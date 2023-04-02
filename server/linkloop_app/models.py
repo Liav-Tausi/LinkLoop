@@ -15,7 +15,7 @@ class Profile(models.Model):
                                         RegexValidator(regex=r'^[a-zA-Z0-9_\- ]+$',
                                                        message="Profile name can only contain letters, numbers,"
                                                                " underscores, hyphens, and spaces."
-                                                       )])
+                                    )])
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     location = models.CharField(db_column="location", blank=False, null=False, max_length=128,
                                 validators=[MinLengthValidator(10)])
