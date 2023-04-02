@@ -1,5 +1,5 @@
 from rest_framework import routers
-from linkloop_app.views.view_profile import (
+from ..views.view_profile import (
     ProfileModelViewSet,
     ProfileImpressionModelViewSet
 )

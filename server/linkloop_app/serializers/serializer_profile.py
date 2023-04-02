@@ -3,7 +3,7 @@ from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from linkloop_app.models import Profile, ProfileImpression
+from ..models import Profile, ProfileImpression
 
 
 class ProfileSerializer(serializers.ModelSerializer):

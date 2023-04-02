@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from linkloop_app.models import UserSearch
-from linkloop_app.serializers.serializer_search import SearchSerializer
+from ..models import UserSearch
+from ..serializers.serializer_search import SearchSerializer
 
 
 class SearchModelViewSet(ModelViewSet):

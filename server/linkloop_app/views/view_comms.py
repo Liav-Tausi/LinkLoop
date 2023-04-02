@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from linkloop_app.models import Message
-from linkloop_app.serializers.serializer_comms import MessageSerializer
+from ..models import Message
+from ..serializers.serializer_comms import MessageSerializer
 
 
 class MessagesModelViewSet(ModelViewSet):

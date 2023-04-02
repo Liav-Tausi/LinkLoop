@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
-from linkloop_app.models import (
+from ..models import (
     Video,
     VideoLike,
     VideoComment,
