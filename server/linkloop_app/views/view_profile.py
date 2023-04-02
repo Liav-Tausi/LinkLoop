@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -12,12 +13,16 @@ from ..serializers.serializer_profile import (
 )
 
 
-# class ProductFilter(django_filters.FilterSet):
-#     name = django_filters.CharFilter(lookup_expr='iexact')
-#
-#     class Meta:
-#         model = Profile
-#         fields = ['price', 'release_date']
+class ProfileFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = User
+        fields = ['username']
+
+
+class ProductFilter(django_filters.FilterSet):
+    pass
 
 
 class ProfileModelViewSet(ModelViewSet):
