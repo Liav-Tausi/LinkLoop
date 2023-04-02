@@ -14,22 +14,24 @@ from ..serializers.serializer_profile import (
 
 
 class ProfileFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(lookup_expr='iexact')
+    first_name = django_filters.CharFilter(field_name='user__first_name', lookup_expr='iexact')
+    last_name = django_filters.CharFilter(field_name='user__last_name', lookup_expr='iexact')
+    min_rating = django_filters.NumberFilter(field_name='rating', lookup_expr='gte')
+    max_rating = django_filters.NumberFilter(field_name='rating', lookup_expr='lte')
+    location = django_filters.CharFilter(field_name='location', lookup_expr='icontains')
 
     class Meta:
-        model = User
-        fields = ['username']
+        model = Profile
+        fields = ['first_name', 'last_name', 'min_rating', 'max_rating', 'location']
 
-
-class ProductFilter(django_filters.FilterSet):
-    pass
 
 
 class ProfileModelViewSet(ModelViewSet):
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.prefetch_related('user')
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
     authentication_classes = [JWTAuthentication]
+    filterset_class = ProfileFilter
 
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
