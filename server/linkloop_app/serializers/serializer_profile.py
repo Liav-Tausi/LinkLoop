@@ -28,6 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile = Profile.objects.create(
             user=validated_data['user'],
+            profile_name=validated_data.get('profile_name'),
             profile_picture=validated_data.get('profile_picture'),
             location=validated_data.get('location'),
             rating=validated_data.get('rating'),
