@@ -1,9 +1,6 @@
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-
-
-
 
 
 class Profile(models.Model):
@@ -11,6 +8,14 @@ class Profile(models.Model):
         db_table = "user_profile"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile_name = models.CharField(db_column="profile_name", max_length=128, unique=True, blank=False, null=False,
+                                    default="",
+                                    validators=[
+                                        MinLengthValidator(5),
+                                        RegexValidator(regex=r'^[a-zA-Z0-9_\- ]+$',
+                                                       message="Profile name can only contain letters, numbers,"
+                                                               " underscores, hyphens, and spaces."
+                                                       )])
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     location = models.CharField(db_column="location", blank=False, null=False, max_length=128,
                                 validators=[MinLengthValidator(10)])
@@ -171,8 +176,3 @@ class Message(models.Model):
                                 validators=[MinLengthValidator(5)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
-
-
-
-
