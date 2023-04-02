@@ -3,7 +3,7 @@ import {
   VisibilityOffRounded,
   VisibilityRounded,
 } from "@mui/icons-material";
-import { Alert, Box, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useContext, useState } from "react";
 import {
   AppContext,
@@ -21,7 +21,6 @@ import { signInUser } from "../../../../../utils/funcs";
 const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   const [signUpEmail, setSignUpEmail] = useState("");
@@ -36,17 +35,37 @@ const SignInFieldGroup = () => {
     event.preventDefault();
     setFormSubmit(true);
     if (passwordError || emailError) {
-      <Alert severity="error" sx={{ mb: 2 }}>
-        Please correct the errors in the form before submitting again.
-      </Alert>;
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload:
+          "Please correct the errors in the form before submitting again.",
+      });
     } else {
       if (!accessToken) {
         const form = event.target;
         const elements = form.elements;
-        dispatch({
-          type: APP_ACTIONS.ACCESS_TOKEN,
-          payload: await signInUser(elements),
-        });
+        const access = await signInUser(elements);
+        if (access) {
+          dispatch({
+            type: APP_ACTIONS.ACCESS_TOKEN,
+            payload: access,
+          });
+          dispatch({
+            type: APP_ACTIONS.SIGN_IN_OPEN,
+          });
+          dispatch({
+            type: APP_ACTIONS.MESSAGE,
+            payload: "Welcome back to linkLoop!",
+          });
+        } else {
+          dispatch({
+            type: APP_ACTIONS.MESSAGE,
+            payload: "Sorry, we couldn't find this account",
+          });
+          setFormSubmit(false);
+          setEmailError(true);
+          setPasswordError(true);
+        }
       }
     }
   };
@@ -71,7 +90,7 @@ const SignInFieldGroup = () => {
         borderRadius: "25px",
         backgroundColor: themeMode.signUpBubbles,
         "@media (max-width: 600px)": {
-          width: 230,
+          width: 285,
           pt: 0,
           pb: 3,
         },
@@ -84,7 +103,7 @@ const SignInFieldGroup = () => {
           color: themeMode.textColor,
         }}
       >
-        <Box sx={{ p: "12px", fontSize: isSmallScreen ? "15px" : "20px" }}>
+        <Box sx={{ p: "10px", fontSize: isSmallScreen ? "18px" : "20px" }}>
           sign in
         </Box>
       </Box>
@@ -100,7 +119,7 @@ const SignInFieldGroup = () => {
               width: 265,
               color: themeMode.textColor,
               "@media (max-width: 600px)": {
-                width: 220,
+                width: 275,
                 pt: "8px",
                 pb: "16px",
               },

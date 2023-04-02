@@ -6,6 +6,7 @@ import { detectColorScheme, isLoggedIn } from "../../utils/funcs";
 
 export const INITIAL_APP_STATE = {
   accessToken: isLoggedIn("").PromiseResult,
+  message: null,
   themeMode: detectColorScheme() === "dark" ? DARK_THEME : LIGHT_THEME,
   forceThemeMode: 3,
   appLoaded: false,
@@ -17,6 +18,7 @@ export const INITIAL_APP_STATE = {
 export const APP_ACTIONS = {
   APP_LOADED: "appLoaded",
   ACCESS_TOKEN: "accessToken",
+  MESSAGE: "message",
   THEME_MODE: "themeMode",
   FORCE_THEME_MODE: "forceThemeMode",
   MENU_OPEN_CLOSE: "openClose",
@@ -30,6 +32,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         accessToken: action.payload,
+      };
+    }
+    case APP_ACTIONS.MESSAGE: {
+      return {
+        ...states,
+        message: action.payload,
       };
     }
     case APP_ACTIONS.MENU_OPEN_CLOSE: {

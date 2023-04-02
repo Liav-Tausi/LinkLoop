@@ -1,4 +1,4 @@
-import { Alert, Box, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useContext, useState } from "react";
 import {
   AppContext,
@@ -48,9 +48,11 @@ const SignUpFieldGroup = () => {
     event.preventDefault();
     setFormSubmit(true);
     if (fullNameError || passwordError || passwordConfirmError || emailError) {
-      <Alert severity="error" sx={{ mb: 2 }}>
-        Please correct the errors in the form before submitting again.
-      </Alert>;
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload:
+          "Please correct the errors in the form before submitting again.",
+      });
     } else {
       if (!accessToken) {
         const form = event.target;
@@ -60,6 +62,13 @@ const SignUpFieldGroup = () => {
           dispatch({
             type: APP_ACTIONS.ACCESS_TOKEN,
             payload: access,
+          });
+          dispatch({
+            type: APP_ACTIONS.SIGN_UP_OPEN,
+          });
+          dispatch({
+            type: APP_ACTIONS.MESSAGE,
+            payload: "Welcome to linkLoop!",
           });
         } else {
           for (let index = 0; index < access.length; index++) {
@@ -113,7 +122,7 @@ const SignUpFieldGroup = () => {
           borderRadius: "25px",
           backgroundColor: themeMode.signUpBubbles,
           "@media (max-width: 600px)": {
-            width: 230,
+            width: 285,
             pt: 0,
             pb: 1,
           },
@@ -126,7 +135,7 @@ const SignUpFieldGroup = () => {
             color: themeMode.textColor,
           }}
         >
-          <Box sx={{ p: "12px", fontSize: isSmallScreen ? "15px" : "20px" }}>
+          <Box sx={{ p: "10px", fontSize: isSmallScreen ? "18px" : "20px" }}>
             sign up
           </Box>
         </Box>
@@ -142,7 +151,7 @@ const SignUpFieldGroup = () => {
                 width: 265,
                 color: themeMode.textColor,
                 "@media (max-width: 600px)": {
-                  width: 220,
+                  width: 275,
                   pt: "8px",
                   pb: "16px",
                 },

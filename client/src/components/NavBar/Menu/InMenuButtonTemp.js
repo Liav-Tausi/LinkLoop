@@ -1,23 +1,20 @@
 import { Box, Button } from "@mui/material";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import {
   AppContext,
   AppDispatchContext,
-  APP_ACTIONS,
-} from "../../../../App/AppStates/AppReducer";
+} from "../../../App/AppStates/AppReducer";
 
-const Display = ({ handleMenuDisplaySettingsChange }) => {
+const InMenuButtonTemp = (props) => {
   const { themeMode } = useContext(AppContext);
+  const isSmallScreen = useContext(AppDispatchContext);
 
   return (
     <>
-      <Box
-        onClick={handleMenuDisplaySettingsChange}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Button
+          onClick={props.func}
           fullWidth
           disableRipple={true}
           variant="contained"
@@ -44,32 +41,24 @@ const Display = ({ handleMenuDisplaySettingsChange }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              fontSize: "12px",
+              fontSize: isSmallScreen ? "11.5px" : "15px",
               color: themeMode.textColor,
-              "@media (max-width: 600px)": {
-                fontSize: "9px",
-              },
             }}
           >
-            <DarkModeIcon
-              sx={{
-                m: 1,
-                color: themeMode.textColor,
-                fontSize: "20px",
-                "@media (max-width: 600px)": {
-                  fontSize: "17px",
-                },
+            {props.children}
+            <p
+              style={{
+                paddingLeft: 10,
+                fontSize: isSmallScreen ? "11px" : "35px",
               }}
-            />
-            <p style={{ paddingLeft: 10 }}>Display</p>
+            >
+              {props.text}
+            </p>
           </Box>
           <ArrowForwardIosIcon
             sx={{
               color: themeMode.textColor,
-              fontSize: "17px",
-              "@media (max-width: 600px)": {
-                fontSize: "12px",
-              },
+              fontSize: isSmallScreen ? "13px" : "17px",
             }}
           />
         </Button>
@@ -78,4 +67,4 @@ const Display = ({ handleMenuDisplaySettingsChange }) => {
   );
 };
 
-export default Display;
+export default InMenuButtonTemp;

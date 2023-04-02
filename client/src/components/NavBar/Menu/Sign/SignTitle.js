@@ -22,15 +22,15 @@ const SignTitle = () => {
         color: themeMode.textColor,
         backgroundColor: themeMode.signUpBubbles,
         "@media (max-width: 600px)": {
-          borderRadius: "24px",
-          py: "14px",
-          px: 2,
+          borderRadius: "26px",
+          py: "13px",
+          px: 1.8,
         },
       }}
     >
       <img
         style={{
-          width: isSmallScreen ? "35px" : "80px",
+          width: isSmallScreen ? "60px" : "80px",
           padding: isSmallScreen ? "3px" : "6px",
         }}
         src={AppLogo}
@@ -40,7 +40,7 @@ const SignTitle = () => {
         <Box
           style={{
             margin: "0",
-            fontSize: isSmallScreen ? "18px" : "25px",
+            fontSize: isSmallScreen ? "22px" : "25px",
             marginBottom: isSmallScreen ? "5px" : "10px",
           }}
         >
@@ -49,7 +49,7 @@ const SignTitle = () => {
         <Box
           style={{
             margin: "0",
-            fontSize: isSmallScreen ? "13px" : "16px",
+            fontSize: isSmallScreen ? "15px" : "16px",
           }}
         >
           find your next adventure

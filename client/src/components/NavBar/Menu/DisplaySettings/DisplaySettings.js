@@ -1,15 +1,10 @@
 import Title from "./Title";
-import {
-  Box,
-  Button,
-  Container,
-  Radio,
-  Stack,
-} from "@mui/material";
+import { Box, Button, Container, Radio, Stack } from "@mui/material";
 import {
   AppContext,
   AppDispatchContext,
   APP_ACTIONS,
+  IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -18,10 +13,12 @@ import PrecisionManufacturingRoundedIcon from "@mui/icons-material/PrecisionManu
 import DARK_THEME from "../../../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../../../assets/themes/LightTheme";
 import { detectColorScheme } from "../../../../utils/funcs";
+import DisplayOptions from "./DisplayOptions";
 
 const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
   const dispatch = useContext(AppDispatchContext);
   const { themeMode, forceThemeMode } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext);
 
   useEffect(() => {
     console.log("display setting refresh");
@@ -31,14 +28,14 @@ const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
     event.preventDefault();
     dispatch({
       type: APP_ACTIONS.FORCE_THEME_MODE,
-      payload: Number(event.target.value)
-    })
+      payload: Number(event.target.value),
+    });
   };
 
   const handleButtonClick = (val) => {
     dispatch({
       type: APP_ACTIONS.FORCE_THEME_MODE,
-      payload: val
+      payload: val,
     });
   };
 
@@ -61,112 +58,52 @@ const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
       <Title
         handleMenuDisplaySettingsChange={handleMenuDisplaySettingsChange}
       />
-      <Container>
-        <Stack aria-label="display" name="theme" defaultValue="Individual">
-          <Button
-            disableRipple={true}
-            onClick={() => handleButtonClick(1)}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              "&:hover": { backgroundColor: themeMode.navInputColor },
-              "&:active": {
-                backgroundColor: themeMode.navInputColorHover,
-                transition: "background-color 0.25s",
-              },
-            }}
+      <Container sx={{ px: isSmallScreen ? 0 : 1 }}>
+        <Stack
+          aria-label="display"
+          name="theme"
+          defaultValue="Individual"
+          gap={1}
+        >
+          <DisplayOptions
+            handleButtonClick={handleButtonClick}
+            handleRadioButton={handleRadioButton}
+            value={1}
+            text={"Light"}
           >
-            <Box display={"flex"}>
-              <LightModeIcon sx={{ color: themeMode.textColor }} />
-              <Box pl={2} color={themeMode.textColor}>
-                Light
-              </Box>
-            </Box>
-
-            <Radio
+            <LightModeIcon
               sx={{
-                fontSize: 25,
                 color: themeMode.textColor,
-                "&.Mui-checked": {
-                  color: themeMode.appTheme,
-                },
+                fontSize: isSmallScreen ? 19 : 20,
               }}
-              checked={forceThemeMode === 1 ? true : false}
-              onChange={(e) => handleRadioButton(e)}
-              value={1}
-              name="radio-buttons"
             />
-          </Button>
-          <Button
-            disableRipple={true}
-            onClick={() => handleButtonClick(2)}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              "&:hover": { backgroundColor: themeMode.navInputColor },
-              "&:active": {
-                backgroundColor: themeMode.navInputColorHover,
-                transition: "background-color 0.25s",
-              },
-            }}
+          </DisplayOptions>
+          <DisplayOptions
+            handleButtonClick={handleButtonClick}
+            handleRadioButton={handleRadioButton}
+            value={2}
+            text={"Dark"}
           >
-            <Box display={"flex"}>
-              <DarkModeIcon sx={{ color: themeMode.textColor }} />
-              <Box pl={2} color={themeMode.textColor}>
-                Dark
-              </Box>
-            </Box>
-
-            <Radio
+            <DarkModeIcon
               sx={{
-                fontSize: 25,
                 color: themeMode.textColor,
-                "&.Mui-checked": {
-                  color: themeMode.appTheme,
-                },
+                fontSize: isSmallScreen ? 19 : 20,
               }}
-              checked={forceThemeMode === 2 ? true : false}
-              onChange={(e) => handleRadioButton(e)}
-              value={2}
-              name="radio-buttons"
             />
-          </Button>
-          <Button
-            disableRipple={true}
-            onClick={() => handleButtonClick(3)}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              "&:hover": { backgroundColor: themeMode.navInputColor },
-              "&:active": {
-                backgroundColor: themeMode.navInputColorHover,
-                transition: "background-color 0.25s",
-              },
-            }}
+          </DisplayOptions>
+          <DisplayOptions
+            handleButtonClick={handleButtonClick}
+            handleRadioButton={handleRadioButton}
+            value={3}
+            text={"Auto"}
           >
-            <Box display={"flex"}>
-              <PrecisionManufacturingRoundedIcon
-                sx={{ color: themeMode.textColor }}
-              />
-              <Box pl={2} color={themeMode.textColor}>
-                Auto
-              </Box>
-            </Box>
-
-            <Radio
+            <PrecisionManufacturingRoundedIcon
               sx={{
-                fontSize: 25,
                 color: themeMode.textColor,
-                "&.Mui-checked": {
-                  color: themeMode.appTheme,
-                },
+                fontSize: isSmallScreen ? 19 : 20,
               }}
-              checked={forceThemeMode === 3 ? true : false}
-              onChange={(e) => handleRadioButton(e)}
-              value={3}
-              name="radio-buttons"
             />
-          </Button>
+          </DisplayOptions>
         </Stack>
       </Container>
     </Box>

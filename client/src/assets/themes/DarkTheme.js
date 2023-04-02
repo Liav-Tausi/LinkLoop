@@ -13,7 +13,9 @@ const DARK_THEME = {
   menuColor: "#FFFFFF",
   appTheme: "#DF2B5B",
   appThemeHover: "#1BE2C1",
-  buttonBorder: "grey"
+  buttonBorder: "grey",
+  ErrorMessage: "#830202",
+  SuccessMessage: "#164D1F",
 };
 
 export default DARK_THEME;

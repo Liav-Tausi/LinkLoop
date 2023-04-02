@@ -17,9 +17,9 @@ const SignUp = () => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const ref = useContext(Ref);
 
-    useEffect(() => {
-      console.log("sign up refresh");
-    }, []);
+  useEffect(() => {
+    console.log("sign up refresh");
+  }, []);
 
   useEffect(() => {
     if (signUpOpen) {
@@ -57,11 +57,11 @@ const SignUp = () => {
           transform: "translate(-50%, -50%)",
           boxShadow: 10,
           "@media (max-width: 414px)": {
-            height: 400,
+            height: 410,
             width: 280,
           },
           "@media (max-width: 428px)": {
-            height: 600,
+            height: 620,
             width: 330,
           },
         }}
@@ -89,8 +89,8 @@ const SignUp = () => {
           <Box
             onClick={() => {
               dispatch({
-                type: APP_ACTIONS.SIGN_IN_OPEN
-              })
+                type: APP_ACTIONS.SIGN_IN_OPEN,
+              });
             }}
             sx={{
               ml: 1,

@@ -24,6 +24,7 @@ const App = () => {
     signInOpen,
     menuOpen,
     accessToken,
+    message,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
@@ -35,14 +36,14 @@ const App = () => {
     });
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchData = async () => {
       const result = await isLoggedIn(accessToken);
       dispatch({
         type: APP_ACTIONS.ACCESS_TOKEN,
         payload: result,
       });
-    }
+    };
     fetchData();
   }, []);
 
@@ -110,12 +111,14 @@ const App = () => {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />}>
-        <Route path="/" element={<Feed />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route path="/" element={<Feed />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 

@@ -3,8 +3,8 @@ import {
   AppContext,
   IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
-import InMenu from "./InMenu";
-import OutMenu from "./OutMenu";
+import InMenu from "./InMenu/InMenu";
+import OutMenu from "./OutMenu/OutMenu";
 import SignUp from "../Sign/SignUp/SignUp";
 import SignIn from "../Sign/SignIn/SignIn";
 

@@ -51,7 +51,7 @@ export const handleAccessTokenResponse = async (user) => {
     if (tokenResponse.status === 200) {
       return tokenResponse;
     } else {
-      throw new Error(tokenResponse);
+      return false;
     }
   } catch {
     return false;
@@ -79,8 +79,10 @@ export const signUpUser = async (user) => {
         username,
         password,
       ]);
-      localStorage.setItem("refresh", accessTokenResponse.data.refresh);
-      return accessTokenResponse.data.access;
+      if (accessTokenResponse.status === 200) {
+        localStorage.setItem("refresh", accessTokenResponse.data.refresh);
+        return accessTokenResponse.data.access;
+      }
     } else {
       throw new Error(response);
     }
@@ -101,26 +103,29 @@ export const signInUser = async (user) => {
     username,
     password,
   ]);
-  localStorage.setItem("refresh", accessTokenResponse.data.refresh);
-  return accessTokenResponse.data.access;
+  if (accessTokenResponse.status === 200) {
+    localStorage.setItem("refresh", accessTokenResponse.data.refresh);
+    return accessTokenResponse.data.access;
+  } else {
+    return false;
+  }
 };
 
-// useEffect(() => {
-//   const handleClickOutside = (event) => {
-//     if (
-//       paperRef.current &&
-//       !paperRef.current.contains(event.target) &&
-//       event.target !== paperRef.current
-//     ) {
-//       dispatch({
-//         type: APP_ACTIONS.MENU_OPEN_CLOSE,
-//       });
-//     }
-//   };
-//   if (menuOpen) {
-//     window.addEventListener("mousedown", handleClickOutside);
-//   }
-//   return () => {
-//     window.removeEventListener("mousedown", handleClickOutside);
-//   };
-// }, [menuOpen]);
+export const logOut = async (refreshToken) => {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/v1/auth/token/blacklist/",
+      {
+        refresh: refreshToken,
+      }
+    );
+    if (response.status === 200) {
+      localStorage.removeItem("refresh");
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};

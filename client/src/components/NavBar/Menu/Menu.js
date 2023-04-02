@@ -1,15 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Paper, Stack, useMediaQuery } from "@mui/material";
+import { Box, Paper, Stack } from "@mui/material";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LogButtons from "./logButtons/LogButtons";
 import {
   AppContext,
   AppDispatchContext,
+  APP_ACTIONS,
   IsSmallScreenContext,
   Ref,
 } from "../../../App/AppStates/AppReducer";
-import Display from "./DisplaySettings/Display";
 import DisplaySettings from "./DisplaySettings/DisplaySettings";
 import MenuIcon from "./MenuIcon";
+import InMenuButtonTemp from "./InMenuButtonTemp";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { logOut } from "../../../utils/funcs";
 
 const Menu = () => {
   const { themeMode, accessToken, menuOpen } = useContext(AppContext);
@@ -22,15 +26,32 @@ const Menu = () => {
     setMenuDisplaySettings(!menuDisplaySettings);
   };
 
-  useEffect(() => {
-    console.log("menu refresh");
-  }, []);
+  const handleLogOut = async () => {
+    const refreshToken = localStorage.getItem("refresh");
+    if (refreshToken) {
+      await logOut(refreshToken);
+      dispatch({
+        type: APP_ACTIONS.ACCESS_TOKEN,
+        payload: "",
+      });
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "Logged Out Successfully!",
+      });
+    } else {
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "ERROR! Did not Log Out Successfully!",
+      });
+    }
+  };
 
+  const isMenuClosed = !menuOpen;
   useEffect(() => {
-    if (!menuOpen) {
+    if (isMenuClosed) {
       setMenuDisplaySettings(false);
     }
-  }, [!menuOpen]);
+  }, [isMenuClosed]);
 
   return (
     <>
@@ -76,14 +97,34 @@ const Menu = () => {
             </Stack>
           )}
           {!menuDisplaySettings && (
-            <Display
-              handleMenuDisplaySettingsChange={handleMenuDisplaySettingsChange}
-            />
+            <InMenuButtonTemp
+              func={handleMenuDisplaySettingsChange}
+              text={"Display"}
+            >
+              <DarkModeIcon
+                sx={{
+                  m: 1,
+                  color: themeMode.textColor,
+                  fontSize: isSmallScreen ? "19px" : "20px",
+                }}
+              />
+            </InMenuButtonTemp>
           )}
           {menuDisplaySettings && (
             <DisplaySettings
               handleMenuDisplaySettingsChange={handleMenuDisplaySettingsChange}
             />
+          )}
+          {accessToken && !menuDisplaySettings && (
+            <InMenuButtonTemp func={handleLogOut} text={"Log out"}>
+              <LogoutIcon
+                sx={{
+                  m: 1,
+                  color: themeMode.textColor,
+                  fontSize: isSmallScreen ? "19px" : "20px",
+                }}
+              />
+            </InMenuButtonTemp>
           )}
         </Paper>
       )}

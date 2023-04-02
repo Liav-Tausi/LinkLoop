@@ -14,6 +14,8 @@ const LIGHT_THEME = {
   appTheme: "#DF2B5B",
   appThemeHover: "#1BE2C1",
   buttonBorder: "#F3F3F3",
+  ErrorMessage: "#980202",
+  SuccessMessage: "#04370E",
 };
 
 export default LIGHT_THEME;

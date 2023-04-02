@@ -11,14 +11,18 @@ import SignTitle from "../SignTitle";
 import SignInFieldGroup from "./SignInFieldGroup";
 
 const SignIn = () => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, signInOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
 
   useEffect(() => {
-    console.log("sign in refresh");
-  }, []);
+    if (signInOpen) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [signInOpen]);
 
   return (
     <div
