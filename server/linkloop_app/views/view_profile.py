@@ -3,12 +3,21 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from linkloop_app.models import Profile, ProfileImpression
+import django_filters
+from ..models import Profile, ProfileImpression
 
-from linkloop_app.serializers.serializer_profile import (
+from ..serializers.serializer_profile import (
     ProfileSerializer,
     ProfileImpressionSerializer
 )
+
+
+# class ProductFilter(django_filters.FilterSet):
+#     name = django_filters.CharFilter(lookup_expr='iexact')
+#
+#     class Meta:
+#         model = Profile
+#         fields = ['price', 'release_date']
 
 
 class ProfileModelViewSet(ModelViewSet):
