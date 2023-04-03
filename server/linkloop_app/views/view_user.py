@@ -3,7 +3,7 @@ from rest_framework import mixins, status
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from linkloop_app.serializers.serializer_user import SignUpUserSerializer, UserSerializer
+from ..serializers.serializer_user import SignUpUserSerializer, UserSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 

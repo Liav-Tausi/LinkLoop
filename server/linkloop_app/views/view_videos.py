@@ -32,6 +32,12 @@ class VideosModelViewSet(ModelViewSet):
         "destroy": BaseVideoSerializer,
     }
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            pass
+        else:
+            return self.queryset
+
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
         data_copy["user"] = request.user.pk

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from linkloop_app.models import UserSearch
+from ..models import UserSearch
 
 
 

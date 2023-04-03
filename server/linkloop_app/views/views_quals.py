@@ -3,14 +3,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from linkloop_app.models import (
+from ..models import (
     Skill,
     Education,
     Experience,
     UserSkill,
     UserEducation
 )
-from linkloop_app.serializers.serializer_quals import (
+from ..serializers.serializer_quals import (
     SkillsSerializer,
     EducationSerializer,
     ExperienceSerializer,

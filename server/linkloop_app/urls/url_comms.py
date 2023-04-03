@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from linkloop_app.views.view_comms import (
+from ..views.view_comms import (
     MessagesModelViewSet,
 )
 router = routers.DefaultRouter()

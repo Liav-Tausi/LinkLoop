@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from linkloop_app.views.view_user import (
+from ..views.view_user import (
     SignUpUserModelViewSet,
     UserModelViewSet
 )

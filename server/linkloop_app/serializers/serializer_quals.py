@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from linkloop_app.models import (
+from ..models import (
     Skill,
     Education,
     Experience,

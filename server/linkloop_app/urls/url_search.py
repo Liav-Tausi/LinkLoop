@@ -1,5 +1,5 @@
 from rest_framework import routers
-from linkloop_app.views.view_search import SearchModelViewSet
+from ..views.view_search import SearchModelViewSet
 
 
 router = routers.DefaultRouter()

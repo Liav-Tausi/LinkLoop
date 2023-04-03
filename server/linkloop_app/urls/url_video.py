@@ -1,5 +1,5 @@
 from rest_framework import routers
-from linkloop_app.views.view_videos import (
+from ..views.view_videos import (
     VideosModelViewSet,
     LikesModelViewSet,
     CommentsModelViewSet,

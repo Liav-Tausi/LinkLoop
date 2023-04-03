@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from linkloop_app.views.views_quals import (
+from ..views.views_quals import (
     SkillsModelViewSet,
     EducationModelViewSet,
     ExperienceModelViewSet,

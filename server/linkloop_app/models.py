@@ -3,14 +3,11 @@ from django.core.validators import MinLengthValidator, MaxValueValidator, MinVal
 from django.db import models
 
 
-
-
-
 class Profile(models.Model):
     class Meta:
         db_table = "user_profile"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     location = models.CharField(db_column="location", blank=False, null=False, max_length=128,
                                 validators=[MinLengthValidator(10)])
@@ -171,8 +168,3 @@ class Message(models.Model):
                                 validators=[MinLengthValidator(5)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
-
-
-
-

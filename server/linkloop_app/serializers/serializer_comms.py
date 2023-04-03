@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from linkloop_app.models import Message
+from ..models import Message
 
 
 class MessageSerializer(serializers.ModelSerializer):
