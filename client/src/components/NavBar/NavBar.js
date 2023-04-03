@@ -1,7 +1,4 @@
-import {
-  AppBar,
-  Toolbar,
-} from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import { useContext, useEffect } from "react";
 import Menu from "./Menu/Menu";
 import Logo from "./Logo/Logo";
@@ -20,7 +17,7 @@ const NavBar = () => {
     <>
       <AppBar
         id="app"
-        position="static"
+        position="sticky"
         sx={{
           backgroundColor: themeMode.navColor,
           borderBottom: "2px solid " + themeMode.navInputColor,
@@ -46,7 +43,7 @@ const NavBar = () => {
           <Menu />
         </Toolbar>
       </AppBar>
-      {message && <AppMessage/>}
+      {message && <AppMessage />}
     </>
   );
 };

@@ -83,7 +83,7 @@ const SignInFieldGroup = () => {
   return (
     <Box
       sx={{
-        width: 330,
+        width: 317.5,
         mt: 2,
         p: 1,
         pb: 2,
@@ -116,10 +116,10 @@ const SignInFieldGroup = () => {
               gap: 2,
               pt: 1,
               pb: 2,
-              width: 265,
+              width: 280,
               color: themeMode.textColor,
               "@media (max-width: 600px)": {
-                width: 275,
+                width: 270,
                 pt: "8px",
                 pb: "16px",
               },
@@ -162,6 +162,29 @@ const SignInFieldGroup = () => {
                 top={"42.7%"}
               />
             )}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "38%",
+                  height: "0.5px",
+                  backgroundColor: themeMode.textColor,
+                }}
+              />
+              <Box sx={{ px: 1, fontSize: 13 }}>or</Box>
+              <Box
+                sx={{
+                  width: "38%",
+                  height: "0.5px",
+                  backgroundColor: themeMode.textColor,
+                }}
+              />
+            </Box>
             <SignGoogleTemp text={"Sign in using Google"} />
           </Box>
           <SignSubmit />

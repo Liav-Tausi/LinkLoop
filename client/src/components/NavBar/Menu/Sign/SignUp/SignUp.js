@@ -46,22 +46,23 @@ const SignUp = () => {
         ref={ref}
         id={"signUp"}
         sx={{
+          mt: 1,
           borderRadius: "25px",
           backgroundColor: themeMode.signUp,
           zIndex: 9999,
           position: "fixed",
           left: "50%",
           top: "47%",
-          height: 680,
-          width: 490,
+          height: 666,
+          width: 440,
           transform: "translate(-50%, -50%)",
           boxShadow: 10,
           "@media (max-width: 414px)": {
-            height: 410,
+            height: 435,
             width: 280,
           },
           "@media (max-width: 428px)": {
-            height: 620,
+            height: 650,
             width: 330,
           },
         }}

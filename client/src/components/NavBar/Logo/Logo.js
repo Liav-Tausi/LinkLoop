@@ -1,11 +1,17 @@
 import { Box } from "@mui/material";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AppContext } from "../../../App/AppStates/AppReducer";
-import AppLogo from "../../../assets/imgs/AppLogo2.png";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
+import { ReactComponent as AppLogoWhite } from "../../../assets/imgs/linkLoopAppLogoWhite.svg";
+import { ReactComponent as AppLogoBlack } from "../../../assets/imgs/linkLoopAppLogoBlack.svg";
+import { ReactComponent as AppLogo } from "../../../assets/imgs/AppLogo.svg";
 
 const Logo = () => {
-    const { themeMode} = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -17,24 +23,13 @@ const Logo = () => {
             },
           }}
         >
-          <img
-            style={{ width: "37px", padding: "7px" }}
-            src={AppLogo}
-            alt="linkLoop logo, dancer with a suit-case"
-          />
+          {themeMode.theme === "light" ? (
+            <AppLogoBlack style={{ width: "200px" }} />
+          ) : <AppLogoWhite style={{ width: "200px" }} /> ? (
+            isSmallScreen && <AppLogo style={{ width: "40px", p: 0.5 }} />
+          ) : null}
         </Box>
       </Link>
-      <Box
-        sx={{
-          color: themeMode.textColor,
-          fontSize: "1em",
-          display: { xs: "none", sm: "flex" },
-          alignItems: "center",
-          mx: "3px",
-        }}
-      >
-        LinkLoop
-      </Box>
     </Box>
   );
 };
