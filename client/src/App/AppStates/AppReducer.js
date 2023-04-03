@@ -2,12 +2,21 @@ import { useMediaQuery } from "@mui/material";
 import { createContext, useEffect, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
-import { detectColorScheme, isLoggedIn } from "../../utils/funcs";
+import { detectColorScheme, getFeedData, isLoggedIn } from "../../utils/funcs";
+
+const awaitIsLoggedIn = async () => {
+  return await isLoggedIn("");
+};
+
+const awaitGetFeedData = async () => {
+  return await getFeedData(awaitIsLoggedIn());
+};
 
 export const INITIAL_APP_STATE = {
-  accessToken: isLoggedIn("").PromiseResult,
-  message: null,
+  accessToken: awaitIsLoggedIn(),
+  feedData: awaitGetFeedData(),
   themeMode: detectColorScheme() === "dark" ? DARK_THEME : LIGHT_THEME,
+  message: null,
   forceThemeMode: 3,
   appLoaded: false,
   menuOpen: false,

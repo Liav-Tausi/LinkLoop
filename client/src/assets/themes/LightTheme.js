@@ -1,6 +1,7 @@
 const LIGHT_THEME = {
   theme: "light",
   body: "#f7f7f7",
+  feed: "#ffffff",
   signUp: "#ffffff",
   signUpBubbles: "#F3F3F3",
   signUpField: "#E9E9E9",

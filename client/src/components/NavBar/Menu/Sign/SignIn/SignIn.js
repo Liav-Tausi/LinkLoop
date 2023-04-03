@@ -47,8 +47,8 @@ const SignIn = () => {
           position: "fixed",
           left: "50%",
           top: "47%",
-          height: 680,
-          width: 490,
+          height: 650,
+          width: 440,
           transform: "translate(-50%, -50%)",
           boxShadow: 10,
           "@media (max-width: 414px)": {

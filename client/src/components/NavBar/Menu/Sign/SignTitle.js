@@ -4,7 +4,7 @@ import {
   AppContext,
   IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
-import AppLogo from "../../../../assets/imgs/AppLogo2.png"
+import AppLogo from "../../../../assets/imgs/AppLogo.svg";
 
 const SignTitle = () => {
   const { themeMode } = useContext(AppContext);
@@ -12,7 +12,7 @@ const SignTitle = () => {
   return (
     <Box
       sx={{
-        mt: 4,
+        mt: 2,
         py: 1,
         px: 2,
         display: "flex",
@@ -36,7 +36,7 @@ const SignTitle = () => {
         src={AppLogo}
         alt="linkLoop logo, dancer with a suit-case"
       />
-      <Box sx={{ pl: 1 }}>
+      <Box>
         <Box
           style={{
             margin: "0",

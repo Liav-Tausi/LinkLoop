@@ -1,15 +1,14 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
-
 import {
   AppContext,
   AppDispatchContext,
   APP_ACTIONS,
   Ref,
 } from "../AppStates/AppReducer";
-import Feed from "../../pages/Feed/Feed";
+import FeedPage from "../../pages/FeedPage/FeedPage";
 import Home from "../../pages/Home/Home";
 import NotFound from "../../pages/NotFound/NotFound";
 import AppLoading from "./AppLoading";
@@ -24,7 +23,7 @@ const App = () => {
     signInOpen,
     menuOpen,
     accessToken,
-    message,
+    feedData,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
@@ -114,7 +113,7 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Home />}>
-          <Route path="/" element={<Feed />} />
+          <Route path="/" element={<FeedPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
