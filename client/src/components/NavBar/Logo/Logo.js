@@ -15,7 +15,6 @@ const Logo = () => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Link to="/feed">
         <Box
           sx={{
             "@media (max-width: 600px)": {
@@ -31,7 +30,6 @@ const Logo = () => {
             <AppLogoWhite style={{ width: "200px" }} />
           )}
         </Box>
-      </Link>
     </Box>
   );
 };

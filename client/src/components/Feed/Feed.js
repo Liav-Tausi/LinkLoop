@@ -43,26 +43,23 @@ const Feed = () => {
       }}
     >
       {videos.length > 0 ? (
-        videos.map(
-          (element) => (
-            console.log(element),
-            (
-              <VideoCard
-                key={element.id}
-                id={element.id}
-                video_id={element.video_url.split("/").pop()}
-                video_url={element.video_url}
-                title={element.title}
-              />
-            )
-          )
-        )
+        videos.map((element) => (
+          <VideoCard
+            key={element.id}
+            id={element.id}
+            video_id={element.video_url.split("/").pop()}
+            video_url={element.video_url}
+            title={element.title}
+            description={element.description}
+            date={element.created_time}
+          />
+        ))
       ) : (
         <Paper
           sx={{
             backgroundColor: themeMode.feed,
             boxShadow: 5,
-            p: 1,
+            p: 2,
           }}
         >
           <Skeleton

@@ -1,6 +1,7 @@
 import { Box, Grid, Paper, Skeleton } from "@mui/material";
 import { AppContext } from "../../../App/AppStates/AppReducer";
 import { useContext, useEffect, useRef, useState } from "react";
+import VideoData from "./VideoInfo";
 
 const VideoCard = (props) => {
   const { themeMode } = useContext(AppContext);
@@ -31,46 +32,37 @@ const VideoCard = (props) => {
     });
   };
 
-  console.log(props.title);
-
-  useEffect(() => {
-    console.log(playerState);
-  }, [playerState]);
-
   return (
     <Paper
       sx={{
         backgroundColor: themeMode.feed,
-        boxShadow: 5,
+        boxShadow: 10,
         p: 1,
       }}
     >
       <Grid>
         {isLoading ? (
-          <Skeleton
-            variant="rectangular"
-            width={400}
-            height={600}
-            animation="wave"
-          />
+          <>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={100} height={30} animation="wave" />
+            </Box>
+            <Skeleton
+              variant="rectangular"
+              width={400}
+              height={585}
+              animation="wave"
+            />
+            <Skeleton width={100} height={38} animation="wave" />
+            <Skeleton height={30} animation="wave" />
+          </>
         ) : (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Box
-              id={props.video_id}
-              sx={{
-                width: "400px",
-                height: "600px",
-                "@media (max-width: 600px)": {
-                  width: "345px",
-                  height: "685px",
-                },
-              }}
-            ></Box>
-          </Box>
+          <VideoData
+            date={props.date}
+            description={props.description}
+            title={props.title}
+            id={props.video_id}
+          />
         )}
-        <Grid>
-          <Paper>{props.title}</Paper>
-        </Grid>
       </Grid>
     </Paper>
   );
