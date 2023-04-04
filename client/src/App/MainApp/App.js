@@ -23,7 +23,6 @@ const App = () => {
     signInOpen,
     menuOpen,
     accessToken,
-    feedData,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);

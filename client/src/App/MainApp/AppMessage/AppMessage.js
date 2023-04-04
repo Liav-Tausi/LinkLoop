@@ -12,7 +12,6 @@ import "./AppMessage.css";
 const AppMessage = () => {
   const { message, themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-  const isSmallScreen = useContext(IsSmallScreenContext);
   const [displayMessage, setDisplayMessage] = useState(message);
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const AppMessage = () => {
           payload: null,
         });
         setDisplayMessage(null);
-      }, 3700);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [message]);

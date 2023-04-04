@@ -19,6 +19,7 @@ const NavBar = () => {
         id="app"
         position="sticky"
         sx={{
+          top: -1,
           backgroundColor: themeMode.navColor,
           borderBottom: "2px solid " + themeMode.navInputColor,
         }}

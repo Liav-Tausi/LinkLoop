@@ -3,7 +3,7 @@ import Feed from "../../components/Feed/Feed";
 
 const FeedPage = () => {
   return (
-    <Container sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+    <Container sx={{ display: "flex", justifyContent: "center", py: 2 }}>
       <Feed />
     </Container>
   );

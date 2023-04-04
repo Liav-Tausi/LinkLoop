@@ -15,7 +15,6 @@ const Logo = () => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Link to="/feed">
         <Box
           sx={{
             "@media (max-width: 600px)": {
@@ -23,13 +22,14 @@ const Logo = () => {
             },
           }}
         >
-          {themeMode.theme === "light" ? (
+          {isSmallScreen ? (
+            <AppLogo style={{ width: "40px", padding: "0.5em" }} />
+          ) : themeMode.theme === "light" ? (
             <AppLogoBlack style={{ width: "200px" }} />
-          ) : <AppLogoWhite style={{ width: "200px" }} /> ? (
-            isSmallScreen && <AppLogo style={{ width: "40px", p: 0.5 }} />
-          ) : null}
+          ) : (
+            <AppLogoWhite style={{ width: "200px" }} />
+          )}
         </Box>
-      </Link>
     </Box>
   );
 };
