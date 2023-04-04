@@ -11,15 +11,17 @@ import {
 } from "../../../App/AppStates/AppReducer";
 import DisplaySettings from "./DisplaySettings/DisplaySettings";
 import MenuIcon from "./MenuIcon";
-import InMenuButtonTemp from "./InMenuButtonTemp";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { logOut } from "../../../utils/funcs";
+import InMenuTemp from "./logButtons/InMenu/InMenuTemp";
 
 const Menu = () => {
   const { themeMode, accessToken, menuOpen } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [menuDisplaySettings, setMenuDisplaySettings] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+
   const ref = useContext(Ref);
 
   const handleMenuDisplaySettingsChange = () => {
@@ -55,7 +57,22 @@ const Menu = () => {
 
   return (
     <>
+      {showOverlay && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 999,
+            backgroundColor: "transparent",
+          }}
+          onClick={() => setShowOverlay(false)}
+        />
+      )}
       <Box
+        onClick={() => setShowOverlay(true)}
         sx={{
           position: "relative",
           gap: 1,
@@ -72,6 +89,7 @@ const Menu = () => {
       </Box>
       {menuOpen && (
         <Paper
+          onClick={(event) => event.stopPropagation()}
           ref={ref}
           id={"menu"}
           sx={{
@@ -91,32 +109,32 @@ const Menu = () => {
             },
           }}
         >
-          {isSmallScreen && !menuDisplaySettings && (
-            <Stack>
-              <LogButtons />
-            </Stack>
-          )}
+          <Stack>
+            {isSmallScreen && !menuDisplaySettings && <LogButtons />}
+          </Stack>
+
           {!menuDisplaySettings && (
-            <InMenuButtonTemp
-              func={handleMenuDisplaySettingsChange}
-              text={"Display"}
-            >
+            <InMenuTemp func={handleMenuDisplaySettingsChange} text={"Display"}>
               <DarkModeIcon
                 sx={{
                   m: 1,
                   color: themeMode.textColor,
-                  fontSize: isSmallScreen ? "19px" : "20px",
+                  fontSize: "20px",
+                  "@media (max-width: 600px)": {
+                    fontSize: "17px",
+                  },
                 }}
               />
-            </InMenuButtonTemp>
+            </InMenuTemp>
           )}
+
           {menuDisplaySettings && (
             <DisplaySettings
               handleMenuDisplaySettingsChange={handleMenuDisplaySettingsChange}
             />
           )}
           {accessToken && !menuDisplaySettings && (
-            <InMenuButtonTemp func={handleLogOut} text={"Log out"}>
+            <InMenuTemp func={handleLogOut} text={"Log out"}>
               <LogoutIcon
                 sx={{
                   m: 1,
@@ -124,7 +142,7 @@ const Menu = () => {
                   fontSize: isSmallScreen ? "19px" : "20px",
                 }}
               />
-            </InMenuButtonTemp>
+            </InMenuTemp>
           )}
         </Paper>
       )}

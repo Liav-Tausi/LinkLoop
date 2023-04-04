@@ -23,11 +23,13 @@ const Logo = () => {
             },
           }}
         >
-          {themeMode.theme === "light" ? (
+          {isSmallScreen ? (
+            <AppLogo style={{ width: "40px", padding: "0.5em" }} />
+          ) : themeMode.theme === "light" ? (
             <AppLogoBlack style={{ width: "200px" }} />
-          ) : <AppLogoWhite style={{ width: "200px" }} /> ? (
-            isSmallScreen && <AppLogo style={{ width: "40px", p: 0.5 }} />
-          ) : null}
+          ) : (
+            <AppLogoWhite style={{ width: "200px" }} />
+          )}
         </Box>
       </Link>
     </Box>

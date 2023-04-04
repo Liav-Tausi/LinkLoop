@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@mui/material";
-import { createContext, useEffect, useReducer, useRef } from "react";
+import { createContext, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
 import { detectColorScheme, getFeedData, isLoggedIn } from "../../utils/funcs";
@@ -14,7 +14,7 @@ const awaitGetFeedData = async () => {
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
-  feedData: awaitGetFeedData(),
+  feedData: awaitGetFeedData() ,
   themeMode: detectColorScheme() === "dark" ? DARK_THEME : LIGHT_THEME,
   message: null,
   forceThemeMode: 3,
@@ -27,6 +27,7 @@ export const INITIAL_APP_STATE = {
 export const APP_ACTIONS = {
   APP_LOADED: "appLoaded",
   ACCESS_TOKEN: "accessToken",
+  FEED_DATA: "feedData",
   MESSAGE: "message",
   THEME_MODE: "themeMode",
   FORCE_THEME_MODE: "forceThemeMode",
@@ -41,6 +42,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         accessToken: action.payload,
+      };
+    }
+    case APP_ACTIONS.FEED_DATA: {
+      return {
+        ...states,
+        feedData: action.payload,
       };
     }
     case APP_ACTIONS.MESSAGE: {

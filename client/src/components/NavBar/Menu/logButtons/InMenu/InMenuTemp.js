@@ -9,30 +9,26 @@ const InMenuTemp = (props) => {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Button
-        fullWidth
         onClick={props.func}
-        variant="contained"
+        fullWidth
         disableRipple={true}
+        variant="contained"
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          backgroundColor: themeMode.navColor + "!important",
           color: themeMode.textColor,
-          backgroundColor: themeMode.navInputColor,
-          borderRadius: "40px",
+          boxShadow: "none",
           "&:hover": {
-            backgroundColor: themeMode.navInputColorHover,
+            backgroundColor: themeMode.navInputColorHover + "!important",
             boxShadow: "none",
           },
           "&:active": {
             transform: "scale(0.98)",
           },
           "@media (max-width: 600px)": {
-            borderRadius: 1,
-            backgroundColor: themeMode.navColor,
             px: "8px",
           },
-          fontSize: "9px",
-          boxShadow: "none",
         }}
       >
         <Box

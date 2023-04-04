@@ -131,23 +131,26 @@ export const logOut = async (refreshToken) => {
 };
 
 export const getFeedData = async (accessToken) => {
-  if (await accessToken) {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/v1/videos/main/",
-      {
-        Authorization: "Bearer " + accessToken,
+  try {
+    if (await accessToken) {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/v1/videos/main/",
+        {
+          Authorization: "Bearer " + accessToken,
+        }
+      );
+      if (response.status === 200) {
+        return await response.data.results;
       }
-    );
-    if (response.status === 200) {
-      return await response.data.results;
+    } else {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/v1/videos/main/"
+      );
+      if (response.status === 200) {
+        return await response.data.results;
+      }
     }
-  } else {
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/v1/videos/main/"
-    );
-    if (response.status === 200) {
-      return await response.data.results;
-    }
+  } catch (error) {
+    return false;
   }
-  return false;
 };

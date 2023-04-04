@@ -1,5 +1,5 @@
-import { Box } from "@mui/material"
-import AppLogo from "../../assets/imgs/AppLogo2.png";
+import { Box } from "@mui/material";
+import { ReactComponent as AppLogo } from "../../assets/imgs/AppLogo.svg";
 
 const AppLoading = ({ colors }) => {
   return (
@@ -20,16 +20,14 @@ const AppLoading = ({ colors }) => {
           flexDirection: "column",
         }}
       >
-        <img
-          style={{ width: "65px", display: "block" }}
-          src={AppLogo}
-          alt="linkLoop logo, dancer with a suit-case"
-        />
+        <Box sx={{ width: "75px" }}>
+          <AppLogo />
+        </Box>
+
         <Box sx={{ my: "10px", fontSize: "0.8em" }}>LinkLoop</Box>
       </Box>
     </>
   );
 };
 
-
-export default AppLoading
+export default AppLoading;
