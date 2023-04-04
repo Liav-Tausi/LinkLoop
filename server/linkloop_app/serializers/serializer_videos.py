@@ -1,3 +1,5 @@
+import os
+import requests
 from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -23,13 +25,24 @@ class CreateVideoSerializer(serializers.ModelSerializer):
         model = Video
         fields = '__all__'
 
-    def validate(self, attrs):
-        video_url = attrs.get('video_url')
-        video = VideoFileClip(video_url)
-        duration = video.duration
-        if duration <= 30:
-            raise ValidationError({"video": "Video must be less then 30 seconds."})
-        return attrs
+    # def validate(self, attrs):
+    #     video_url = attrs.get('video_url')
+    #     try:
+    #         response = requests.head(video_url)
+    #         response.raise_for_status()
+    #
+    #         ext = os.path.splitext(video_url)[1]
+    #         if ext.lower() not in ['.mp4', '.mov', '.avi', '.mkv']:
+    #             raise ValidationError({"video": "Invalid file extension."})
+    #
+    #         video = VideoFileClip(video_url)
+    #         duration = video.duration
+    #         if duration > 30:
+    #             raise ValidationError({"video": "Video must be less than 30 seconds."})
+    #     except (requests.exceptions.RequestException, IOError, OSError, ValueError) as e:
+    #         raise ValidationError({"video": "Invalid video URL."})
+    #
+    #     return attrs
 
     def create(self, validated_data):
         video = Video.objects.create(

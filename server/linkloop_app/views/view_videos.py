@@ -34,7 +34,7 @@ class VideosModelViewSet(ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            pass
+            return self.queryset
         else:
             return self.queryset
 
