@@ -2,9 +2,9 @@ import { AppBar, Toolbar } from "@mui/material";
 import { useContext, useEffect } from "react";
 import Menu from "./Menu/Menu";
 import Logo from "./Logo/Logo";
-import Search from "./Search";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import AppMessage from "../../App/MainApp/AppMessage/AppMessage";
+import SearchBar from "./SearchBar/SearchBar";
 
 const NavBar = () => {
   const { themeMode, message } = useContext(AppContext);
@@ -40,7 +40,7 @@ const NavBar = () => {
           }}
         >
           <Logo />
-          <Search />
+          <SearchBar />
           <Menu />
         </Toolbar>
       </AppBar>

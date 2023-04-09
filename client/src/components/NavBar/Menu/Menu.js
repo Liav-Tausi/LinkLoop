@@ -12,8 +12,8 @@ import {
 import DisplaySettings from "./DisplaySettings/DisplaySettings";
 import MenuIcon from "./MenuIcon";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { logOut } from "../../../utils/funcs";
 import InMenuTemp from "./logButtons/InMenu/InMenuTemp";
+import { logOut } from "../../../utils/funcs/authFuncs";
 
 const Menu = () => {
   const { themeMode, accessToken, menuOpen } = useContext(AppContext);

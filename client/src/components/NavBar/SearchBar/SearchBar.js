@@ -1,4 +1,4 @@
-const Search = () => {
+const SearchBar = () => {
   return (
     <>
       {/* <Box sx={{ flexGrow: 1, mx: "50px", border: "none" }}>
@@ -20,4 +20,4 @@ const Search = () => {
     </>
   );
 };
-export default Search;
+export default SearchBar;

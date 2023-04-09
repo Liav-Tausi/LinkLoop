@@ -16,7 +16,7 @@ import { validateEmail, validatePassword } from "../formValidators";
 import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
-import { signInUser } from "../../../../../utils/funcs";
+import { signInUser } from "../../../../../utils/funcs/authFuncs";
 
 const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -92,7 +92,7 @@ const SignInFieldGroup = () => {
         "@media (max-width: 600px)": {
           width: 285,
           pt: 0,
-          pb: 3,
+          pb: 1.5,
         },
       }}
     >
@@ -135,7 +135,7 @@ const SignInFieldGroup = () => {
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
             {emailError && formSubmit && (
-              <SignErrorTemp text={"Invalid Email"} top={"32.9%"} />
+              <SignErrorTemp text={"Invalid Email"} top={"29.5%"} />
             )}
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
@@ -159,7 +159,7 @@ const SignInFieldGroup = () => {
             {passwordError && formSubmit && (
               <SignErrorTemp
                 text={"must be at least 8 characters"}
-                top={"42.7%"}
+                top={"39.7%"}
               />
             )}
             <Box

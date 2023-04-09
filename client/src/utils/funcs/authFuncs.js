@@ -1,12 +1,5 @@
 import axios from "axios";
 
-export const detectColorScheme = () => {
-  const isDarkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: light)").matches;
-  return isDarkMode ? "light" : "dark";
-};
-
 export const isLoggedIn = async (accessToken) => {
   const access = accessToken;
   if (await access) {
@@ -29,7 +22,7 @@ export const handleRefreshTokenResponse = async (refreshToken) => {
         refresh: refreshToken,
       }
     );
-    if (tokenResponse.status === 200) {
+    if (tokenResponse.status < 300) {
       return tokenResponse.data.access;
     } else {
       return false;
@@ -48,7 +41,7 @@ export const handleAccessTokenResponse = async (user) => {
         password: user[1],
       }
     );
-    if (tokenResponse.status === 200) {
+    if (tokenResponse.status < 300) {
       return tokenResponse;
     } else {
       return false;
@@ -79,7 +72,7 @@ export const signUpUser = async (user) => {
         username,
         password,
       ]);
-      if (accessTokenResponse.status === 200) {
+      if (accessTokenResponse.status < 300) {
         localStorage.setItem("refresh", accessTokenResponse.data.refresh);
         return accessTokenResponse.data.access;
       }
@@ -103,7 +96,7 @@ export const signInUser = async (user) => {
     username,
     password,
   ]);
-  if (accessTokenResponse.status === 200) {
+  if (accessTokenResponse.status < 300) {
     localStorage.setItem("refresh", accessTokenResponse.data.refresh);
     return accessTokenResponse.data.access;
   } else {
@@ -119,36 +112,11 @@ export const logOut = async (refreshToken) => {
         refresh: refreshToken,
       }
     );
-    if (response.status === 200) {
+    if (response.status < 300) {
       localStorage.removeItem("refresh");
       return true;
     } else {
       return false;
-    }
-  } catch (error) {
-    return false;
-  }
-};
-
-export const getFeedData = async (accessToken) => {
-  try {
-    if (await accessToken) {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/",
-        {
-          Authorization: "Bearer " + accessToken,
-        }
-      );
-      if (response.status === 200) {
-        return await response.data.results;
-      }
-    } else {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/"
-      );
-      if (response.status === 200) {
-        return await response.data.results;
-      }
     }
   } catch (error) {
     return false;

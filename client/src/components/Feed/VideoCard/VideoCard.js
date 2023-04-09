@@ -1,12 +1,14 @@
 import { Box, Grid, Paper, Skeleton } from "@mui/material";
 import { AppContext } from "../../../App/AppStates/AppReducer";
 import { useContext, useEffect, useRef, useState } from "react";
-import VideoData from "./VideoInfo";
+import VideoData from "./VideoData";
+import { isLiked } from "../../../utils/funcs/mainFuncs";
 
 const VideoCard = (props) => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, accessToken } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
   const [playerState, setPlayerState] = useState(1);
+  const [liked, setLiked] = useState(false);
   const playerRef = useRef(null);
 
   const script = document.createElement("script");
@@ -15,12 +17,12 @@ const VideoCard = (props) => {
 
   script.onload = () => {
     window.YT.ready(() => {
-      playerRef.current = new window.YT.Player(props.video_id, {
-        videoId: props.video_id,
+      playerRef.current = new window.YT.Player(props.videoNumber, {
+        videoId: props.videoNumber,
         width: "100%",
         playerVars: {
           loop: 1,
-          playlist: props.video_id,
+          playlist: props.videoNumber,
         },
         events: {
           onStateChange: (e) => {
@@ -31,6 +33,17 @@ const VideoCard = (props) => {
       setIsLoading(false);
     });
   };
+
+  useEffect(() => {
+    const getLikedStatus = async () => {
+      if (accessToken) {
+        const likedStatus = await isLiked(props.videoId, accessToken);
+        setLiked(likedStatus);
+      }
+    };
+
+    getLikedStatus();
+  }, [props.videoId, accessToken]);
 
   return (
     <Paper
@@ -49,7 +62,7 @@ const VideoCard = (props) => {
             <Skeleton
               variant="rectangular"
               width={400}
-              height={585}
+              height={555}
               animation="wave"
             />
             <Skeleton width={100} height={38} animation="wave" />
@@ -60,7 +73,9 @@ const VideoCard = (props) => {
             date={props.date}
             description={props.description}
             title={props.title}
-            id={props.video_id}
+            videoNumber={props.videoNumber}
+            videoId={props.videoId}
+            liked={liked}
           />
         )}
       </Grid>

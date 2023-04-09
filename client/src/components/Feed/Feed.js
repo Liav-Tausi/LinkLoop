@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import VideoCard from "./VideoCard/VideoCard";
 
 const Feed = () => {
-  const { feedData, themeMode } = useContext(AppContext);
+  const { feedData, themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [videos, setVideos] = useState([]);
 
@@ -46,8 +46,8 @@ const Feed = () => {
         videos.map((element) => (
           <VideoCard
             key={element.id}
-            id={element.id}
-            video_id={element.video_url.split("/").pop()}
+            videoId={element.id}
+            videoNumber={element.video_url.split("/").pop()}
             video_url={element.video_url}
             title={element.title}
             description={element.description}

@@ -13,7 +13,7 @@ import Home from "../../pages/Home/Home";
 import NotFound from "../../pages/NotFound/NotFound";
 import AppLoading from "./AppLoading";
 import "./App.css";
-import { isLoggedIn } from "../../utils/funcs";
+import { isLoggedIn } from "../../utils/funcs/authFuncs";
 
 const App = () => {
   const {
@@ -26,6 +26,14 @@ const App = () => {
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
+
+  useEffect(() => {
+    if (signUpOpen || signInOpen) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [signUpOpen, signInOpen]);
 
   const handleThemeChange = (event) => {
     dispatch({

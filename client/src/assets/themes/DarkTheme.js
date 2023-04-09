@@ -2,7 +2,7 @@ const DARK_THEME = {
   theme: "dark",
   body: "#18191a",
   feed: "#242526",
-  signUp: "#0c0c0c",
+  sign: "#0c0c0c",
   signUpBubbles: "#444444",
   signUpField: "#8D8D8D",
   signUpFieldHover: "#A7A7A7",

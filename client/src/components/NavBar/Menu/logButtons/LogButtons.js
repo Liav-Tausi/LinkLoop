@@ -18,13 +18,13 @@ const LogButtons = () => {
 
   return (
     <>
-      {!accessToken && signInOpen && !signUpOpen && <SignIn />}
-      {!accessToken && signUpOpen && !signInOpen && <SignUp />}
       {!isSmallScreen && !accessToken ? (
         <OutMenu />
       ) : (
         !accessToken && <InMenu />
       )}
+      {!accessToken && signInOpen && !signUpOpen && <SignIn />}
+      {!accessToken && signUpOpen && !signInOpen && <SignUp />}
     </>
   );
 };

@@ -12,7 +12,7 @@ const SignErrorTemp = (props) => {
         backgroundColor: themeMode.appTheme,
         position: "absolute",
         top: props.top,
-        right: "110px",
+        right: "85px",
         transform: "translateY(-50%)",
         color: themeMode.textColor,
         display: "flex",
