@@ -27,6 +27,8 @@ class Video(models.Model):
     video_url = models.URLField(verbose_name="video_url", blank=False, null=False)
     topic = models.CharField(db_column="topic", blank=False, null=False, max_length=128,
                              validators=[MinLengthValidator(1)])
+    title = models.CharField(db_column="title", default='', blank=False, null=False, max_length=64,
+                             validators=[MinLengthValidator(1)])
     description = models.TextField(db_column="description", blank=False, null=False, max_length=300,
                                    validators=[MinLengthValidator(1)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
@@ -61,6 +63,7 @@ class VideoImpression(models.Model):
 
     viewer = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    impression_duration = models.TimeField(db_column="impression_duration", blank=True, null=True)
     impression_time = models.DateTimeField(db_column="impression_time", auto_now_add=True)
 
 
