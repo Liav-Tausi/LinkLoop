@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
@@ -14,6 +14,7 @@ import NotFound from "../../pages/NotFound/NotFound";
 import AppLoading from "./AppLoading";
 import "./App.css";
 import { isLoggedIn } from "../../utils/funcs/authFuncs";
+import ProfilePage from "../../pages/ProfilePage/ProfilePage";
 
 const App = () => {
   const {
@@ -35,13 +36,6 @@ const App = () => {
     }
   }, [signUpOpen, signInOpen]);
 
-  const handleThemeChange = (event) => {
-    dispatch({
-      type: APP_ACTIONS.THEME_MODE,
-      payload: event.matches ? DARK_THEME : LIGHT_THEME,
-    });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const result = await isLoggedIn(accessToken);
@@ -54,22 +48,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    dispatch({
-      type: APP_ACTIONS.THEME_MODE,
-      payload: mediaQuery.matches ? DARK_THEME : LIGHT_THEME,
-    });
-
-    mediaQuery.addEventListener("change", handleThemeChange);
-
     const timer = setTimeout(() => {
       dispatch({ type: APP_ACTIONS.APP_LOADED });
     }, 1600);
 
     return () => {
       clearTimeout(timer);
-      mediaQuery.removeEventListener("change", handleThemeChange);
     };
   }, [dispatch]);
 
@@ -113,7 +97,7 @@ const App = () => {
   }, [closeWhenOutside]);
 
   if (!appLoaded) {
-    return <AppLoading colors={themeMode} />;
+    return <AppLoading />;
   }
 
   return (
@@ -121,6 +105,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />}>
           <Route path="/" element={<FeedPage />} />
+          <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

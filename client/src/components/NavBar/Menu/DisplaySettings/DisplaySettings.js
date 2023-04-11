@@ -51,6 +51,7 @@ const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
           ? DARK_THEME
           : LIGHT_THEME,
     });
+    localStorage.setItem("preferredTheme", forceThemeMode);
   }, [forceThemeMode]);
 
   return (

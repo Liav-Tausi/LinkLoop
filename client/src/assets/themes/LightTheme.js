@@ -1,6 +1,8 @@
 const LIGHT_THEME = {
   theme: "light",
   body: "#f7f7f7",
+  anonymousPicture: "#C5C5C5",
+  profileBack: "#E2E2E2",
   feed: "#ffffff",
   sign: "#ffffff",
   signUpBubbles: "#F3F3F3",
@@ -8,6 +10,7 @@ const LIGHT_THEME = {
   signUpFieldHover: "#E4E4E4",
   signUpFieldText: "#0C0C0C",
   textColor: "#0C0C0C",
+  secTextColor: "#505050",
   navColor: "#ffffff",
   navInputColor: "#f7f7f7",
   navInputColorHover: "#eeeff1",

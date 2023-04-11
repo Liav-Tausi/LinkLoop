@@ -151,9 +151,9 @@ const VideoData = (props) => {
               sx={{
                 marginTop: 2,
                 color: themeMode.appTheme,
-                transform: "scale(1.45)",
+                transform: "scale(1.8)",
                 "&:hover": {
-                  transform: "scale(1.4)",
+                  transform: "scale(1.6)",
                   cursor: "pointer",
                 },
                 "&:active": {

@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
 import { ReactComponent as AppLogo } from "../../assets/imgs/AppLogo.svg";
+import { useContext } from "react";
+import { AppContext } from "../AppStates/AppReducer";
 
-const AppLoading = ({ colors }) => {
+const AppLoading = () => {
+  const { themeMode } = useContext(AppContext);
   return (
     <>
       <Box
@@ -14,9 +17,9 @@ const AppLoading = ({ colors }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: colors.body,
+          backgroundColor: themeMode.body,
           zIndex: 9999,
-          color: colors.textColor,
+          color: themeMode.textColor,
           flexDirection: "column",
         }}
       >

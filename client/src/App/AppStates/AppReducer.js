@@ -3,7 +3,7 @@ import { createContext, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
 import { isLoggedIn } from "../../utils/funcs/authFuncs";
-import { getFeedData } from "../../utils/funcs/mainFuncs";
+import { getFeedData, getProfileData } from "../../utils/funcs/mainFuncs";
 import { detectColorScheme } from "../../utils/funcs/confFuncs";
 
 const awaitIsLoggedIn = async () => {
@@ -17,9 +17,19 @@ const awaitGetFeedData = async () => {
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
   feedData: awaitGetFeedData(),
-  themeMode: detectColorScheme() === "dark" ? DARK_THEME : LIGHT_THEME,
+  themeMode: localStorage.getItem("preferredTheme")
+    ? localStorage.getItem("preferredTheme") === "2"
+      ? DARK_THEME
+      : LIGHT_THEME
+    : detectColorScheme() === "dark"
+    ? DARK_THEME
+    : LIGHT_THEME,
   message: null,
-  forceThemeMode: 3,
+  forceThemeMode: localStorage.getItem("preferredTheme")
+    ? localStorage.getItem("preferredTheme") === "2"
+      ? 2
+      : 1
+    : 3,
   appLoaded: false,
   menuOpen: false,
   signUpOpen: false,

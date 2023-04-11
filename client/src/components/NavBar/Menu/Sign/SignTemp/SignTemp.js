@@ -13,10 +13,6 @@ const SignTemp = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const ref = useContext(Ref);
 
-  useEffect(() => {
-    console.log("sign up refresh");
-  }, []);
-
   return (
     <Box
       sx={{

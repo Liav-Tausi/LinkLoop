@@ -4,7 +4,7 @@ import {
   VisibilityRounded,
 } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -30,6 +30,10 @@ const SignInFieldGroup = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+
+  useEffect(()=> {
+    console.log('signInFieldGroup refresh')
+  },[])
 
   const handleSubmit = async (event) => {
     event.preventDefault();

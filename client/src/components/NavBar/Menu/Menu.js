@@ -20,8 +20,6 @@ const Menu = () => {
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [menuDisplaySettings, setMenuDisplaySettings] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-
   const ref = useContext(Ref);
 
   const handleMenuDisplaySettingsChange = () => {
@@ -48,31 +46,9 @@ const Menu = () => {
     }
   };
 
-  const isMenuClosed = !menuOpen;
-  useEffect(() => {
-    if (isMenuClosed) {
-      setMenuDisplaySettings(false);
-    }
-  }, [isMenuClosed]);
-
   return (
     <>
-      {showOverlay && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 999,
-            backgroundColor: "transparent",
-          }}
-          onClick={() => setShowOverlay(false)}
-        />
-      )}
       <Box
-        onClick={() => setShowOverlay(true)}
         sx={{
           position: "relative",
           gap: 1,

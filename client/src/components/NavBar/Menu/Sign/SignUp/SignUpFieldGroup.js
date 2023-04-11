@@ -1,5 +1,5 @@
 import { Box, IconButton } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -43,6 +43,12 @@ const SignUpFieldGroup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  useEffect(()=> {
+     console.log("SignUpFieldGroup refresh");
+  }, [])
+
+ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();

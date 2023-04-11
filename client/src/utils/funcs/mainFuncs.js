@@ -1,9 +1,42 @@
 import axios from "axios";
 
+export const getProfileData = async (accessToken, username) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    }
+    else if (username) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/profile/main/?username=${username}`
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
 
 export const getFeedData = async (accessToken) => {
   try {
-    if (await accessToken) {
+    if (accessToken) {
       const response = await axios.get(
         "http://127.0.0.1:8000/api/v1/videos/main/",
         {
@@ -84,5 +117,3 @@ export const videoLike = async (videoId, accessToken, remove) => {
     return false;
   }
 };
-
-
