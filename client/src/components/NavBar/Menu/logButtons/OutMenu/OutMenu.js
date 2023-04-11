@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   AppDispatchContext,
   APP_ACTIONS,
@@ -7,6 +7,10 @@ import OutMenuTemp from "./OutMenuTemp";
 
 const OutMenu = () => {
   const dispatch = useContext(AppDispatchContext);
+
+    useEffect(() => {
+      console.log("OutMenu refresh");
+    }, []);
 
   return (
     <>

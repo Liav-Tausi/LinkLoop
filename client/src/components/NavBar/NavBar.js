@@ -1,13 +1,15 @@
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Box, Toolbar } from "@mui/material";
 import { useContext, useEffect } from "react";
 import Menu from "./Menu/Menu";
 import Logo from "./Logo/Logo";
-import Search from "./Search";
-import { AppContext } from "../../App/AppStates/AppReducer";
+import { AppContext, IsSmallScreenContext } from "../../App/AppStates/AppReducer";
 import AppMessage from "../../App/MainApp/AppMessage/AppMessage";
+import SearchBar from "./SearchBar/SearchBar";
+import ProfilePic from "./ProfilePic/ProfilePic";
 
 const NavBar = () => {
   const { themeMode, message } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext)
 
   useEffect(() => {
     console.log("nav refresh");
@@ -40,8 +42,12 @@ const NavBar = () => {
           }}
         >
           <Logo />
-          <Search />
-          <Menu />
+          <SearchBar />
+          <Box sx={{ display: "flex", alignItems: "center",
+           justifyContent: "center", gap: isSmallScreen? 0 : 1.8}}>
+            <ProfilePic />
+            <Menu />
+          </Box>
         </Toolbar>
       </AppBar>
       {message && <AppMessage />}

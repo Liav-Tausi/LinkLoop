@@ -5,7 +5,7 @@ import { useContext  } from "react";
 import { AppContext, AppDispatchContext, APP_ACTIONS } from "../../../App/AppStates/AppReducer";
 
 const MenuIcon = () => {
-    const { themeMode } = useContext(AppContext);
+    const { themeMode, accessToken} = useContext(AppContext);
     const dispatch = useContext(AppDispatchContext);
 
   return (
@@ -18,8 +18,8 @@ const MenuIcon = () => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        py: "4px",
-        px: "5px",
+        py: accessToken ? "5px": "4px",
+        px: accessToken ? "5.5px": "4.5px",
         borderRadius: "50%",
         backgroundColor: themeMode.navInputColor,
         "&:hover": {
@@ -29,17 +29,13 @@ const MenuIcon = () => {
         "&:active": {
           transform: "scale(0.97)",
         },
-        "@media (max-width: 600px)": {
-          py: "4px",
-          px: "5px",
-        },
       }}
     >
       <MenuRoundedIcon
         id={"hamburgerMenu"}
         sx={{
           color: themeMode.textColor,
-          fontSize: "22px",
+          fontSize: accessToken ? "29px" : "23px",
         }}
       />
     </Box>

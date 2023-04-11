@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../../../../App/AppStates/AppReducer";
 
@@ -24,11 +24,12 @@ const OutMenuTemp = (props) => {
           borderRadius: 1,
           backgroundColor: themeMode.navInputColor,
         },
-        fontSize: "9.5px",
+        px: 1.8,
+        py: 0.7,
         boxShadow: "none",
       }}
     >
-      {props.text}
+      <Box sx={{fontSize: "10.5px"}}>{props.text}</Box>
     </Button>
   );
 };

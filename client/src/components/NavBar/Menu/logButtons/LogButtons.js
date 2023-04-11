@@ -11,6 +11,7 @@ import SignIn from "../Sign/SignIn/SignIn";
 const LogButtons = () => {
   const { accessToken, signUpOpen, signInOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+  console.log(signInOpen);
 
   useEffect(() => {
     console.log("log buttons refresh");
@@ -18,13 +19,13 @@ const LogButtons = () => {
 
   return (
     <>
-      {!accessToken && signInOpen && !signUpOpen && <SignIn />}
-      {!accessToken && signUpOpen && !signInOpen && <SignUp />}
       {!isSmallScreen && !accessToken ? (
         <OutMenu />
       ) : (
         !accessToken && <InMenu />
       )}
+      {!accessToken && signInOpen && !signUpOpen && <SignIn />}
+      {!accessToken && signUpOpen && !signInOpen && <SignUp />}
     </>
   );
 };

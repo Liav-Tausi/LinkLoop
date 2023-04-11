@@ -15,21 +15,25 @@ const Logo = () => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Box
-          sx={{
-            "@media (max-width: 600px)": {
-              paddingLeft: "14px",
-            },
-          }}
-        >
+      <Box
+        sx={{
+          "@media (max-width: 600px)": {
+            paddingLeft: "14px",
+          },
+        }}
+      >
+        <Link to="/">
           {isSmallScreen ? (
-            <AppLogo style={{ width: "40px", padding: "0.5em" }} />
+            <AppLogo
+              style={{ marginTop: 3, width: "42px", padding: "0.12em" }}
+            />
           ) : themeMode.theme === "light" ? (
             <AppLogoBlack style={{ width: "200px" }} />
           ) : (
             <AppLogoWhite style={{ width: "200px" }} />
           )}
-        </Box>
+        </Link>
+      </Box>
     </Box>
   );
 };

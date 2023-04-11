@@ -1,19 +1,19 @@
 import Title from "./Title";
-import { Box, Button, Container, Radio, Stack } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 import {
   AppContext,
   AppDispatchContext,
   APP_ACTIONS,
   IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import PrecisionManufacturingRoundedIcon from "@mui/icons-material/PrecisionManufacturingRounded";
 import DARK_THEME from "../../../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../../../assets/themes/LightTheme";
-import { detectColorScheme } from "../../../../utils/funcs";
 import DisplayOptions from "./DisplayOptions";
+import { detectColorScheme } from "../../../../utils/funcs/confFuncs";
 
 const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
   const dispatch = useContext(AppDispatchContext);
@@ -51,6 +51,7 @@ const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
           ? DARK_THEME
           : LIGHT_THEME,
     });
+    localStorage.setItem("preferredTheme", forceThemeMode);
   }, [forceThemeMode]);
 
   return (

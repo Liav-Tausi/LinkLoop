@@ -1,6 +1,6 @@
 import BookIcon from "@mui/icons-material/Book";
 import LoginIcon from "@mui/icons-material/Login";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -11,6 +11,11 @@ import InMenuTemp from "./InMenuTemp";
 const InMenu = () => {
   const { themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
+
+  useEffect(() => {
+    console.log("InMenu refresh");
+  }, []);
+  
 
   return (
     <>

@@ -2,7 +2,9 @@ import { useMediaQuery } from "@mui/material";
 import { createContext, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
-import { detectColorScheme, getFeedData, isLoggedIn } from "../../utils/funcs";
+import { isLoggedIn } from "../../utils/funcs/authFuncs";
+import { getFeedData, getProfileData } from "../../utils/funcs/mainFuncs";
+import { detectColorScheme } from "../../utils/funcs/confFuncs";
 
 const awaitIsLoggedIn = async () => {
   return await isLoggedIn("");
@@ -14,10 +16,20 @@ const awaitGetFeedData = async () => {
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
-  feedData: awaitGetFeedData() ,
-  themeMode: detectColorScheme() === "dark" ? DARK_THEME : LIGHT_THEME,
+  feedData: awaitGetFeedData(),
+  themeMode: localStorage.getItem("preferredTheme")
+    ? localStorage.getItem("preferredTheme") === "2"
+      ? DARK_THEME
+      : LIGHT_THEME
+    : detectColorScheme() === "dark"
+    ? DARK_THEME
+    : LIGHT_THEME,
   message: null,
-  forceThemeMode: 3,
+  forceThemeMode: localStorage.getItem("preferredTheme")
+    ? localStorage.getItem("preferredTheme") === "2"
+      ? 2
+      : 1
+    : 3,
   appLoaded: false,
   menuOpen: false,
   signUpOpen: false,
@@ -65,15 +77,15 @@ export const AppReducer = (states, action) => {
     case APP_ACTIONS.SIGN_UP_OPEN: {
       return {
         ...states,
-        signUpOpen: !states.signUpOpen,
         signInOpen: false,
+        signUpOpen: !states.signUpOpen,
       };
     }
     case APP_ACTIONS.SIGN_IN_OPEN: {
       return {
         ...states,
-        signInOpen: !states.signInOpen,
         signUpOpen: false,
+        signInOpen: !states.signInOpen,
       };
     }
     case APP_ACTIONS.THEME_MODE: {
@@ -110,7 +122,7 @@ export const Ref = createContext(null);
 
 export const AppProvider = ({ children }) => {
   const [appState, dispatch] = useReducer(AppReducer, INITIAL_APP_STATE);
-  const isSmallScreen = useMediaQuery("(max-width:599px)");
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
   const ref = useRef(null);
 
   return (
