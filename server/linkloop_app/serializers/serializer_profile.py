@@ -3,10 +3,12 @@ from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from .serializer_user import UserSerializer
 from ..models import Profile, ProfileImpression
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Profile
         fields = '__all__'
