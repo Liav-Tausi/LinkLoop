@@ -22,6 +22,7 @@ const App = () => {
     appLoaded,
     signUpOpen,
     signInOpen,
+    profilePatch,
     menuOpen,
     accessToken,
   } = useContext(AppContext);
@@ -69,6 +70,7 @@ const App = () => {
 
   const closeWhenOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
+      console.log(ref.current);
       if (ref.current.id === "signUp" && signUpOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_UP_OPEN,
@@ -76,6 +78,10 @@ const App = () => {
       } else if (ref.current.id === "signIn" && signInOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_IN_OPEN,
+        });
+      } else if (ref.current.id === "profilePatch" && profilePatch) {
+        dispatch({
+          type: APP_ACTIONS.PROFILE_PATCH,
         });
       } else if (
         ref.current.id === "menu" &&

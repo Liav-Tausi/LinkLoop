@@ -34,6 +34,7 @@ export const INITIAL_APP_STATE = {
   menuOpen: false,
   signUpOpen: false,
   signInOpen: false,
+  profilePatch: false,
 };
 
 export const APP_ACTIONS = {
@@ -46,6 +47,7 @@ export const APP_ACTIONS = {
   MENU_OPEN_CLOSE: "openClose",
   SIGN_UP_OPEN: "signUpOpen",
   SIGN_IN_OPEN: "signInOpen",
+  PROFILE_PATCH: "profilePatch",
 };
 
 export const AppReducer = (states, action) => {
@@ -86,6 +88,12 @@ export const AppReducer = (states, action) => {
         ...states,
         signUpOpen: false,
         signInOpen: !states.signInOpen,
+      };
+    }
+    case APP_ACTIONS.PROFILE_PATCH: {
+      return {
+        ...states,
+        profilePatch: !states.profilePatch,
       };
     }
     case APP_ACTIONS.THEME_MODE: {

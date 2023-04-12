@@ -64,8 +64,8 @@ const Feed = () => {
         >
           <Skeleton
             variant="rectangular"
-            width={400}
-            height={600}
+            width="350px"
+            height="500px"
             animation="wave"
           />
         </Paper>

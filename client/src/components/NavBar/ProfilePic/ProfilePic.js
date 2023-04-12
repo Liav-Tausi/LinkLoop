@@ -3,25 +3,35 @@ import { AppContext } from "../../../App/AppStates/AppReducer";
 import { Box } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
-import { getProfileData } from "../../../utils/funcs/mainFuncs";
+import { getProfileData, getUserData } from "../../../utils/funcs/mainFuncs";
 
 const ProfilePic = () => {
   const { accessToken, themeMode } = useContext(AppContext);
-  const [profileData, setProfileData] = useState({});
+  const [userData, setUserData] = useState(null);
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const retVal = await getProfileData(accessToken, null);
+      setProfileData(retVal.data);
+    };
+    fetchProfileData();
+  }, [accessToken]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await getProfileData(accessToken, null);
-      setProfileData(res.data);
+      const retVal = await getUserData(accessToken, null);
+      console.log(retVal);
+      setUserData(retVal.data);
     };
     fetchUserData();
   }, [accessToken]);
 
   return (
     <>
-      {accessToken && profileData && (
-        <Link to={`profile/${profileData.user?.username}`}>
-          {profileData.profile_picture ? (
+      {userData?.username && (
+        <Link to={`profile/${userData.username}`}>
+          {accessToken && profileData && profileData.profile_picture ? (
             <Box sx={{ width: 37, height: 37 }}>
               <img
                 style={{ width: "100%", borderRadius: "50%" }}
@@ -39,6 +49,18 @@ const ProfilePic = () => {
               }}
             />
           )}
+        </Link>
+      )}
+      {!userData && accessToken && (
+        <Link to={`profile/${userData?.username}`}>
+          <AccountCircleIcon
+            sx={{
+              mt: 0.45,
+              transform: "scale(1.95)",
+              color: themeMode.anonymousPicture,
+              mx: 1,
+            }}
+          />
         </Link>
       )}
     </>

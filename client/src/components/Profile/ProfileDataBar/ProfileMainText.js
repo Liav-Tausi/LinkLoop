@@ -14,17 +14,27 @@ const ProfileMainText = (props) => {
           alignSelf: "flex-start",
         }}
       >
-        {props.profileData.user ? (
+        {props.profileData?.user ? (
           <>
             <Box
-              sx={{ fontSize: "20px", mb: 1.5, color: themeMode.textColor }}
-            >{`${props.profileData?.user?.first_name} ${props.profileData?.user?.last_name}`}</Box>
+              sx={{ fontSize: "23px", mb: 1.5, color: themeMode.textColor }}
+            >{`${props.profileData.user.first_name} ${props.profileData.user.last_name}`}</Box>
             <Box
               sx={{ color: themeMode.textColor, mb: 0.8 }}
             >{`${props.profileData.headline}`}</Box>
             <Box
               sx={{ fontSize: "12px", color: themeMode.secTextColor }}
             >{`${props.profileData.location}`}</Box>
+          </>
+        ) : props.userData ? (
+          <>
+            <Box
+              sx={{ fontSize: "23px", mb: 1.5, color: themeMode.textColor }}
+            >{`${props.userData.first_name} ${props.userData.last_name}`}</Box>
+            <Box sx={{ color: themeMode.textColor, mb: 0.8 }}>headline</Box>
+            <Box sx={{ fontSize: "12px", color: themeMode.secTextColor }}>
+              location
+            </Box>
           </>
         ) : (
           <>
@@ -40,6 +50,6 @@ const ProfileMainText = (props) => {
       </Box>
     </Box>
   );
-}
+};
 
 export default ProfileMainText;
