@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useContext } from "react";
-import { AppContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 
 const ProfileDataBarPicture = (props) => {
   const { themeMode } = useContext(AppContext);
@@ -9,10 +12,10 @@ const ProfileDataBarPicture = (props) => {
 
   return (
     <Box sx={{ position: "relative", width: 175, height: 175 }}>
-      {props.profileData.profile_picture ? (
+      {props.profileData?.profile_picture ? (
         <img
           style={{
-            width: isSmallScreen ? 20 : "10em",
+            width: isSmallScreen ? "8em" : "10em",
             borderRadius: "50%",
           }}
           src={props.profileData.profile_picture}
@@ -42,6 +45,6 @@ const ProfileDataBarPicture = (props) => {
       )}
     </Box>
   );
-}
+};
 
-export default ProfileDataBarPicture;;
+export default ProfileDataBarPicture;

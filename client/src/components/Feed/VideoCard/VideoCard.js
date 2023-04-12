@@ -61,12 +61,16 @@ const VideoCard = (props) => {
             </Box>
             <Skeleton
               variant="rectangular"
-              width={400}
-              height={555}
+              width="350px"
+              height="500px"
               animation="wave"
             />
-            <Skeleton width={100} height={38} animation="wave" />
-            <Skeleton height={30} animation="wave" />
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={100} height={38} animation="wave" />
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={250} height={35} animation="wave" />
+            </Box>
           </>
         ) : (
           <VideoData

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -7,6 +7,7 @@ import {
 import SignTitle from "../SignTitle";
 import { Box, Paper } from "@mui/material";
 import "../SignTemp/SignTemp.css";
+import BlurBack from "../../../../../utils/Comps/BlurBack";
 
 const SignTemp = (props) => {
   const { themeMode, signInOpen } = useContext(AppContext);
@@ -14,17 +15,7 @@ const SignTemp = (props) => {
   const ref = useContext(Ref);
 
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        zIndex: 9996,
-        backdropFilter: signInOpen ? "blur(2.4px)" : "blur(5px)",
-      }}
-    >
+    <BlurBack>
       <Paper
         ref={ref}
         id={props.SignId}
@@ -81,7 +72,7 @@ const SignTemp = (props) => {
           </Box>
         </Box>
       </Paper>
-    </Box>
+    </BlurBack>
   );
 };
 

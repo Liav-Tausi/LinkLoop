@@ -17,6 +17,7 @@ import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
 import { signInUser } from "../../../../../utils/funcs/authFuncs";
+import SignField from "../SignTemp/SignField";
 
 const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -31,9 +32,9 @@ const SignInFieldGroup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
 
-  useEffect(()=> {
-    console.log('signInFieldGroup refresh')
-  },[])
+  useEffect(() => {
+    console.log("signInFieldGroup refresh");
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -85,21 +86,7 @@ const SignInFieldGroup = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: 317.5,
-        mt: 2,
-        p: 1,
-        pb: 2,
-        borderRadius: "25px",
-        backgroundColor: themeMode.signUpBubbles,
-        "@media (max-width: 600px)": {
-          width: 285,
-          pt: 0,
-          pb: 1.5,
-        },
-      }}
-    >
+    <SignField>
       <Box
         sx={{
           display: "flex",
@@ -194,7 +181,7 @@ const SignInFieldGroup = () => {
           <SignSubmit />
         </form>
       </Box>
-    </Box>
+    </SignField>
   );
 };
 
