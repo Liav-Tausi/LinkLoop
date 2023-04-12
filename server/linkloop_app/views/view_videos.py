@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.mixins import DestroyModelMixin
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -61,10 +62,12 @@ class LikesModelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = LikeVideoSerializer
     authentication_classes = [JWTAuthentication]
+    allowed_methods = ['GET', 'POST', 'DELETE']
 
     def create(self, request, *args, **kwargs):
         video_id = kwargs['video_pk']
         user_id = request.user.pk
+        print(kwargs)
         existing_like = VideoLike.objects.filter(video=video_id, user=user_id).exists()
         if existing_like:
             return Response({'detail': 'You have already liked this video'}, status=status.HTTP_400_BAD_REQUEST)
@@ -86,6 +89,26 @@ class LikesModelViewSet(ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def retrieve(self, request, *args, **kwargs):
+        video_id = kwargs['video_pk']
+        user_id = request.user.pk
+        like = VideoLike.objects.filter(video=video_id, user=user_id).first()
+        if not like:
+            return Response({'detail': 'You have not liked this video yet'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(like)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def destroy(self, request, *args, **kwargs):
+        video_id = kwargs['video_pk']
+        user_id = request.user.pk
+        like = VideoLike.objects.filter(video=video_id, user=user_id)
+        if not like.exists():
+            return Response({'detail': 'You have not liked this video yet'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.perform_destroy(like)
+        return Response({'detail': 'You have unliked this video'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
