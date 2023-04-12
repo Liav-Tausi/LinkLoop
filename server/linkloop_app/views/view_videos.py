@@ -1,3 +1,4 @@
+import django_filters
 from rest_framework import status
 from rest_framework.mixins import DestroyModelMixin
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -21,9 +22,18 @@ from ..serializers.serializer_videos import (
 )
 
 
+class VideoFilter(django_filters.FilterSet):
+    username = django_filters.CharFilter(field_name='user__username', lookup_expr='iexact')
+
+    class Meta:
+        model = Video
+        fields = ['username']
+
+
 class VideosModelViewSet(ModelViewSet):
     queryset = Video.objects.all()
     permission_classes = [AllowAny]
+    filterset_class = VideoFilter
     depth = 3
 
     serializer_class = {
@@ -47,6 +57,14 @@ class VideosModelViewSet(ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def retrieve(self, request, *args, **kwargs):
+        user_id = request.user.pk
+        video = Video.objects.filter(user=user_id).first()
+        if not video:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(video)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_permissions(self):
         if self.action in ['create', 'destroy']:
@@ -99,7 +117,6 @@ class LikesModelViewSet(ModelViewSet):
         serializer = self.get_serializer(like)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def destroy(self, request, *args, **kwargs):
         video_id = kwargs['video_pk']
         user_id = request.user.pk
@@ -109,7 +126,6 @@ class LikesModelViewSet(ModelViewSet):
 
         self.perform_destroy(like)
         return Response({'detail': 'You have unliked this video'}, status=status.HTTP_204_NO_CONTENT)
-
 
 
 class CommentsModelViewSet(ModelViewSet):
@@ -163,4 +179,3 @@ class ImpressionModelViewSet(ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
