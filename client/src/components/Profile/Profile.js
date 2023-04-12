@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import ProfileDataBar from "./ProfileDataBar/ProfileDataBar";
+import ProfileData from "./ProfileData/ProfileData";
 const Profile = () => {
     const { username } = useParams();
 
   return (
-    <ProfileDataBar username={username}/>
+    <ProfileData username={username}/>
    
   );
 };
