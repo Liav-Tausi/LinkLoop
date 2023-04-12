@@ -1,29 +1,26 @@
 import { Box } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import {
-  APP_ACTIONS,
   AppContext,
   AppDispatchContext,
 } from "../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-const ProfileEditButton = () => {
+const ProfileEditButton = (props) => {
   const { themeMode } = useContext(AppContext);
-  const dispatch = useContext(AppDispatchContext);
 
   return (
     <Box
-      onClick={() =>
-        dispatch({
-          type: APP_ACTIONS.PROFILE_PATCH,
-        })
-      }
+      onClick={props.func}
       sx={{
+        display: "flex",
+        justifyContent: "center",
         borderRadius: "50%",
-        px: 1.3,
-        py: 1,
+        px: props.sizeX,
+        py: props.sizeY,
+        backgroundColor: props.background,
         "&:hover": {
-          backgroundColor: themeMode.navInputColor,
+          backgroundColor: props.hoverColor,
           cursor: "pointer",
         },
         "&:active": {
@@ -32,7 +29,7 @@ const ProfileEditButton = () => {
       }}
     >
       <EditRoundedIcon
-        sx={{ color: themeMode.textColor, transform: "scale(1.1)" }}
+        sx={{ color: themeMode.textColor, transform: props.scale }}
       />
     </Box>
   );

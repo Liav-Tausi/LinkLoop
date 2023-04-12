@@ -3,7 +3,7 @@ import { createContext, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
 import { isLoggedIn } from "../../utils/funcs/authFuncs";
-import { getFeedData, getProfileData } from "../../utils/funcs/mainFuncs";
+import { getFeedData } from "../../utils/funcs/mainFuncs";
 import { detectColorScheme } from "../../utils/funcs/confFuncs";
 
 const awaitIsLoggedIn = async () => {
@@ -16,6 +16,7 @@ const awaitGetFeedData = async () => {
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
+  user: null,
   feedData: awaitGetFeedData(),
   themeMode: localStorage.getItem("preferredTheme")
     ? localStorage.getItem("preferredTheme") === "2"
@@ -40,6 +41,7 @@ export const INITIAL_APP_STATE = {
 export const APP_ACTIONS = {
   APP_LOADED: "appLoaded",
   ACCESS_TOKEN: "accessToken",
+  USER: "user",
   FEED_DATA: "feedData",
   MESSAGE: "message",
   THEME_MODE: "themeMode",
@@ -56,6 +58,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         accessToken: action.payload,
+      };
+    }
+    case APP_ACTIONS.USER: {
+      return {
+        ...states,
+        user: action.payload,
       };
     }
     case APP_ACTIONS.FEED_DATA: {

@@ -12,6 +12,7 @@ const SignFieldTemp = (props) => {
 
   return (
     <InputBase
+      fullWidth={true}
       required={true}
       type={props.type}
       position={"fixed"}

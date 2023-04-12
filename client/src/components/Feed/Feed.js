@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import VideoCard from "./VideoCard/VideoCard";
 
 const Feed = () => {
-  const { feedData, themeMode, accessToken } = useContext(AppContext);
+  const { feedData, themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [videos, setVideos] = useState([]);
 

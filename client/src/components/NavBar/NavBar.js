@@ -24,6 +24,8 @@ const NavBar = () => {
           top: -1,
           backgroundColor: themeMode.navColor,
           borderBottom: "2px solid " + themeMode.navInputColor,
+          left: 0,
+          right: 0,
         }}
       >
         <Toolbar
@@ -43,8 +45,14 @@ const NavBar = () => {
         >
           <Logo />
           <SearchBar />
-          <Box sx={{ display: "flex", alignItems: "center",
-           justifyContent: "center", gap: isSmallScreen? 0 : 1.8}}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: isSmallScreen ? 0 : 1.8,
+            }}
+          >
             <ProfilePic />
             <Menu />
           </Box>

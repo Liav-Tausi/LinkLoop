@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../App/AppStates/AppReducer";
+import { APP_ACTIONS, AppContext, AppDispatchContext } from "../../../App/AppStates/AppReducer";
 import { Box } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import { getProfileData, getUserData } from "../../../utils/funcs/mainFuncs";
 
 const ProfilePic = () => {
   const { accessToken, themeMode } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext)
   const [userData, setUserData] = useState(null);
   const [profileData, setProfileData] = useState(null);
 
@@ -21,8 +22,12 @@ const ProfilePic = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const retVal = await getUserData(accessToken, null);
-      console.log(retVal);
       setUserData(retVal.data);
+      dispatch({
+        type: APP_ACTIONS.USER,
+        payload: retVal.data
+      });
+
     };
     fetchUserData();
   }, [accessToken]);

@@ -66,6 +66,26 @@ export const getUserData = async (accessToken, username) => {
   }
 };
 
+export const getVideosOfUser = async (username) => {
+  try {
+    if (username) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/videos/main/?username=${username}`
+      );
+      if (response.status < 300) {
+  
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false
+    }
+  } catch {
+    return false
+  }
+}
+
 export const getFeedData = async (accessToken) => {
   try {
     if (accessToken) {
