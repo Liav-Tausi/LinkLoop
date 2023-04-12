@@ -29,7 +29,7 @@ const ProfileDataBar = (props) => {
         }}
       >
         <Box sx={{ display: "flex", position: "sticky" }}>
-          <ProfileDataBarPicture profileData={props.profileData} />
+          <ProfileDataBarPicture profileData={props.profileData} username={props.username}/>
           <ProfileMainText profileData={props.profileData} />
         </Box>
         {user?.username === props.username && (

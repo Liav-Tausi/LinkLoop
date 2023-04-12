@@ -7,11 +7,10 @@ import {
   AppDispatchContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ProfileEditButton from "./ProfileEditButton";
 
 const ProfileDataBarPicture = (props) => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, user} = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
 
@@ -35,7 +34,8 @@ const ProfileDataBarPicture = (props) => {
             src={props.profileData.profile_picture}
             alt="profile picture"
           />
-          <Box sx={{ position: "absolute", right: 30, bottom: 15 }}>
+          {user?.username === props.username &&
+          <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
             <ProfileEditButton
               sizeX={0.7}
               sizeY={0.65}
@@ -49,6 +49,7 @@ const ProfileDataBarPicture = (props) => {
               }
             />
           </Box>
+          }
         </>
       ) : (
         <Box
