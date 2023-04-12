@@ -11,6 +11,8 @@ class Profile(models.Model):
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     headline = models.CharField(db_column="headline", blank=False, default="", null=False, max_length=32,
                                 validators=[MinLengthValidator(3)])
+    about = models.TextField(db_column="about", blank=True, null=True, max_length=2000,
+                             validators=[MinLengthValidator(10)])
     location = models.CharField(db_column="location", blank=False, null=False, max_length=128,
                                 validators=[MinLengthValidator(10)])
     rating = models.PositiveSmallIntegerField(db_column="rating", blank=True, null=True,
