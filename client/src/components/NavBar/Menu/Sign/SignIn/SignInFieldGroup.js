@@ -23,14 +23,19 @@ const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-
-  const [signUpEmail, setSignUpEmail] = useState("");
-  const [signUpPassword, setSignUpPassword] = useState("");
-
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+
+  const [signInData, setSignInData] = useState({
+    signUpEmail: "",
+    signUpPassword: "",
+  });
+
+  const [errors, setErrors] = useState({
+    emailError: false,
+    passwordError: false,
+  });
+
 
   useEffect(() => {
     console.log("signInFieldGroup refresh");
@@ -39,7 +44,7 @@ const SignInFieldGroup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmit(true);
-    if (passwordError || emailError) {
+    if (errors.passwordError || errors.emailError) {
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -68,21 +73,21 @@ const SignInFieldGroup = () => {
             payload: "Sorry, we couldn't find this account",
           });
           setFormSubmit(false);
-          setEmailError(true);
-          setPasswordError(true);
+          setErrors((error) => ({ ...error, emailError: true }));
+          setErrors((error) => ({ ...error, passwordError: true }));
         }
       }
     }
   };
 
   const handleEmailChange = (event) => {
-    setEmailError(!validateEmail(event.target.value));
-    setSignUpEmail(event.target.value);
+    setErrors((error) => ({ ...error, emailError: !validateEmail(event.target.value)}));
+    setSignInData((data) => ({ ...data, signUpEmail: event.target.value, }));
   };
 
   const handlePasswordChange = (event) => {
-    setPasswordError(validatePassword(event.target.value));
-    setSignUpPassword(event.target.value);
+    setErrors((error) => ({ ...error, passwordError: validatePassword(event.target.value) }));
+    setSignInData((data) => ({ ...data, signUpPassword: event.target.value }));
   };
 
   return (
@@ -120,30 +125,30 @@ const SignInFieldGroup = () => {
               type={"email"}
               placeholder={"Email"}
               autocomplete={"username"}
-              error={emailError}
-              sign={signUpEmail}
+              error={errors.emailError}
+              sign={signInData.signUpEmail}
               handleChange={handleEmailChange}
               padding={"8px"}
               paddingL={"18px"}
               multiline={false}
-              row="1"
+              maxRows={1}
             >
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
-            {emailError && formSubmit && (
+            {errors.emailError && formSubmit && (
               <SignErrorTemp text={"Invalid Email"} top={"29.5%"} />
             )}
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
               placeholder={"Password"}
               autocomplete={"current-password"}
-              error={passwordError}
-              sign={signUpPassword}
+              error={errors.passwordError}
+              sign={signInData.signUpPassword}
               handleChange={handlePasswordChange}
               padding={"8px"}
               paddingL={"18px"}
               multiline={false}
-              row="1"
+              maxRows={1}
             >
               <IconButton
                 onClick={() => {
@@ -157,7 +162,7 @@ const SignInFieldGroup = () => {
                 )}
               </IconButton>
             </SignFieldTemp>
-            {passwordError && formSubmit && (
+            {errors.passwordError && formSubmit && (
               <SignErrorTemp
                 text={"must be at least 8 characters"}
                 top={"39.7%"}

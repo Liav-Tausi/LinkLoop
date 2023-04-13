@@ -19,7 +19,7 @@ const SignFieldTemp = (props) => {
       placeholder={props.placeholder}
       autoComplete={props.autocomplete}
       multiline={props.multiline}
-      rows={props.rows}
+      maxRows={props.maxRows}
       sx={{
         border: `solid 1px ${
           props.sign && props.error

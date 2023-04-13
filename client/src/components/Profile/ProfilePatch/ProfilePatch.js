@@ -1,16 +1,13 @@
-import {
-  Box,
-  Container,
-  Paper,
-  Stack,
-} from "@mui/material";
+import { Box, Container, IconButton } from "@mui/material";
 import { useContext } from "react";
 import { APP_ACTIONS, AppContext, AppDispatchContext, Ref } from "../../../App/AppStates/AppReducer";
 import BlurBack from "../../../utils/Comps/BlurBack";
-import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
 import AppLogo from "../../../assets/imgs/AppLogo.svg"
 import { Link } from "react-router-dom";
 import PaperBack from "../../../utils/Comps/PaperBack";
+import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
+import ProfilePatchField from "./ProfilePatchField";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ProfilePatch = () => {
   const { themeMode } = useContext(AppContext);
@@ -36,92 +33,63 @@ const ProfilePatch = () => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ fontSize: 25, my: 1, color: themeMode.textColor }}>
-              Edit Personal Info:
-            </Box>
-            <Link to={"/"}>
-              <Box
-                p={1}
-                cursor="pointer"
-                onClick={() => {
-                  dispatch({
-                    type: APP_ACTIONS.PROFILE_PATCH,
-                  });
-                }}
-              >
-                <img
-                  src={AppLogo}
-                  style={{ width: 35 }}
-                  alt="linkLoop logo"
-                ></img>
-              </Box>
-            </Link>
-          </Container>
-          <Box
-            sx={{
-              backgroundColor: themeMode.signUpBubbles,
-              borderRadius: "26px",
-              py: 2,
-              px: 2,
-              mx: 2,
-              mb: 3,
-            }}
-          >
-            <Stack
+            <Box
               sx={{
-                gap: 3,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: 25,
+                my: 1,
+                color: themeMode.textColor,
               }}
             >
-              <Box>
-                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>
-                  How others will see you:
+              <Link to={"/"}>
+                <Box
+                  pl={0}
+                  pr={1}
+                  cursor="pointer"
+                  onClick={() => {
+                    dispatch({
+                      type: APP_ACTIONS.PROFILE_PATCH,
+                    });
+                  }}
+                >
+                  <img
+                    src={AppLogo}
+                    style={{ width: 35 }}
+                    alt="linkLoop logo"
+                  ></img>
                 </Box>
-                <SignFieldTemp
-                  placeholder="Full Name"
-                  padding="8px"
-                  paddingL="18px"
-                />
-              </Box>
-              <Box>
-                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>
-                  Your professional headline:
-                </Box>
-                <SignFieldTemp
-                  placeholder="Headline"
-                  padding="8px"
-                  paddingL="18px"
-                />
-              </Box>
-              <Box>
-                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>Your location:</Box>
-                <SignFieldTemp
-                  placeholder="Location"
-                  padding="8px"
-                  paddingL="18px"
-                />
-              </Box>
-            </Stack>
-          </Box>
-          <Box
-            sx={{
-              backgroundColor: themeMode.signUpBubbles,
-              borderRadius: "26px",
-              py: 2,
-              px: 2,
-              mx: 2,
-            }}
-          >
-            <Box>
-              <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>About:</Box>
-              <SignFieldTemp
-                placeholder=""
-                padding="13px"
-                paddingL="18px"
-                multiline={true}
-                row="6"
-              />
+              </Link>
+              Edit Personal Info:
             </Box>
-          </Box>
+            <Box
+              p={1}
+              cursor="pointer"
+              onClick={() => {
+                dispatch({
+                  type: APP_ACTIONS.PROFILE_PATCH,
+                });
+              }}
+            >
+              <IconButton>
+                <CloseRoundedIcon sx={{ transform: "scale(1.2)" }} />
+              </IconButton>
+            </Box>
+          </Container>
+          <ProfilePatchField />
+        </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            bottom: 22,
+            left: "50%",
+            right: "50%",
+          }}
+        >
+          <SignSubmit />
         </Box>
       </PaperBack>
     </BlurBack>

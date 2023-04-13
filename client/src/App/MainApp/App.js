@@ -70,7 +70,6 @@ const App = () => {
 
   const closeWhenOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
-      console.log(ref.current);
       if (ref.current.id === "signUp" && signUpOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_UP_OPEN,

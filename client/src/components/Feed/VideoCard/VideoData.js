@@ -46,6 +46,9 @@ const VideoData = (props) => {
       dispatch({
         type: APP_ACTIONS.SIGN_IN_OPEN,
       });
+      if (!signInOpen && accessToken) {
+        handleLike()
+      }
     }
   };
 
