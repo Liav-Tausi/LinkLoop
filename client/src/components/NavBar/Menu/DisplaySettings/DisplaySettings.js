@@ -17,12 +17,12 @@ import { detectColorScheme } from "../../../../utils/funcs/confFuncs";
 
 const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
   const dispatch = useContext(AppDispatchContext);
-  const { themeMode, forceThemeMode } = useContext(AppContext);
+  const { themeMode, forceThemeMode, menuOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   useEffect(() => {
     console.log("display setting refresh");
-  }, []);
+  }, [menuOpen]);
 
   const handleRadioButton = (event) => {
     event.preventDefault();
