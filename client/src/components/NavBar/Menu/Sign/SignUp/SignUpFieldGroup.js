@@ -150,9 +150,14 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"email"}
               placeholder={"Email"}
+              autocomplete={"username"}
               error={emailError}
               sign={signUpEmail}
               handleChange={handleEmailChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
@@ -166,9 +171,14 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"text"}
               placeholder={"Full Name"}
+              autocomplete={"username"}
               error={fullNameError}
               sign={signUpFullName}
               handleChange={handleFullNameChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <BadgeRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
@@ -182,9 +192,14 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
               placeholder={"Password"}
+              autocomplete={"current-password"}
               error={passwordError}
               sign={signUpPassword}
               handleChange={handlePasswordChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <IconButton
                 onClick={() => {
@@ -210,9 +225,14 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"password"}
               placeholder={"Confirm Password"}
+              autocomplete={"current-password"}
               error={passwordConfirmError}
               sign={signUpConfirmPassword}
               handleChange={handlePasswordConfirmChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <LockRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>

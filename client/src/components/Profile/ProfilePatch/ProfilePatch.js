@@ -10,6 +10,7 @@ import BlurBack from "../../../utils/Comps/BlurBack";
 import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
 import AppLogo from "../../../assets/imgs/AppLogo.svg"
 import { Link } from "react-router-dom";
+import PaperBack from "../../../utils/Comps/PaperBack";
 
 const ProfilePatch = () => {
   const { themeMode } = useContext(AppContext);
@@ -18,35 +19,17 @@ const ProfilePatch = () => {
 
   return (
     <BlurBack>
-      <Paper
-        ref={ref}
+      <PaperBack
         id="profilePatch"
-        sx={{
-          boxShadow: 10,
-          mt: 1,
-          zIndex: 9999,
-          borderRadius: "25px",
-          backgroundColor: themeMode.sign,
-          position: "fixed",
-          left: "50%",
-          top: "47%",
-          height: 666,
-          width: 666,
-          transform: "translate(-50%, -50%)",
-          "@media (max-width: 600px)": {
-            height: 600,
-            width: 350,
-          },
-          "@media (max-width: 428px)": {
-            height: 650,
-            width: 330,
-          },
-        }}
+        height={666}
+        width={666}
+        smallHeight={600}
+        boxShadow={10}
       >
         <Box>
           <Container
             sx={{
-              mb: 5,
+              mb: 3,
               borderBottom: "solid 3px" + themeMode.signUpBubbles,
               display: "flex",
               justifyContent: "space-between",
@@ -57,10 +40,15 @@ const ProfilePatch = () => {
               Edit Personal Info:
             </Box>
             <Link to={"/"}>
-              <Box p={1} cursor="pointer" onClick={() => {
-                dispatch({
-                type: APP_ACTIONS.PROFILE_PATCH
-              })}}>
+              <Box
+                p={1}
+                cursor="pointer"
+                onClick={() => {
+                  dispatch({
+                    type: APP_ACTIONS.PROFILE_PATCH,
+                  });
+                }}
+              >
                 <img
                   src={AppLogo}
                   style={{ width: 35 }}
@@ -76,6 +64,7 @@ const ProfilePatch = () => {
               py: 2,
               px: 2,
               mx: 2,
+              mb: 3,
             }}
           >
             <Stack
@@ -83,13 +72,58 @@ const ProfilePatch = () => {
                 gap: 3,
               }}
             >
-              <SignFieldTemp placeholder={"Full Name"} />
-              <SignFieldTemp placeholder={"Headline"} />
-              <SignFieldTemp placeholder={"Location"} />
+              <Box>
+                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>
+                  How others will see you:
+                </Box>
+                <SignFieldTemp
+                  placeholder="Full Name"
+                  padding="8px"
+                  paddingL="18px"
+                />
+              </Box>
+              <Box>
+                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>
+                  Your professional headline:
+                </Box>
+                <SignFieldTemp
+                  placeholder="Headline"
+                  padding="8px"
+                  paddingL="18px"
+                />
+              </Box>
+              <Box>
+                <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>Your location:</Box>
+                <SignFieldTemp
+                  placeholder="Location"
+                  padding="8px"
+                  paddingL="18px"
+                />
+              </Box>
             </Stack>
           </Box>
+          <Box
+            sx={{
+              backgroundColor: themeMode.signUpBubbles,
+              borderRadius: "26px",
+              py: 2,
+              px: 2,
+              mx: 2,
+            }}
+          >
+            <Box>
+              <Box sx={{ ml: 2, my: 0.5, fontSize: 12 }}>About:</Box>
+              <SignFieldTemp
+                placeholder=""
+                padding="13px"
+                paddingL="18px"
+                multiline={true}
+                row="6"
+              />
+            </Box>
+          </Box>
         </Box>
-      </Paper>
+      </PaperBack>
     </BlurBack>
   );
 };

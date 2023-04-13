@@ -119,9 +119,14 @@ const SignInFieldGroup = () => {
             <SignFieldTemp
               type={"email"}
               placeholder={"Email"}
+              autocomplete={"username"}
               error={emailError}
               sign={signUpEmail}
               handleChange={handleEmailChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
@@ -131,9 +136,14 @@ const SignInFieldGroup = () => {
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
               placeholder={"Password"}
+              autocomplete={"current-password"}
               error={passwordError}
               sign={signUpPassword}
               handleChange={handlePasswordChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              row="1"
             >
               <IconButton
                 onClick={() => {

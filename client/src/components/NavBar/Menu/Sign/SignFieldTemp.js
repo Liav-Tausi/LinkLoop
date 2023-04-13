@@ -17,6 +17,9 @@ const SignFieldTemp = (props) => {
       type={props.type}
       position={"fixed"}
       placeholder={props.placeholder}
+      autoComplete={props.autocomplete}
+      multiline={props.multiline}
+      rows={props.rows}
       sx={{
         border: `solid 1px ${
           props.sign && props.error
@@ -25,8 +28,8 @@ const SignFieldTemp = (props) => {
         }`,
         backgroundColor: themeMode.signUpField,
         borderRadius: "25px",
-        p: "8px",
-        pl: "18px",
+        p: props.padding,
+        pl: props.paddingL,
         "& input::placeholder": {
           opacity: 1,
         },
@@ -38,9 +41,7 @@ const SignFieldTemp = (props) => {
       onChange={props.handleChange}
       inputProps={{ style: { color: themeMode.signUpFieldText } }}
       endAdornment={
-        <InputAdornment position="end">
-          {props.children}
-        </InputAdornment>
+        <InputAdornment position="end">{props.children}</InputAdornment>
       }
     />
   );

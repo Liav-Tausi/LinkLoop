@@ -30,12 +30,12 @@ const App = () => {
   const ref = useContext(Ref);
 
   useEffect(() => {
-    if (signUpOpen || signInOpen) {
+    if (signUpOpen || signInOpen || profilePatch) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [signUpOpen, signInOpen]);
+  }, [signUpOpen, signInOpen, profilePatch]);
 
   useEffect(() => {
     const fetchData = async () => {
