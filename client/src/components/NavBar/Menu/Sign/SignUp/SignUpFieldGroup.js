@@ -48,7 +48,6 @@ const SignUpFieldGroup = () => {
     submitError: ""
   });
 
-
   useEffect(() => {
     console.log("SignUpFieldGroup refresh");
   }, []);

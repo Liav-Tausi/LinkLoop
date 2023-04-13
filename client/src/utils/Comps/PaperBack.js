@@ -13,7 +13,7 @@ const PaperBack = (props) => {
       id={props.id}
       sx={{
         mt: 1,
-        zIndex: 9999,
+        zIndex: 9996,
         borderRadius: "25px",
         backgroundColor: themeMode.sign,
         position: "fixed",
