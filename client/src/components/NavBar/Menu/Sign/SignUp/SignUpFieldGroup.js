@@ -30,20 +30,23 @@ const SignUpFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-
-  const [signUpEmail, setSignUpEmail] = useState("");
-  const [signUpFullName, setSignUpFullName] = useState("");
-  const [signUpPassword, setSignUpPassword] = useState("");
-  const [signUpConfirmPassword, setSignUpConfirmPassword] = useState("");
-
-  const [emailError, setEmailError] = useState(false);
-  const [fullNameError, setFullNameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordConfirmError, setPasswordConfirmError] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+
+  const [signUpData, setSignUpData] = useState({
+    signUpEmail: "",
+    signUpFullName: "",
+    signUpPassword: "",
+    signUpConfirmPassword: ""
+  });
+
+  const [errors, setErrors] = useState({
+    emailError: false,
+    fullNameError: false,
+    passwordError: false,
+    passwordConfirmError: false,
+    submitError: ""
+  });
 
   useEffect(() => {
     console.log("SignUpFieldGroup refresh");
@@ -52,7 +55,12 @@ const SignUpFieldGroup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmit(true);
-    if (fullNameError || passwordError || passwordConfirmError || emailError) {
+    if (
+      errors.fullNameError ||
+      errors.passwordError ||
+      errors.passwordConfirmError ||
+      errors.emailError
+    ) {
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -79,14 +87,14 @@ const SignUpFieldGroup = () => {
           for (let index = 0; index < access.length; index++) {
             const element = access[index];
             if (element.includes("This field must be unique.")) {
-              setSubmitError("already taken.");
-              setEmailError(true);
+              setErrors((error) => ({ ...error, submitError: "already taken."}));
+              setErrors((error) => ({ ...error, emailError: true }));
             } else if (element.includes("This password is too common.")) {
-              setSubmitError("too common.");
-              setPasswordError(true);
+              setErrors((error) => ({ ...error, submitError: "too common." }));
+              setErrors((error) => ({ ...error, passwordError: true }));
             } else if (element.includes("This password is entirely numeric.")) {
-              setSubmitError("entirely numeric.");
-              setPasswordError(true);
+              setErrors((error) => ({ ...error, submitError: "entirely numeric." }));
+              setErrors((error) => ({ ...error, passwordError: true }));
             }
           }
         }
@@ -95,25 +103,32 @@ const SignUpFieldGroup = () => {
   };
 
   const handleEmailChange = (event) => {
-    setEmailError(!validateEmail(event.target.value));
-    setSignUpEmail(event.target.value);
+    setErrors((error) => ({ ...error, emailError: !validateEmail(event.target.value) }));
+    setSignUpData((data) => ({ ...data, signUpEmail: event.target.value }));
   };
 
   const handleFullNameChange = (event) => {
-    setFullNameError(!validateFullName(event.target.value));
-    setSignUpFullName(event.target.value);
+    setErrors((error) => ({ ...error, fullNameError: !validateFullName(event.target.value) }));
+    setSignUpData((data) => ({ ...data, signUpFullName: event.target.value }));
   };
 
   const handlePasswordChange = (event) => {
-    setPasswordError(validatePassword(event.target.value));
-    setSignUpPassword(event.target.value);
+    setErrors((error) => ({...error, passwordError: validatePassword(event.target.value) }));
+    setSignUpData((data) => ({ ...data, signUpPassword: event.target.value }));
   };
 
   const handlePasswordConfirmChange = (event) => {
-    setPasswordConfirmError(
-      validateConfirmPassword(event.target.value, signUpPassword)
-    );
-    setSignUpConfirmPassword(event.target.value);
+    setErrors((error) => ({
+      ...error,
+      passwordConfirmError: validateConfirmPassword(
+        event.target.value,
+        signUpData.signUpPassword
+      ),
+    }));
+    setSignUpData((data) => ({
+      ...data,
+      signUpConfirmPassword: event.target.value,
+    }));
   };
 
   return (
@@ -150,15 +165,20 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"email"}
               placeholder={"Email"}
-              error={emailError}
-              sign={signUpEmail}
+              autocomplete={"username"}
+              error={errors.emailError}
+              sign={signUpData.signUpEmail}
               handleChange={handleEmailChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              maxRows={1}
             >
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
-            {emailError && formSubmit && (
+            {errors.emailError && formSubmit && (
               <SignErrorTemp
-                text={submitError ? submitError : "Invalid Email"}
+                text={errors.submitError ? errors.submitError : "Invalid Email"}
                 top={"30.6%"}
                 mobileTop={"28.2%"}
               />
@@ -166,15 +186,22 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"text"}
               placeholder={"Full Name"}
-              error={fullNameError}
-              sign={signUpFullName}
+              autocomplete={"username"}
+              error={errors.fullNameError}
+              sign={signUpData.signUpFullName}
               handleChange={handleFullNameChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              maxRows={1}
             >
               <BadgeRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
-            {fullNameError && formSubmit && (
+            {errors.fullNameError && formSubmit && (
               <SignErrorTemp
-                text={submitError ? submitError : "Invalid Full Name"}
+                text={
+                  errors.submitError ? errors.submitError : "Invalid Full Name"
+                }
                 top={"40.5%"}
                 mobileTop={"39.2%"}
               />
@@ -182,9 +209,14 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
               placeholder={"Password"}
-              error={passwordError}
-              sign={signUpPassword}
+              autocomplete={"current-password"}
+              error={errors.passwordError}
+              sign={signUpData.signUpPassword}
               handleChange={handlePasswordChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              maxRows={1}
             >
               <IconButton
                 onClick={() => {
@@ -198,10 +230,12 @@ const SignUpFieldGroup = () => {
                 )}
               </IconButton>
             </SignFieldTemp>
-            {passwordError && formSubmit && (
+            {errors.passwordError && formSubmit && (
               <SignErrorTemp
                 text={
-                  submitError ? submitError : "must be at least 8 characters"
+                  errors.submitError
+                    ? errors.submitError
+                    : "must be at least 8 characters"
                 }
                 top={"50.2%"}
                 mobileTop={"50.2%"}
@@ -210,13 +244,18 @@ const SignUpFieldGroup = () => {
             <SignFieldTemp
               type={"password"}
               placeholder={"Confirm Password"}
-              error={passwordConfirmError}
-              sign={signUpConfirmPassword}
+              autocomplete={"current-password"}
+              error={errors.passwordConfirmError}
+              sign={signUpData.signUpConfirmPassword}
               handleChange={handlePasswordConfirmChange}
+              padding={"8px"}
+              paddingL={"18px"}
+              multiline={false}
+              maxRows={1}
             >
               <LockRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
-            {passwordConfirmError && formSubmit && (
+            {errors.passwordConfirmError && formSubmit && (
               <SignErrorTemp
                 text={"passwords must be equal"}
                 top={"60.2%"}

@@ -8,37 +8,20 @@ import SignTitle from "../SignTitle";
 import { Box, Paper } from "@mui/material";
 import "../SignTemp/SignTemp.css";
 import BlurBack from "../../../../../utils/Comps/BlurBack";
+import PaperBack from "../../../../../utils/Comps/PaperBack";
 
 const SignTemp = (props) => {
-  const { themeMode, signInOpen } = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-  const ref = useContext(Ref);
 
   return (
     <BlurBack>
-      <Paper
-        ref={ref}
+      <PaperBack
         id={props.SignId}
-        sx={{
-          mt: 1,
-          zIndex: 9999,
-          borderRadius: "25px",
-          backgroundColor: themeMode.sign,
-          position: "fixed",
-          left: "50%",
-          top: "47%",
-          height: 666,
-          width: 440,
-          transform: "translate(-50%, -50%)",
-          "@media (max-width: 414px)": {
-            height: 435,
-            width: 280,
-          },
-          "@media (max-width: 428px)": {
-            height: 650,
-            width: 330,
-          },
-        }}
+        height={666}
+        width={440}
+        smallHeight={435}
+        boxShadow={0}
       >
         <Box
           sx={{
@@ -71,7 +54,7 @@ const SignTemp = (props) => {
             {props.goToName}
           </Box>
         </Box>
-      </Paper>
+      </PaperBack>
     </BlurBack>
   );
 };

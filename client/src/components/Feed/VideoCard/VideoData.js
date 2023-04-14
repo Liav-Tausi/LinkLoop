@@ -16,6 +16,7 @@ const VideoData = (props) => {
   const { themeMode, accessToken, signInOpen } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [likeState, setLikeState] = useState(false);
+  const [userSignedIn, setUserSignedIn] = useState(false);
 
   useEffect(() => {
     if (props.liked) {
@@ -29,6 +30,7 @@ const VideoData = (props) => {
     }
   }, [accessToken]);
 
+
   const handleLike = async () => {
     if (accessToken) {
       if (!likeState) {
@@ -37,13 +39,19 @@ const VideoData = (props) => {
       } else if (likeState) {
         setLikeState(false);
         await videoLike(props.videoId, accessToken, true);
+      } else {
+        return false
       }
     } else {
       dispatch({
         type: APP_ACTIONS.SIGN_IN_OPEN,
       });
+      if (!signInOpen && accessToken) {
+        handleLike()
+      }
     }
   };
+
 
   return (
     <>

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import DARK_THEME from "../../assets/themes/DarkTheme";
-import LIGHT_THEME from "../../assets/themes/LightTheme";
 import {
   AppContext,
   AppDispatchContext,
@@ -25,17 +24,18 @@ const App = () => {
     profilePatch,
     menuOpen,
     accessToken,
+    chooseLocation,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
 
   useEffect(() => {
-    if (signUpOpen || signInOpen) {
+    if (signUpOpen || signInOpen || profilePatch) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [signUpOpen, signInOpen]);
+  }, [signUpOpen, signInOpen, profilePatch]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +70,6 @@ const App = () => {
 
   const closeWhenOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
-      console.log(ref.current);
       if (ref.current.id === "signUp" && signUpOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_UP_OPEN,
@@ -79,7 +78,11 @@ const App = () => {
         dispatch({
           type: APP_ACTIONS.SIGN_IN_OPEN,
         });
-      } else if (ref.current.id === "profilePatch" && profilePatch) {
+      } else if (
+        ref.current.id === "profilePatch" &&
+        profilePatch &&
+        !chooseLocation
+      ) {
         dispatch({
           type: APP_ACTIONS.PROFILE_PATCH,
         });

@@ -30,7 +30,7 @@ const ProfileMainText = (props) => {
           >{`${props.profileData.location}`}</Box>
         </Stack>
       ) : user ? (
-        <>
+        <Stack>
           <Box
             sx={{
               fontSize: "23px",
@@ -47,9 +47,9 @@ const ProfileMainText = (props) => {
           >
             location
           </Box>
-        </>
+        </Stack>
       ) : (
-        <>
+        <Stack>
           <Box
             sx={{
               fontSize: "23px",
@@ -63,7 +63,7 @@ const ProfileMainText = (props) => {
           <Box sx={{ fontSize: "12px", color: themeMode.secTextColor }}>
             location
           </Box>
-        </>
+        </Stack>
       )}
     </Box>
   );
