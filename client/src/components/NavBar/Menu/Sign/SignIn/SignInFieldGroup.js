@@ -12,7 +12,10 @@ import {
   IsSmallScreenContext,
 } from "../../../../../App/AppStates/AppReducer";
 import SignSubmit from "../SignSubmit";
-import { validateEmail, validatePassword } from "../formValidators";
+import {
+  validateEmail,
+  validatePassword,
+} from "../../../../../utils/funcs/formValidators";
 import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
@@ -35,7 +38,6 @@ const SignInFieldGroup = () => {
     emailError: false,
     passwordError: false,
   });
-
 
   useEffect(() => {
     console.log("signInFieldGroup refresh");
@@ -81,12 +83,18 @@ const SignInFieldGroup = () => {
   };
 
   const handleEmailChange = (event) => {
-    setErrors((error) => ({ ...error, emailError: !validateEmail(event.target.value)}));
-    setSignInData((data) => ({ ...data, signUpEmail: event.target.value, }));
+    setErrors((error) => ({
+      ...error,
+      emailError: !validateEmail(event.target.value),
+    }));
+    setSignInData((data) => ({ ...data, signUpEmail: event.target.value }));
   };
 
   const handlePasswordChange = (event) => {
-    setErrors((error) => ({ ...error, passwordError: validatePassword(event.target.value) }));
+    setErrors((error) => ({
+      ...error,
+      passwordError: validatePassword(event.target.value),
+    }));
     setSignInData((data) => ({ ...data, signUpPassword: event.target.value }));
   };
 

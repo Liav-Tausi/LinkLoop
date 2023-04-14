@@ -19,7 +19,7 @@ import {
   validateEmail,
   validateFullName,
   validatePassword,
-} from "../formValidators";
+} from "../../../../../utils/funcs/formValidators";
 import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
@@ -37,7 +37,7 @@ const SignUpFieldGroup = () => {
     signUpEmail: "",
     signUpFullName: "",
     signUpPassword: "",
-    signUpConfirmPassword: ""
+    signUpConfirmPassword: "",
   });
 
   const [errors, setErrors] = useState({
@@ -45,7 +45,7 @@ const SignUpFieldGroup = () => {
     fullNameError: false,
     passwordError: false,
     passwordConfirmError: false,
-    submitError: ""
+    submitError: "",
   });
 
   useEffect(() => {
@@ -87,13 +87,19 @@ const SignUpFieldGroup = () => {
           for (let index = 0; index < access.length; index++) {
             const element = access[index];
             if (element.includes("This field must be unique.")) {
-              setErrors((error) => ({ ...error, submitError: "already taken."}));
+              setErrors((error) => ({
+                ...error,
+                submitError: "already taken.",
+              }));
               setErrors((error) => ({ ...error, emailError: true }));
             } else if (element.includes("This password is too common.")) {
               setErrors((error) => ({ ...error, submitError: "too common." }));
               setErrors((error) => ({ ...error, passwordError: true }));
             } else if (element.includes("This password is entirely numeric.")) {
-              setErrors((error) => ({ ...error, submitError: "entirely numeric." }));
+              setErrors((error) => ({
+                ...error,
+                submitError: "entirely numeric.",
+              }));
               setErrors((error) => ({ ...error, passwordError: true }));
             }
           }
@@ -103,17 +109,26 @@ const SignUpFieldGroup = () => {
   };
 
   const handleEmailChange = (event) => {
-    setErrors((error) => ({ ...error, emailError: !validateEmail(event.target.value) }));
+    setErrors((error) => ({
+      ...error,
+      emailError: !validateEmail(event.target.value),
+    }));
     setSignUpData((data) => ({ ...data, signUpEmail: event.target.value }));
   };
 
   const handleFullNameChange = (event) => {
-    setErrors((error) => ({ ...error, fullNameError: !validateFullName(event.target.value) }));
+    setErrors((error) => ({
+      ...error,
+      fullNameError: !validateFullName(event.target.value),
+    }));
     setSignUpData((data) => ({ ...data, signUpFullName: event.target.value }));
   };
 
   const handlePasswordChange = (event) => {
-    setErrors((error) => ({...error, passwordError: validatePassword(event.target.value) }));
+    setErrors((error) => ({
+      ...error,
+      passwordError: validatePassword(event.target.value),
+    }));
     setSignUpData((data) => ({ ...data, signUpPassword: event.target.value }));
   };
 

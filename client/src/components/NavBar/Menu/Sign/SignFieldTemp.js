@@ -3,12 +3,11 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
 
 const SignFieldTemp = (props) => {
-    const { themeMode } = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
 
-
-    useEffect(()=> {
-      console.log("SignFieldTemp refresh");
-    },[])
+  useEffect(() => {
+    console.log("SignFieldTemp refresh");
+  }, []);
 
   return (
     <InputBase
@@ -45,6 +44,6 @@ const SignFieldTemp = (props) => {
       }
     />
   );
-}
+};
 
 export default SignFieldTemp;

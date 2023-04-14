@@ -1,61 +1,113 @@
-import {
-  Box,
-  Stack,
-  Select,
-  FormControl,
-  MenuItem,
-  InputLabel,
-} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
 import {
   APP_ACTIONS,
   AppContext,
   AppDispatchContext,
+  IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
-import countriesDataSmall from "../../../assets/data/countriesDataSmall.json";
+import ProfilePatchLocation from "./ProfilePatchLocation";
+import {
+  validateAbout,
+  validateFullName,
+  validateHeadline,
+} from "../../../utils/funcs/formValidators";
+import {
+  getProfileData,
+  patchProfileData,
+} from "../../../utils/funcs/mainFuncs";
 
 const ProfilePatchField = () => {
-  const { themeMode, chooseLocation } = useContext(AppContext);
+  const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-
-  const handleCountryClick = () => {
-    dispatch({
-      type: APP_ACTIONS.CHOOSE_LOCATION,
-    });
-  };
-
-  const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
-    setSelectedCity("");
-  };
-
-  const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
-  };
-
-  const [signUpData, setSignUpData] = useState({
+  const isSmallScreen = useContext(IsSmallScreenContext);
+  const [formSubmit, setFormSubmit] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+  const [patchData, setPatchData] = useState({
     fullName: "",
     headline: "",
     location: "",
     about: "",
   });
 
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const retVal = await getProfileData(accessToken, null);
+      setProfileData(retVal.data);
+    };
+    fetchProfileData();
+  }, []);
+
+  useEffect(() => {
+    if (profileData) {
+      setPatchData({
+        fullName: `${profileData?.user?.first_name} ${profileData?.user?.last_name}`,
+        headline: profileData?.headline,
+        location: `${profileData?.location.split(" ")[0]}
+         ${profileData?.location.split(" ")}`,
+        about: profileData.about ? profileData?.about : "",
+      });
+    }
+  }, [profileData]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormSubmit(true);
+    if (errors.fullNameError || errors.headlineError || errors.aboutError) {
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload:
+          "Please correct the errors in the form before submitting again.",
+      });
+    } else {
+      const form = event.target;
+      const elements = form.elements;
+      const retVal = await patchProfileData(accessToken, elements);
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "Your Personal Info have Change successfully.",
+      });
+      dispatch({
+        type: APP_ACTIONS.PROFILE_PATCH
+      })
+    }
+  };
+
   const [errors, setErrors] = useState({
     fullNameError: false,
     headlineError: false,
-    locationError: false,
     aboutError: false,
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleFullNameChange = (event) => {
+    setErrors((error) => ({
+      ...error,
+      fullNameError: !validateFullName(event.target.value),
+    }));
+    setPatchData((data) => ({ ...data, fullName: event.target.value }));
   };
 
-  console.log(chooseLocation);
+  const handleHeadLineChange = (event) => {
+    setErrors((error) => ({
+      ...error,
+      headlineError: !validateHeadline(event.target.value),
+    }));
+    setPatchData((data) => ({ ...data, headline: event.target.value }));
+  };
+
+  const handleLocationChange = (country, city) => {
+    setPatchData((data) => ({ ...data, location: `${country} ${city}` }));
+  };
+
+  const handleAboutChange = (event) => {
+    setErrors((error) => ({
+      ...error,
+      aboutError: !validateAbout(event.target.value),
+    }));
+    setPatchData((data) => ({ ...data, about: event.target.value }));
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -83,6 +135,9 @@ const ProfilePatchField = () => {
             <SignFieldTemp
               placeholder="Full Name"
               autocomplete={"text"}
+              handleChange={handleFullNameChange}
+              error={errors.fullNameError}
+              sign={patchData.fullName}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -98,88 +153,22 @@ const ProfilePatchField = () => {
             <SignFieldTemp
               placeholder="Headline"
               autocomplete={"text"}
+              handleChange={handleHeadLineChange}
+              error={errors.headlineError}
+              sign={patchData.headline}
               padding="8px"
               paddingL="18px"
               multiline={false}
               maxRows={1}
             />
           </Box>
-          <Box>
-            <Box
-              sx={{ color: themeMode.textColor, ml: 2, my: 0.5, fontSize: 12 }}
-            >
-              Your location:
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <FormControl
-                sx={{ m: 1, minWidth: 285 }}
-                onClick={handleCountryClick}
-              >
-                <Select
-                  id="country-select"
-                  value={selectedCountry}
-                  onChange={handleCountryChange}
-                  MenuProps={{
-                    sx: {
-                      zIndex: 9999,
-                      color: themeMode.textColor,
-                      "& .MuiPaper-root.MuiMenu-paper": {
-                        transitionDuration: "0s !important",
-                      },
-                    },
-                  }}
-                  onOpen={() => {
-                    dispatch({ type: APP_ACTIONS.CHOOSE_LOCATION });
-                  }}
-                >
-                  <InputLabel disableAnimation={true} shrink={false}>
-                    Country
-                  </InputLabel>
-                  {Object.keys(countriesDataSmall).map((country) => (
-                    <MenuItem
-                      sx={{ zIndex: 9999 }}
-                      key={country}
-                      value={country}
-                    >
-                      {country}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 285 }}>
-                <Select
-                  id="city-select"
-                  value={selectedCity}
-                  onChange={handleCityChange}
-                  disabled={!selectedCountry}
-                  MenuProps={{
-                    sx: {
-                      zIndex: 9999,
-                      color: themeMode.textColor,
-                      "& .MuiPaper-root.MuiMenu-paper": {
-                        transitionDuration: "0s !important",
-                      },
-                    },
-                  }}
-                  onOpen={() => {
-                    dispatch({ type: APP_ACTIONS.CHOOSE_LOCATION });
-                  }}
-                >
-                  <InputLabel disableAnimation={true} shrink={false}>
-                    City
-                  </InputLabel>
-                  {countriesDataSmall[selectedCountry] &&
-                    countriesDataSmall[selectedCountry].map((city, index) => (
-                      <MenuItem sx={{ zIndex: 9999 }} key={index} value={city}>
-                        {city}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
+          <ProfilePatchLocation
+            location={profileData?.location}
+            handleLocationChange={handleLocationChange}
+          />
         </Stack>
       </Box>
+
       <Box
         sx={{
           backgroundColor: themeMode.signUpBubbles,
@@ -196,12 +185,15 @@ const ProfilePatchField = () => {
             About:
           </Box>
           <SignFieldTemp
-            placeholder=""
+            placeholder={profileData?.about}
             autocomplete={"text"}
+            handleChange={handleAboutChange}
+            error={errors.aboutError}
+            sign={patchData.about}
             padding="13px"
             paddingL="18px"
             multiline={true}
-            maxRows={5}
+            maxRows={isSmallScreen ? 2 : 4}
           />
         </Box>
       </Box>

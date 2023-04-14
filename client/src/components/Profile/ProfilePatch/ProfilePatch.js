@@ -1,11 +1,10 @@
-import { Box } from "@mui/material";
 import BlurBack from "../../../utils/Comps/BlurBack";
 import PaperBack from "../../../utils/Comps/PaperBack";
-import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
 import ProfilePatchField from "./ProfilePatchField";
 import ProfilePatchTitle from "./ProfilePatchTitle";
 
 const ProfilePatch = () => {
+
   return (
     <BlurBack>
       <PaperBack

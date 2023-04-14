@@ -1,13 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 import { getProfileData } from "../../../utils/funcs/mainFuncs";
-import { Box, Container } from "@mui/material";
+import { Box  } from "@mui/material";
 import ProfilePatch from "../ProfilePatch/ProfilePatch";
 import ProfileVideos from "../ProfileVideos/ProfileVideos";
 import ProfileDataBar from "./ProfileDataBar";
 
 const ProfileData = (props) => {
-  const { accessToken, profilePatch,} = useContext(AppContext);
+  const { accessToken, profilePatch, message } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [profileData, setProfileData] = useState(null);
 
@@ -17,12 +20,14 @@ const ProfileData = (props) => {
       setProfileData(retVal.data.results[0]);
     };
     fetchUserData();
-  }, [accessToken, props.username]);
+  }, [accessToken, props.username, message]);
 
   return (
     <Box>
       {profilePatch && <ProfilePatch />}
-      <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
         <ProfileDataBar username={props.username} profileData={profileData} />
       </Box>
       <Box

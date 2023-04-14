@@ -2,13 +2,16 @@ import { Box, Container, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import AppLogo from "../../../assets/imgs/AppLogo.svg";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { APP_ACTIONS, AppContext, AppDispatchContext } from "../../../App/AppStates/AppReducer";
+import {
+  APP_ACTIONS,
+  AppContext,
+  AppDispatchContext,
+} from "../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
 const ProfilePatchTitle = () => {
   const { themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-
 
   return (
     <Container
@@ -52,20 +55,32 @@ const ProfilePatchTitle = () => {
         Edit Personal Info:
       </Box>
       <Box
-        p={1}
-        cursor="pointer"
         onClick={() => {
           dispatch({
             type: APP_ACTIONS.PROFILE_PATCH,
           });
         }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          borderRadius: "50%",
+          px: 0.7,
+          py: 0.7,
+          "&:hover": {
+            backgroundColor: themeMode.navInputColor,
+            cursor: "pointer",
+          },
+          "&:active": {
+            transform: "scale(0.98)",
+          },
+        }}
       >
-        <IconButton>
-          <CloseRoundedIcon sx={{ transform: "scale(1.2)" }} />
-        </IconButton>
+        <CloseRoundedIcon
+          sx={{ transform: "scale(1.2)", color: themeMode.textColor }}
+        />
       </Box>
     </Container>
   );
-}
+};
 
 export default ProfilePatchTitle;
