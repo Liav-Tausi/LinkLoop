@@ -35,6 +35,7 @@ export const INITIAL_APP_STATE = {
   menuOpen: false,
   signUpOpen: false,
   signInOpen: false,
+  userProfileData: "",
   profilePatch: false,
   chooseLocation: false,
 };

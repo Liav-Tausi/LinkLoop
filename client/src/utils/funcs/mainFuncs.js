@@ -33,6 +33,37 @@ export const getProfileData = async (accessToken, username) => {
   }
 };
 
+export const patchProfileData = async (accessToken, elements) => {
+  try {
+    if (accessToken) {
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
+        {
+          first_name: elements[0].value.split(" ")[0],
+          last_name: elements[0].value.split(" ")[1],
+          headline: elements[1].value,
+          location: `${elements[2].value} ${elements[4].value}`,
+          about: elements[6].value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 export const getUserData = async (accessToken, username) => {
   try {
     if (username) {
@@ -73,18 +104,17 @@ export const getVideosOfUser = async (username) => {
         `http://127.0.0.1:8000/api/v1/videos/main/?username=${username}`
       );
       if (response.status < 300) {
-  
         return response;
       } else {
         return false;
       }
     } else {
-      return false
+      return false;
     }
   } catch {
-    return false
+    return false;
   }
-}
+};
 
 export const getFeedData = async (accessToken) => {
   try {

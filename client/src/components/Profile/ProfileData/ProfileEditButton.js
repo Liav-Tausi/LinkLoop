@@ -20,7 +20,7 @@ const ProfileEditButton = (props) => {
         py: props.sizeY,
         backgroundColor: props.background,
         "&:hover": {
-          backgroundColor: props.hoverColor,
+          backgroundColor: themeMode.navInputColor,
           cursor: "pointer",
         },
         "&:active": {
