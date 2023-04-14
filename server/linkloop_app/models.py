@@ -9,16 +9,14 @@ class Profile(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles', unique=True)
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
-    headline = models.CharField(db_column="headline", blank=False, default="", null=False, max_length=32,
+    headline = models.CharField(db_column="headline", default="", blank=True, null=True, max_length=64,
                                 validators=[MinLengthValidator(3)])
-    about = models.TextField(db_column="about", blank=True, null=True, max_length=2000,
+    about = models.TextField(db_column="about", blank=True, null=True, max_length=500,
                              validators=[MinLengthValidator(10)])
-    location = models.CharField(db_column="location", blank=False, null=False, max_length=128,
+    location = models.CharField(db_column="location", default="", blank=True, null=True, max_length=128,
                                 validators=[MinLengthValidator(10)])
     rating = models.PositiveSmallIntegerField(db_column="rating", blank=True, null=True,
                                               validators=[MinValueValidator(1), MaxValueValidator(5)])
-    website = models.URLField(db_column="website_url", blank=True, null=True)
-    date_of_birth = models.DateField(db_column="date_of_birth", blank=False, null=False)
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 

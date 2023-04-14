@@ -31,10 +31,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(
             user=validated_data['user'],
             profile_picture=validated_data.get('profile_picture'),
+            headline=validated_data.hget('headline'),
+            about=validated_data.get('about'),
             location=validated_data.get('location'),
             rating=validated_data.get('rating'),
-            website=validated_data.get('website'),
-            date_of_birth=validated_data.get('date_of_birth'),
         )
         return profile
 
