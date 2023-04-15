@@ -1,9 +1,12 @@
 import { Box, Stack } from "@mui/material";
-import { AppContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
 const ProfileMainText = (props) => {
-  const { themeMode, user} = useContext(AppContext);
+  const { themeMode, user } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
@@ -65,6 +68,22 @@ const ProfileMainText = (props) => {
           </Box>
         </Stack>
       )}
+      <Box
+        sx={{
+          py: 2,
+          mx: isSmallScreen ? 1 : 7,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          color: themeMode.textColor,
+          border: "solid 1px white",
+          gap: 2,
+        }}
+      >
+        <Box sx={{ color: themeMode.textColor, fontSize: 15 }}>About:</Box>
+        <Box sx={{ fontSize: 12, width: 700 }}>{props.profileData?.about}</Box>
+      </Box>
     </Box>
   );
 };

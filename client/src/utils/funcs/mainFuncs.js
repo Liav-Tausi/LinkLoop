@@ -35,6 +35,7 @@ export const getProfileData = async (accessToken, username) => {
 
 export const patchProfileData = async (accessToken, elements) => {
   try {
+    console.log(elements[6].value);
     if (accessToken) {
       const response = await axios.patch(
         `http://127.0.0.1:8000/api/v1/profile/main/0/`,

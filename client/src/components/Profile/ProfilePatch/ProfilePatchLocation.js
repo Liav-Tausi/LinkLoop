@@ -17,15 +17,13 @@ const ProfilePatchLocation = (props) => {
 
   useEffect(() => {
     if (props.location) {
-      const country = props.location.split(" ")[0]
+      const country = props.location.split(" ")[0];
       const citySplit = props.location.split(" ").slice(1);
       const city = citySplit.join(" ");
       setSelectedCountry(country);
       setSelectedCity(city);
     }
   }, [props.location]);
-
-  console.log(selectedCountry, selectedCity);
 
   useEffect(() => {
     props.handleLocationChange(selectedCountry, selectedCity);
