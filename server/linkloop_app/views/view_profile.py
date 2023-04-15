@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django_filters import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -69,6 +70,13 @@ class ProfileModelViewSet(ModelViewSet):
         profile = Profile.objects.filter(user=user_id).first()
         serializer = self.get_serializer(profile, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
+
+        user = get_user_model().objects.get(pk=user_id)
+        first_name, last_name = request.data.get('first_name', ''), request.data.get('last_name', '')
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
         self.perform_update(serializer)
         return Response(serializer.data)
 
