@@ -67,11 +67,11 @@ const ProfilePatchField = () => {
       const retVal = await patchProfileData(accessToken, elements);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
-        payload: "Your Personal Info have Change successfully.",
+        payload: "Your Personal Info have Saved successfully.",
       });
       dispatch({
-        type: APP_ACTIONS.PROFILE_PATCH
-      })
+        type: APP_ACTIONS.PROFILE_PATCH,
+      });
     }
   };
 

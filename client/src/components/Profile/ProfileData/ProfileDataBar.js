@@ -1,14 +1,19 @@
-import { Box } from "@mui/material";
-import { APP_ACTIONS, AppContext, AppDispatchContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import { Box, Button, Paper } from "@mui/material";
+import {
+  APP_ACTIONS,
+  AppContext,
+  AppDispatchContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 import ProfileDataBarPicture from "./ProfileDataBarPicture";
 import ProfileMainText from "./ProfileMainText";
 import ProfileEditButton from "./ProfileEditButton";
 
 const ProfileDataBar = (props) => {
-    const { themeMode, user } =useContext(AppContext);
-    const isSmallScreen = useContext(IsSmallScreenContext);
-    const dispatch = useContext(AppDispatchContext);
+  const { themeMode, user } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext);
+  const dispatch = useContext(AppDispatchContext);
 
   return (
     <Box
@@ -18,6 +23,7 @@ const ProfileDataBar = (props) => {
         width: "100%",
         backgroundColor: themeMode.profileBack,
         pt: 2,
+        borderBottom: "solid 1px" + themeMode.feed,
       }}
     >
       <Box
@@ -29,7 +35,10 @@ const ProfileDataBar = (props) => {
         }}
       >
         <Box sx={{ display: "flex", position: "sticky" }}>
-          <ProfileDataBarPicture profileData={props.profileData} username={props.username}/>
+          <ProfileDataBarPicture
+            profileData={props.profileData}
+            username={props.username}
+          />
           <ProfileMainText profileData={props.profileData} />
         </Box>
         {user?.username === props.username && (
@@ -51,6 +60,6 @@ const ProfileDataBar = (props) => {
       </Box>
     </Box>
   );
-}
+};
 
 export default ProfileDataBar;
