@@ -12,7 +12,7 @@ class Profile(models.Model):
     headline = models.CharField(db_column="headline", default="", blank=True, null=True, max_length=64,
                                 validators=[MinLengthValidator(3)])
     about = models.TextField(db_column="about", blank=True, null=True, max_length=500,
-                             validators=[MinLengthValidator(10)])
+                             validators=[MinLengthValidator(3)])
     location = models.CharField(db_column="location", default="", blank=True, null=True, max_length=128,
                                 validators=[MinLengthValidator(10)])
     rating = models.PositiveSmallIntegerField(db_column="rating", blank=True, null=True,
