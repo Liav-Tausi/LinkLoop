@@ -23,7 +23,7 @@ const ProfileDataBarPicture = (props) => {
         cursor: "pointer",
       }}
     >
-      {props.profileData?.profile_picture ? (
+      {user?.profile_picture ? (
         <>
           <img
             style={{
@@ -31,25 +31,25 @@ const ProfileDataBarPicture = (props) => {
               width: isSmallScreen ? "7em" : "10em",
               borderRadius: "50%",
             }}
-            src={props.profileData.profile_picture}
+            src={user.profile_picture}
             alt="profile picture"
           />
-          {user?.username === props.username &&
-          <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
-            <ProfileEditButton
-              sizeX={0.7}
-              sizeY={0.65}
-              scale={"scale(0.9)"}
-              background={themeMode.navInputColor}
-              hoverColor={themeMode.navInputColorHover}
-              func={() =>
-                dispatch({
-                  type: APP_ACTIONS.PROFILE_PATCH,
-                })
-              }
-            />
-          </Box>
-          }
+          {user?.user?.username === props.username && (
+            <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
+              <ProfileEditButton
+                sizeX={0.7}
+                sizeY={0.65}
+                scale={"scale(0.9)"}
+                background={themeMode.navInputColor}
+                hoverColor={themeMode.navInputColorHover}
+                func={() =>
+                  dispatch({
+                    type: APP_ACTIONS.PROFILE_PATCH,
+                  })
+                }
+              />
+            </Box>
+          )}
         </>
       ) : (
         <Box

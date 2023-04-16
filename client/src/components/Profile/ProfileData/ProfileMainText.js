@@ -5,13 +5,13 @@ import {
 } from "../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-const ProfileMainText = (props) => {
+const ProfileMainText = () => {
   const { themeMode, user } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
     <Box sx={{ display: "flex", mt: isSmallScreen ? 2 : 5.5 }}>
-      {props.profileData?.user ? (
+      {user?.user ? (
         <Stack>
           <Box
             sx={{
@@ -20,17 +20,17 @@ const ProfileMainText = (props) => {
               mb: 1.5,
               color: themeMode.textColor,
             }}
-          >{`${props.profileData.user.first_name} ${props.profileData.user.last_name}`}</Box>
+          >{`${user.user.first_name} ${user.user.last_name}`}</Box>
           <Box
             sx={{ whiteSpace: "nowrap", color: themeMode.textColor, mb: 0.8 }}
-          >{`${props.profileData.headline}`}</Box>
+          >{`${user.headline}`}</Box>
           <Box
             sx={{
               whiteSpace: "nowrap",
               fontSize: "12px",
               color: themeMode.secTextColor,
             }}
-          >{`${props.profileData.location}`}</Box>
+          >{`${user.location}`}</Box>
         </Stack>
       ) : user ? (
         <Stack>
@@ -40,7 +40,7 @@ const ProfileMainText = (props) => {
               mb: 1.5,
               color: themeMode.textColor,
             }}
-          >{`${user.first_name} ${user.last_name}`}</Box>
+          >{`${user.user?.first_name} ${user.user?.last_name}`}</Box>
           <Box sx={{ color: themeMode.textColor, mb: 0.8 }}>headline</Box>
           <Box
             sx={{
@@ -80,8 +80,6 @@ const ProfileMainText = (props) => {
           gap: 2,
         }}
       >
-        {/* <Box sx={{ color: themeMode.textColor, fontSize: 15 }}>About:</Box>
-        <Box sx={{ fontSize: 12, width: 700 }}>{props.profileData?.about}</Box> */}
       </Box>
     </Box>
   );

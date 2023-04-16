@@ -34,8 +34,6 @@ const ProfileShowButtonTemp = (props) => {
         boxShadow: "none",
         flex: 1,
         py: 1.1,
-        ml: props.ml,
-        mr: props.mr,
       }}
     >
       <Box

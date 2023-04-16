@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   APP_ACTIONS,
   AppContext,
@@ -6,11 +6,12 @@ import {
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
 import { useContext, useState } from "react";
-import ProfileDataBarPicture from "./ProfileDataBarPicture";
+import ProfileBarPicture from "./ProfileDataBarPicture";
 import ProfileMainText from "./ProfileMainText";
 import ProfileEditButton from "./ProfileEditButton";
 import ProfileShowButtonTemp from "./ProfileShowButtonTemp";
-import ProfileVideos from "../../Profile/ProfileVideos/ProfileVideos";
+import ProfileVideos from "../ProfileVideos/ProfileVideos";
+import ProfileInfo from "../ProfileInfo/ProfileInfo";
 
 const ProfileDataBar = (props) => {
   const { themeMode, user } = useContext(AppContext);
@@ -20,7 +21,12 @@ const ProfileDataBar = (props) => {
 
   return (
     <Box
-      sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 3 }}
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: isSmallScreen? 2 : 3,
+      }}
     >
       <Box
         sx={{
@@ -41,13 +47,10 @@ const ProfileDataBar = (props) => {
           }}
         >
           <Box sx={{ display: "flex", position: "sticky" }}>
-            <ProfileDataBarPicture
-              profileData={props.profileData}
-              username={props.username}
-            />
-            <ProfileMainText profileData={props.profileData} />
+            <ProfileBarPicture username={props.username}/>
+            <ProfileMainText />
           </Box>
-          {user?.username === props.username && (
+          {user?.user?.username === props.username && (
             <Box sx={{ position: "relative", alignItems: "center" }}>
               <ProfileEditButton
                 sizeX={1.3}
@@ -69,55 +72,47 @@ const ProfileDataBar = (props) => {
         sx={{
           display: "flex",
           justifyContent: "center",
+          flexDirection: "column",
+          gap: isSmallScreen? 2 : 3,
+          mx: 2,
+          px: 5,
+          "@media (max-width: 1200px)": {
+            px: 3,
+          },
+          "@media (max-width: 1000px)": {
+            px: 2,
+          },
+          "@media (max-width: 600px)": {
+            px: 0,
+          },
         }}
       >
-        <ProfileShowButtonTemp
-          background={themeMode.profileBack}
-          backgroundHover={themeMode.profileVideoInfoButtonHover}
-          text={"Info"}
-          func={() => setShowVideos(!showVideos)}
-          disabled={!showVideos}
-          ml={isSmallScreen ? "auto" : 6}
-          mr={1}
-        />
-        <ProfileShowButtonTemp
-          background={themeMode.profileBack}
-          backgroundHover={themeMode.profileVideoInfoButtonHover}
-          text={"Videos"}
-          func={() => setShowVideos(!showVideos)}
-          disabled={showVideos}
-          ml={1}
-          mr={isSmallScreen ? "auto" : 6}
-        />
-      </Box>
-      {showVideos && (
         <Box
           sx={{
             display: "flex",
-            justifyContent: isSmallScreen ? "center" : "flex-start",
-            mx: isSmallScreen ? "auto" : 2,
-            py: 2,
+            justifyContent: "center",
+            gap: isSmallScreen ? 2 : 5,
           }}
         >
-          <ProfileVideos username={props.username} />
+          <ProfileShowButtonTemp
+            background={themeMode.profileBack}
+            backgroundHover={themeMode.profileVideoInfoButtonHover}
+            text={"Info"}
+            func={() => setShowVideos(!showVideos)}
+            disabled={!showVideos}
+          />
+          <ProfileShowButtonTemp
+            background={themeMode.profileBack}
+            backgroundHover={themeMode.profileVideoInfoButtonHover}
+            text={"Videos"}
+            func={() => setShowVideos(!showVideos)}
+            disabled={showVideos}
+          />
         </Box>
-      )}
-      {!showVideos && (
-        <Paper
-          sx={{
-            borderRadius: "17px",
-            boxShadow: 0,
-            backgroundColor: themeMode.profileBack,
-            display: "flex",
-            justifyContent: isSmallScreen ? "center" : "flex-start",
-            mx: isSmallScreen ? "auto" : 6,
-            p: 25,
-            mb: 10,
-          }}
-        >
-          {/* <ProfileVideos username={props.username} /> */}
-        </Paper>
-      )}
+
+        {showVideos && <ProfileVideos username={props.username} />}
+        {!showVideos && <ProfileInfo />}
+      </Box>
     </Box>
   );
 };
