@@ -77,12 +77,11 @@ const ProfileMainText = (props) => {
           alignItems: "flex-start",
           justifyContent: "flex-start",
           color: themeMode.textColor,
-          border: "solid 1px white",
           gap: 2,
         }}
       >
-        <Box sx={{ color: themeMode.textColor, fontSize: 15 }}>About:</Box>
-        <Box sx={{ fontSize: 12, width: 700 }}>{props.profileData?.about}</Box>
+        {/* <Box sx={{ color: themeMode.textColor, fontSize: 15 }}>About:</Box>
+        <Box sx={{ fontSize: 12, width: 700 }}>{props.profileData?.about}</Box> */}
       </Box>
     </Box>
   );

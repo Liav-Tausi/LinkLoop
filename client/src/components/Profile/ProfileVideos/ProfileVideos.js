@@ -22,6 +22,7 @@ const ProfileVideos = (props) => {
         display: "flex",
         flexWrap: isSmallScreen ? "nowrap" : "wrap",
         mx: 5,
+        gap: 19,
       }}
     >
       {videosUser.length > 0 ? (
