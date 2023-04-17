@@ -7,7 +7,7 @@ class Profile(models.Model):
     class Meta:
         db_table = "user_profile"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles', unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     headline = models.CharField(db_column="headline", default="", blank=True, null=True, max_length=64,
                                 validators=[MinLengthValidator(3)])
@@ -73,6 +73,7 @@ class Skill(models.Model):
     class Meta:
         db_table = "skill"
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     skill_name = models.CharField(db_column="skill_name", max_length=128, blank=False, null=False,
                                   validators=[MinLengthValidator(3)])
     skill_level = models.PositiveSmallIntegerField(db_column="rating", blank=True, null=True,
@@ -81,20 +82,11 @@ class Skill(models.Model):
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
 
-class UserSkill(models.Model):
-    class Meta:
-        db_table = "user_skill"
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
-    created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
-    updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
-
 class Education(models.Model):
     class Meta:
         db_table = "education"
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     education_name = models.CharField(db_column="education_name", blank=False, null=False, max_length=128,
                                       validators=[MinLengthValidator(5)])
     school_name = models.CharField(db_column="school_name", blank=False, null=False, max_length=128,
@@ -105,35 +97,17 @@ class Education(models.Model):
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
 
-class UserEducation(models.Model):
-    class Meta:
-        db_table = "user_education"
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    education = models.ForeignKey(Education, on_delete=models.PROTECT)
-    created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
-    updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
-
 class Experience(models.Model):
     class Meta:
         db_table = "experience"
 
-    experience_name = models.CharField(db_column="experience_name", blank=False, null=False, max_length=128)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
+    experience_name = models.CharField(db_column="experience_name", blank=False, null=False, max_length=128,
+                                       validators=[MinLengthValidator(1)])
     experience_description = models.TextField(db_column="description", blank=False, null=False, max_length=300,
-                                              validators=[MinLengthValidator(1)])
+                                       validators=[MinLengthValidator(1)])
     start_date = models.DateField(db_column="start_date", blank=False, null=False)
     end_date = models.DateField(db_column="end_date", blank=True, null=True)
-    created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
-    updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
-
-class UserExperience(models.Model):
-    class Meta:
-        db_table = "user_experience"
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    experience = models.ForeignKey(Experience, on_delete=models.DO_NOTHING)
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
