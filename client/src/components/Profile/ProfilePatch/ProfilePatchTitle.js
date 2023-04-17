@@ -1,4 +1,4 @@
-import { Box, Container, IconButton } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import AppLogo from "../../../assets/imgs/AppLogo.svg";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";

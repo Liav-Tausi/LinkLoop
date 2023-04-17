@@ -30,10 +30,33 @@ const SignFieldTemp = (props) => {
         p: props.padding,
         pl: props.paddingL,
         "& input::placeholder": {
+          color: themeMode.textColor,
           opacity: 1,
         },
         "&:hover": {
           backgroundColor: themeMode.signUpFieldHover,
+        },
+        ".MuiInputBase-inputMultiline": {
+          "&::placeholder": {
+            color: themeMode.textColor,
+            opacity: 1,
+          },
+          "&::-webkit-scrollbar": {
+            borderRadius: "3px",
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            borderRadius: "3px",
+            background: themeMode.feed,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: themeMode.signUpBubbles,
+            borderRadius: "3px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            cursor: "pointer",
+            background: themeMode.appTheme,
+          },
         },
       }}
       value={props.sign}

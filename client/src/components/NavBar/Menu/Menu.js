@@ -16,7 +16,7 @@ import InMenuTemp from "./logButtons/InMenu/InMenuTemp";
 import { logOut } from "../../../utils/funcs/authFuncs";
 
 const Menu = () => {
-  const { themeMode, accessToken, menuOpen } = useContext(AppContext);
+  const { themeMode, accessToken, menuOpen} = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [menuDisplaySettings, setMenuDisplaySettings] = useState(false);

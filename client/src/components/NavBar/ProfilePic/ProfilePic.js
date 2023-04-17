@@ -1,14 +1,18 @@
 import { useContext, useEffect, useState } from "react";
-import { APP_ACTIONS, AppContext, AppDispatchContext } from "../../../App/AppStates/AppReducer";
+import {
+  APP_ACTIONS,
+  AppContext,
+  AppDispatchContext,
+} from "../../../App/AppStates/AppReducer";
 import { Box } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { getProfileData, getUserData } from "../../../utils/funcs/mainFuncs";
 
 const ProfilePic = () => {
-  const { accessToken, themeMode } = useContext(AppContext);
-  const dispatch = useContext(AppDispatchContext)
-  const [userData, setUserData] = useState(null);
+  const { accessToken, themeMode, connectedUser } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
+
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
@@ -22,20 +26,18 @@ const ProfilePic = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const retVal = await getUserData(accessToken, null);
-      setUserData(retVal.data);
       dispatch({
-        type: APP_ACTIONS.USER,
-        payload: retVal.data
+        type: APP_ACTIONS.CONNECTED_USER,
+        payload: retVal.data,
       });
-
     };
     fetchUserData();
   }, [accessToken]);
 
   return (
     <>
-      {userData?.username && (
-        <Link to={`profile/${userData.username}`}>
+      {connectedUser?.username && (
+        <Link to={`profile/${connectedUser.username}`}>
           {accessToken && profileData && profileData.profile_picture ? (
             <Box sx={{ width: 37, height: 37 }}>
               <img
@@ -56,8 +58,8 @@ const ProfilePic = () => {
           )}
         </Link>
       )}
-      {!userData && accessToken && (
-        <Link to={`profile/${userData?.username}`}>
+      {!connectedUser && accessToken && (
+        <Link to={`profile/${connectedUser?.username}`}>
           <AccountCircleIcon
             sx={{
               mt: 0.45,

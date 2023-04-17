@@ -34,10 +34,10 @@ export const getProfileData = async (accessToken, username) => {
 };
 
 export const patchProfileData = async (accessToken, elements) => {
+  console.log(elements);
   try {
-    console.log(elements[6].value);
     if (accessToken) {
-      const response = await axios.patch(
+      const response1 = await axios.patch(
         `http://127.0.0.1:8000/api/v1/profile/main/0/`,
         {
           first_name: elements[0].value.split(" ")[0],
@@ -52,8 +52,22 @@ export const patchProfileData = async (accessToken, elements) => {
           },
         }
       );
-      if (response.status < 300) {
-        return response;
+      const response2 = await axios.post(
+        `http://127.0.0.1:8000/api/v1/quals/experience/`,
+        {
+          experience_name: elements[8].value,
+          experience_description: elements[9].value,
+          start_date: elements[11].value,
+          end_date: elements[12].value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response1.status < 300 && response2.status < 300) {
+        return [response1, response2];
       } else {
         return false;
       }
