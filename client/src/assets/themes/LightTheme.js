@@ -1,8 +1,10 @@
 const LIGHT_THEME = {
   theme: "light",
   body: "#f7f7f7",
-  anonymousPicture: "#C5C5C5",
-  profileBack: "#E2E2E2",
+  anonymousPicture: "#CFCFCF",
+  profileBack: "#EBEBEB",
+  profileVideoInfoButtonHover: "#CFCFCF",
+  ProfileVideoInfoButtonDisabled: "#EEEEEE",
   feed: "#ffffff",
   sign: "#ffffff",
   signUpBubbles: "#F3F3F3",

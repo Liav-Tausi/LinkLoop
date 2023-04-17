@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import VideoCard from "../../Feed/VideoCard/VideoCard";
 import { getVideosOfUser } from "../../../utils/funcs/mainFuncs";
@@ -20,13 +20,28 @@ const ProfileVideos = (props) => {
     <Box
       sx={{
         display: "flex",
-        flexWrap: isSmallScreen ? "nowrap" : "wrap",
+        justifyContent: "center",
+        py: 2,
         mx: 5,
+        flexWrap: "wrap",
+        "@media (min-width: 600px)": {
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "row",
+        },
       }}
     >
       {videosUser.length > 0 ? (
         videosUser.map((element) => (
-          <Box key={element.id} sx={{ mb: isSmallScreen ? 4 : 0 }}>
+          <Box
+            key={element.id}
+            sx={{
+              flex: "1 1 25%",
+              display: "flex",
+              justifyContent: "center",
+              mb: 4,
+            }}
+          >
             <VideoCard
               videoId={element.id}
               videoNumber={element.video_url.split("/").pop()}
@@ -38,9 +53,9 @@ const ProfileVideos = (props) => {
           </Box>
         ))
       ) : (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          No Videos Yet
-        </Box>
+          <Box sx={{display: "flex", justifyContent: "center", width: "100%"}}>
+            No Videos Yet
+          </Box>
       )}
     </Box>
   );

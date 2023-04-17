@@ -4,6 +4,8 @@ const DARK_THEME = {
   anonymousPicture: "#585A5B",
   feed: "#242526",
   profileBack: "#242424",
+  profileVideoInfoButtonHover: "#383838",
+  ProfileVideoInfoButtonDisabled: "#333333",
   sign: "#0c0c0c",
   signUpBubbles: "#444444",
   signUpField: "#8D8D8D",
