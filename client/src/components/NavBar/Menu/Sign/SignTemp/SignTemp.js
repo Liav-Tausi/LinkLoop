@@ -2,11 +2,9 @@ import { useContext } from "react";
 import {
   AppContext,
   IsSmallScreenContext,
-  Ref,
 } from "../../../../../App/AppStates/AppReducer";
 import SignTitle from "../SignTitle";
-import { Box, Paper } from "@mui/material";
-import "../SignTemp/SignTemp.css";
+import { Box } from "@mui/material";
 import BlurBack from "../../../../../utils/Comps/BlurBack";
 import PaperBack from "../../../../../utils/Comps/PaperBack";
 

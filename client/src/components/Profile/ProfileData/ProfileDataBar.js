@@ -14,7 +14,7 @@ import ProfileVideos from "../ProfileVideos/ProfileVideos";
 import ProfileInfo from "../ProfileInfo/ProfileInfo";
 
 const ProfileDataBar = (props) => {
-  const { themeMode, user } = useContext(AppContext);
+  const { themeMode, connectedUser } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
   const [showVideos, setShowVideos] = useState(false);
@@ -25,7 +25,7 @@ const ProfileDataBar = (props) => {
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: isSmallScreen? 2 : 3,
+        gap: isSmallScreen ? 2 : 3,
       }}
     >
       <Box
@@ -47,10 +47,13 @@ const ProfileDataBar = (props) => {
           }}
         >
           <Box sx={{ display: "flex", position: "sticky" }}>
-            <ProfileBarPicture username={props.username}/>
-            <ProfileMainText />
+            <ProfileBarPicture
+              username={props.username}
+              profileData={props.profileData}
+            />
+            <ProfileMainText profileData={props.profileData} />
           </Box>
-          {user?.user?.username === props.username && (
+          {connectedUser?.username === props.username && (
             <Box sx={{ position: "relative", alignItems: "center" }}>
               <ProfileEditButton
                 sizeX={1.3}
@@ -73,7 +76,7 @@ const ProfileDataBar = (props) => {
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          gap: isSmallScreen? 2 : 3,
+          gap: isSmallScreen ? 2 : 3,
           mx: 2,
           px: 5,
           "@media (max-width: 1200px)": {

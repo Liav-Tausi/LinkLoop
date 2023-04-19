@@ -33,11 +33,14 @@ export const getProfileData = async (accessToken, username) => {
   }
 };
 
-export const patchProfileData = async (accessToken, elements) => {
+export const patchProfileData = async (
+  accessToken,
+  elements,
+  experienceData
+) => {
   try {
-    console.log(elements[6].value);
     if (accessToken) {
-      const response = await axios.patch(
+      const response1 = await axios.patch(
         `http://127.0.0.1:8000/api/v1/profile/main/0/`,
         {
           first_name: elements[0].value.split(" ")[0],
@@ -46,6 +49,55 @@ export const patchProfileData = async (accessToken, elements) => {
           location: `${elements[2].value} ${elements[4].value}`,
           about: elements[6].value,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const experienceResponses = await Promise.all(
+        experienceData.map(async (experience) => {
+          return await axios.post(
+            `http://127.0.0.1:8000/api/v1/quals/experience/`,
+            {
+              experience_name: experience.experienceName,
+              experience_description: experience.experienceDescription,
+              start_date: experience.experienceStartDate,
+              end_date: experience.experienceEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      console.log(experienceResponses);
+      if (
+        response1.status < 300 &&
+        experienceResponses.every((response) => response.status < 300)
+      ) {
+        return [response1, ...experienceResponses];
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
+
+
+export const getUserExperience = async (accessToken) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/quals/experience/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

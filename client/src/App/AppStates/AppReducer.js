@@ -16,7 +16,7 @@ const awaitGetFeedData = async () => {
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
-  user: null,
+  connectedUser: null,
   feedData: awaitGetFeedData(),
   themeMode: localStorage.getItem("preferredTheme")
     ? localStorage.getItem("preferredTheme") === "2"
@@ -63,10 +63,10 @@ export const AppReducer = (states, action) => {
         accessToken: action.payload,
       };
     }
-    case APP_ACTIONS.USER: {
+    case APP_ACTIONS.CONNECTED_USER: {
       return {
         ...states,
-        user: action.payload,
+        connectedUser: action.payload,
       };
     }
     case APP_ACTIONS.FEED_DATA: {

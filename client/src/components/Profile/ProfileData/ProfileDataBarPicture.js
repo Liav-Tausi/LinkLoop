@@ -10,7 +10,7 @@ import {
 import ProfileEditButton from "./ProfileEditButton";
 
 const ProfileDataBarPicture = (props) => {
-  const { themeMode, user} = useContext(AppContext);
+  const { themeMode, connectedUser } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
 
@@ -23,7 +23,7 @@ const ProfileDataBarPicture = (props) => {
         cursor: "pointer",
       }}
     >
-      {user?.profile_picture ? (
+      {props.profileData?.profile_picture ? (
         <>
           <img
             style={{
@@ -31,10 +31,10 @@ const ProfileDataBarPicture = (props) => {
               width: isSmallScreen ? "7em" : "10em",
               borderRadius: "50%",
             }}
-            src={user.profile_picture}
+            src={props.profileData.profile_picture}
             alt="profile picture"
           />
-          {user?.user?.username === props.username && (
+          {connectedUser?.username === props.username && (
             <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
               <ProfileEditButton
                 sizeX={0.7}
