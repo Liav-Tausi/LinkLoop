@@ -65,8 +65,8 @@ const ProfilePatchExperience = (props) => {
               placeholder="Name"
               autocomplete={"text"}
               handleChange={props.handleExperienceNameChange}
-              error={props.errors.experienceNameError}
-              sign={props.patchData.experienceName || ""}
+              error={props.experienceError?.experienceNameError}
+              sign={props.experienceData?.experienceName || ""}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -88,8 +88,8 @@ const ProfilePatchExperience = (props) => {
               placeholder="Description"
               autocomplete={"text"}
               handleChange={props.handleExperienceDescriptionChange}
-              error={props.errors.experienceDescriptionError}
-              sign={props.patchData.experienceDescription}
+              error={props.experienceError?.experienceDescriptionError}
+              sign={props.experienceData?.experienceDescription}
               padding="12px"
               paddingL="18px"
               multiline={true}
@@ -113,8 +113,8 @@ const ProfilePatchExperience = (props) => {
                 autocomplete={"date"}
                 type={"date"}
                 handleChange={props.handleExperienceStartDateChange}
-                error={props.errors.experienceStartDateError}
-                sign={props.patchData.experienceStartDate}
+                error={props.experienceError?.experienceStartDateError}
+                sign={props.experienceData?.experienceStartDate || "0000-00-00"}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -137,8 +137,8 @@ const ProfilePatchExperience = (props) => {
                 autocomplete={"date"}
                 type={"date"}
                 handleChange={props.handleExperienceEndDateChange}
-                error={props.errors.experienceEndDateError}
-                sign={props.patchData.experienceEndDate}
+                error={props.experienceError?.experienceEndDateError}
+                sign={props.experienceData?.experienceEndDate || "0000-00-00"}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}

@@ -20,6 +20,7 @@ import {
 } from "../../../utils/funcs/formValidators";
 import {
   getProfileData,
+  getUserExperience,
   patchProfileData,
 } from "../../../utils/funcs/mainFuncs";
 import ProfilePatchMultiline from "./ProfilePatchMultiline";
@@ -27,47 +28,47 @@ import ProfilePatchExperience from "./ProfilePatchExperience/ProfilePatchExperie
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 const ProfilePatchField = () => {
-  const { themeMode, accessToken } = useContext(AppContext);
+  const { themeMode, accessToken, user } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-  const [formSubmit, setFormSubmit] = useState(false);
+  const [formSubmit, setFormSubmit] = useState(true)
   const [profileData, setProfileData] = useState(null);
   const [numExperiences, setNumExperiences] = useState(false);
+  const [experienceData, setExperienceData] = useState([
+    {
+      experienceName: "",
+      experienceDescription: "",
+      experienceStartDate: "",
+      experienceEndDate: "",
+    },
+  ]);
+  const [experienceError, setExperienceError] = useState([
+    {
+      experienceNameError: false,
+      experienceDescriptionError: false,
+      experienceStartDateError: false,
+      experienceEndDateError: false,
+    },
+  ]);
+
   const [patchData, setPatchData] = useState({
     fullName: "",
     headline: "",
     location: "",
     about: "",
-    skills: "",
-    experience: [
-      {
-        experienceName: "",
-        experienceDescription: "",
-        experienceStartDate: "",
-        experienceEndDate: "",
-      },
-    ],
-    education: "",
   });
-
   const [errors, setErrors] = useState({
     fullNameError: false,
     headlineError: false,
     aboutError: false,
-    experienceError: [
-      {
-        experienceNameError: false,
-        experienceDescriptionError: false,
-        experienceStartDateError: false,
-        experienceEndDateError: false,
-      },
-    ],
   });
 
   useEffect(() => {
     const fetchProfileData = async () => {
       const retVal = await getProfileData(accessToken, null);
       setProfileData(retVal.data);
+      const retVal2 = await getUserExperience(accessToken);
+      setExperienceData(retVal2.data.results);
     };
     fetchProfileData();
   }, []);
@@ -79,8 +80,7 @@ const ProfilePatchField = () => {
         headline: profileData?.headline,
         location: `${profileData?.location.split(" ")[0]}
          ${profileData?.location.split(" ")}`,
-        about: profileData.about ? profileData?.about : "",
-        experience: profileData.experience ? profileData.experience : "",
+        about: profileData?.about ? profileData?.about : "",
       });
     }
   }, [profileData]);
@@ -88,7 +88,9 @@ const ProfilePatchField = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmit(true);
-    if (errors.fullNameError || errors.headlineError || errors.aboutError) {
+    if (Object.values(errors).some((error) => error) ||
+      experienceError.some((error) => Object.values(error).some((val) => val))
+    ) {
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -97,17 +99,28 @@ const ProfilePatchField = () => {
     } else {
       const form = event.target;
       const elements = form.elements;
-      const retVal = await patchProfileData(accessToken, elements);
-      console.log(retVal);
-      dispatch({
-        type: APP_ACTIONS.MESSAGE,
-        payload: "Saved successfully.",
-      });
-      dispatch({
-        type: APP_ACTIONS.PROFILE_PATCH,
-      });
+      const response = await patchProfileData(
+        accessToken,
+        elements,
+        experienceData
+      );
+      if (response) {
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "Saved successfully.",
+        });
+        dispatch({
+          type: APP_ACTIONS.PROFILE_PATCH,
+        });
+      } else {
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "ERROR! Did Not Save successfully.",
+        });
+      }
     }
   };
+
 
   const handleFullNameChange = (event) => {
     setErrors((error) => ({
@@ -137,80 +150,84 @@ const ProfilePatchField = () => {
     setPatchData((data) => ({ ...data, about: event.target.value }));
   };
 
-  const handleExperienceNameChange = (event) => {
-    setErrors((error) => ({
-      ...error,
-      experienceError: {
-        ...error.experienceError,
-        experienceNameError: !validateExperienceName(event.target.value),
-      },
-    }));
-    setPatchData((data) => ({
-      ...data,
-      experience: {
-        ...data.experience,
-        experienceName: event.target.value,
-      },
-    }));
+  const handleExperienceNameChange = (event, index) => {
+    if (index < 0 || index >= experienceData.length) return;
+
+    const newExperienceError = [...experienceError];
+    newExperienceError[index] = {
+      ...newExperienceError[index],
+      experienceNameError: !validateExperienceName(event.target.value),
+    };
+    setExperienceError(newExperienceError);
+
+    const newExperienceData = [...experienceData];
+    newExperienceData[index] = {
+      ...newExperienceData[index],
+      experienceName: event.target.value,
+    };
+    setExperienceData(newExperienceData);
   };
 
-  const handleExperienceDescriptionChange = (event) => {
-    setErrors((error) => ({
-      ...error,
-      experienceError: {
-        ...error.experienceError,
-        experienceDescriptionError: !validateExperienceDescription(
+  const handleExperienceDescriptionChange = (event, index) => {
+    const newExperienceError = [...experienceError];
+    newExperienceError[index].experienceDescriptionError =
+      !validateExperienceDescription(event.target.value);
+    setExperienceError(newExperienceError);
+
+    const newExperienceData = [...experienceData];
+    newExperienceData[index].experienceDescription = event.target.value;
+    setExperienceData(newExperienceData);
+  };
+
+  const handleExperienceStartDateChange = (event, index) => {
+    const newExperienceData = [...experienceData];
+    newExperienceData[index].experienceStartDate = event.target.value;
+    const newExperienceError = [...experienceError];
+    newExperienceError[index].experienceStartDateError =
+      !validateExperienceStartDate(
+        event.target.value,
+        experienceData[index].experienceEndDate
+      );
+    if (experienceData[index].experienceEndDate) {
+      newExperienceError[index].experienceEndDateError =
+        !validateExperienceEndDate(
+          experienceData[index].experienceEndDate,
           event.target.value
-        ),
-      },
-    }));
-    setPatchData((data) => ({
-      ...data,
-      experience: {
-        ...data.experience,
-        experienceDescription: event.target.value,
-      },
-    }));
+        );
+    }
+    setExperienceData(newExperienceData);
+    setExperienceError(newExperienceError);
   };
-
-  const handleExperienceStartDateChange = (event) => {
-    setErrors((error) => ({
-      ...error,
-      experienceError: {
-        ...error.experienceError,
-        experienceStartDateError: !validateExperienceStartDate(
+  const handleExperienceEndDateChange = (event, index) => {
+    const newExperienceData = [...experienceData];
+    newExperienceData[index].experienceEndDate = event.target.value;
+    const newExperienceError = [...experienceError];
+    newExperienceError[index].experienceEndDateError =
+      !validateExperienceEndDate(
+        event.target.value,
+        experienceData[index].experienceStartDate
+      );
+    if (experienceData[index].experienceStartDate) {
+      newExperienceError[index].experienceStartDateError =
+        !validateExperienceStartDate(
+          experienceData[index].experienceStartDate,
           event.target.value
-        ),
-      },
-    }));
-    setPatchData((data) => ({
-      ...data,
-      experience: {
-        ...data.experience,
-        experienceStartDate: event.target.value,
-      },
-    }));
+        );
+    }
+    setExperienceData(newExperienceData);
+    setExperienceError(newExperienceError);
   };
 
-  const handleExperienceEndDateChange = (event) => {
-    setErrors((error) => ({
-      ...error,
-      experienceError: {
-        ...error.experienceError,
-        experienceEndDateError: !validateExperienceEndDate(event.target.value),
-      },
-    }));
-    setPatchData((data) => ({
-      ...data,
-      experience: {
-        ...data.experience,
-        experienceEndDate: event.target.value,
-      },
-    }));
-  };
 
-  const handleDeleteExperience = () => {
-    setNumExperiences(false);
+  
+  const handleDeleteExperience = (index) => {
+    const newExperienceData = [...experienceData];
+    newExperienceData.splice(index, 1);
+    setExperienceData(newExperienceData);
+
+    const newExperienceError = [...experienceError];
+    newExperienceError.splice(index, 1);
+    setExperienceError(newExperienceError);
   };
 
   return (
@@ -349,19 +366,26 @@ const ProfilePatchField = () => {
               <AddCircleIcon />
             </Box>
           </Box>
-          {numExperiences && (
+          {experienceData.map((experience, index) => (
             <ProfilePatchExperience
-              errors={errors.experienceError}
-              patchData={patchData.experience}
-              handleExperienceNameChange={handleExperienceNameChange}
-              handleExperienceDescriptionChange={
-                handleExperienceDescriptionChange
+              key={index}
+              experienceData={experience}
+              experienceError={experienceError[index]}
+              handleExperienceNameChange={(event) =>
+                handleExperienceNameChange(event, index)
               }
-              handleExperienceStartDateChange={handleExperienceStartDateChange}
-              handleExperienceEndDateChange={handleExperienceEndDateChange}
-              handleDeleteExperience={handleDeleteExperience}
+              handleExperienceDescriptionChange={(event) =>
+                handleExperienceDescriptionChange(event, index)
+              }
+              handleExperienceStartDateChange={(event) =>
+                handleExperienceStartDateChange(event, index)
+              }
+              handleExperienceEndDateChange={(event) =>
+                handleExperienceEndDateChange(event, index)
+              }
+              handleDeleteExperience={() => handleDeleteExperience(index)}
             />
-          )}
+          ))}
         </Box>
         <Box
           sx={{

@@ -1,3 +1,5 @@
+
+
 export const validateEmail = (email) => {
   const re = /\S+@\S+\.\S+/;
   return re.test(email);
@@ -17,13 +19,27 @@ export const validateExperienceDescription = (experienceDescription) => {
   );
 };
 
-export const validateExperienceStartDate = (experienceStartDate) => {
-  return experienceStartDate.length >= 3 && experienceStartDate.length <= 500;
+export const validateExperienceStartDate = (
+  experienceStartDate,
+  experienceEndDate
+) => {
+  console.log(experienceStartDate, experienceEndDate);
+  if (!experienceStartDate || !experienceEndDate) return false; 
+  const startDate = new Date(experienceStartDate);
+  const endDate = new Date(experienceEndDate);
+  return startDate <= endDate;
 };
 
-export const validateExperienceEndDate = (experienceEndDate) => {
-  return experienceEndDate.length >= 3 && experienceEndDate.length <= 500;
+export const validateExperienceEndDate = (
+  experienceEndDate,
+  experienceStartDate
+) => {
+  if (!experienceStartDate || !experienceEndDate) return false; 
+  const startDate = new Date(experienceStartDate);
+  const endDate = new Date(experienceEndDate);
+  return endDate >= startDate;
 };
+
 
 export const validateAbout = (headline) => {
   return headline.length >= 3 && headline.length <= 500;

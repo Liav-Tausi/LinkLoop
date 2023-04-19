@@ -33,8 +33,11 @@ export const getProfileData = async (accessToken, username) => {
   }
 };
 
-export const patchProfileData = async (accessToken, elements) => {
-  console.log(elements);
+export const patchProfileData = async (
+  accessToken,
+  elements,
+  experienceData
+) => {
   try {
     if (accessToken) {
       const response1 = await axios.patch(
@@ -52,22 +55,57 @@ export const patchProfileData = async (accessToken, elements) => {
           },
         }
       );
-      const response2 = await axios.post(
+
+      const experienceResponses = await Promise.all(
+        experienceData.map(async (experience) => {
+          return await axios.post(
+            `http://127.0.0.1:8000/api/v1/quals/experience/`,
+            {
+              experience_name: experience.experienceName,
+              experience_description: experience.experienceDescription,
+              start_date: experience.experienceStartDate,
+              end_date: experience.experienceEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      console.log(experienceResponses);
+      if (
+        response1.status < 300 &&
+        experienceResponses.every((response) => response.status < 300)
+      ) {
+        return [response1, ...experienceResponses];
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
+
+
+export const getUserExperience = async (accessToken) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(
         `http://127.0.0.1:8000/api/v1/quals/experience/`,
-        {
-          experience_name: elements[8].value,
-          experience_description: elements[9].value,
-          start_date: elements[11].value,
-          end_date: elements[12].value,
-        },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      if (response1.status < 300 && response2.status < 300) {
-        return [response1, response2];
+      if (response.status < 300) {
+        return response;
       } else {
         return false;
       }
