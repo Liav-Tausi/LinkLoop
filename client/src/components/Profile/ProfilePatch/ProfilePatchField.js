@@ -219,7 +219,6 @@ const ProfilePatchField = () => {
   };
 
 
-  
   const handleDeleteExperience = (index) => {
     const newExperienceData = [...experienceData];
     newExperienceData.splice(index, 1);

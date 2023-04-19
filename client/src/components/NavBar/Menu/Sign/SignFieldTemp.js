@@ -1,6 +1,7 @@
 import { InputAdornment, InputBase } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 
 const SignFieldTemp = (props) => {
   const { themeMode } = useContext(AppContext);
@@ -35,6 +36,9 @@ const SignFieldTemp = (props) => {
         },
         "&:hover": {
           backgroundColor: themeMode.signUpFieldHover,
+        },
+        "& input[type='date']::-webkit-calendar-picker-indicator": {
+          background: "red",
         },
         ".MuiInputBase-inputMultiline": {
           "&::placeholder": {
