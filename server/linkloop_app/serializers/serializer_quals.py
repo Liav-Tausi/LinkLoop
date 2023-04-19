@@ -3,34 +3,24 @@ from ..models import (
     Skill,
     Education,
     Experience,
-    UserSkill,
-    UserEducation,
-    UserExperience
 )
 
-
-# ____________________skills_______________________#
 
 class SkillsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = '__all__'
 
-
-class SkillsUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserSkill
-        fields = '__all__'
-
     def create(self, validated_data):
-        user_skill = UserSkill.objects.create(
+        skill = Skill.objects.create(
             user=validated_data.get('user'),
-            skill=validated_data.get('skill')
+            skill_name=validated_data.get('skill_name'),
+            skill_level=validated_data.hget('skill_level'),
         )
-        return user_skill
+        return skill
 
 
-# ____________________education_______________________#
+
 
 
 class EducationSerializer(serializers.ModelSerializer):
@@ -38,21 +28,18 @@ class EducationSerializer(serializers.ModelSerializer):
         model = Education
         fields = '__all__'
 
-
-class EducationUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserEducation
-        fields = '__all__'
-
     def create(self, validated_data):
-        user_education = UserEducation.objects.create(
+        education = Education.objects.create(
             user=validated_data.get('user'),
-            education=validated_data.get('education')
+            education_name=validated_data.get('education_name'),
+            school_name=validated_data.hget('school_name'),
+            start_date=validated_data.get('start_date'),
+            end_date=validated_data.get('end_date'),
+            rating=validated_data.get('rating'),
         )
-        return user_education
+        return education
 
 
-# ____________________experience_______________________#
 
 
 class ExperienceSerializer(serializers.ModelSerializer):
@@ -60,15 +47,13 @@ class ExperienceSerializer(serializers.ModelSerializer):
         model = Experience
         fields = '__all__'
 
-
-class ExperienceUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserExperience
-        fields = '__all__'
-
     def create(self, validated_data):
-        user_experience = UserExperience.objects.create(
+        experience = Experience.objects.create(
             user=validated_data.get('user'),
-            experience=validated_data.get('experience')
+            experience_name=validated_data.get('experience_name'),
+            experience_description=validated_data.get('experience_description'),
+            start_date=validated_data.get('start_date'),
+            end_date=validated_data.get('end_date'),
         )
-        return user_experience
+        return experience
+
