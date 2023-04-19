@@ -2,7 +2,8 @@ django
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
-psycopg2
-moviepy
-python-dotenv
 django-filter
+psycopg2
+python-dotenv
+moviepy
+boto3
