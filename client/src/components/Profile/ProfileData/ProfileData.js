@@ -8,7 +8,6 @@ import ProfileDataBar from "./ProfileDataBar";
 const ProfileData = (props) => {
   const { accessToken, profilePatch, message } = useContext(AppContext);
   const [profileData, setProfileData] = useState(null);
-  const [accessProfileData, setAccessProfileData] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {

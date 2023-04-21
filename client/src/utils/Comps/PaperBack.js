@@ -1,11 +1,10 @@
-import { Paper } from "@mui/material"
+import { Paper } from "@mui/material";
 import { AppContext, Ref } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-
 const PaperBack = (props) => {
-    const { themeMode, } = useContext(AppContext);
-    const ref = useContext(Ref);
+  const { themeMode } = useContext(AppContext);
+  const ref = useContext(Ref);
 
   return (
     <Paper
@@ -25,17 +24,17 @@ const PaperBack = (props) => {
         boxShadow: props.boxShadow,
         "@media (max-width: 600px)": {
           height: props.smallHeight,
-          width: 280,
+          width: props.smallWidth,
         },
         "@media (max-width: 428px)": {
           height: 650,
-          width: 330,
+          width: props.verySmallWidth,
         },
       }}
     >
       {props.children}
     </Paper>
   );
-}
+};
 
 export default PaperBack;

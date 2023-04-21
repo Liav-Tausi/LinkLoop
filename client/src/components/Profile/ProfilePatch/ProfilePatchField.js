@@ -1,4 +1,5 @@
-import { Box, Stack, Button } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import { isEqual } from "lodash";
 import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
 import {
   APP_ACTIONS,
@@ -19,6 +20,7 @@ import {
   validateHeadline,
 } from "../../../utils/funcs/formValidators";
 import {
+  delUserExperience,
   getProfileData,
   getUserExperience,
   patchProfileData,
@@ -30,18 +32,16 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 const ProfilePatchField = () => {
   const { themeMode, accessToken, user } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-  const isSmallScreen = useContext(IsSmallScreenContext);
-  const [formSubmit, setFormSubmit] = useState(true)
-  const [profileData, setProfileData] = useState(null);
-  const [numExperiences, setNumExperiences] = useState(false);
+  const [formSubmit, setFormSubmit] = useState(true);
   const [experienceData, setExperienceData] = useState([
     {
       experienceName: "",
       experienceDescription: "",
-      experienceStartDate: "",
-      experienceEndDate: "",
+      experienceStartDate: "2000-11-11",
+      experienceEndDate: "2000-11-11",
     },
   ]);
+
   const [experienceError, setExperienceError] = useState([
     {
       experienceNameError: false,
@@ -57,6 +57,7 @@ const ProfilePatchField = () => {
     location: "",
     about: "",
   });
+
   const [errors, setErrors] = useState({
     fullNameError: false,
     headlineError: false,
@@ -66,29 +67,34 @@ const ProfilePatchField = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       const retVal = await getProfileData(accessToken, null);
-      setProfileData(retVal.data);
+      const location = retVal.data.location;
+      const cityArray = location ? location.split(" ") : [];
+      const country = cityArray[0];
+      const city = cityArray.slice(1).join(" ");
+      setPatchData({
+        fullName: `${retVal.data?.user?.first_name} ${retVal.data?.user?.last_name}`,
+        headline: retVal.data?.headline,
+        location: `${country} ${city}`,
+        about: retVal.data?.about ? retVal.data?.about : "",
+      });
       const retVal2 = await getUserExperience(accessToken);
-      setExperienceData(retVal2.data.results);
+      const newData = retVal2.data.results.map((experience) => ({
+        experienceName: experience.experience_name,
+        experienceDescription: experience.experience_description,
+        experienceStartDate: experience.start_date,
+        experienceEndDate: experience.end_date,
+      }));
+      setExperienceData(newData);
     };
+
     fetchProfileData();
   }, []);
-
-  useEffect(() => {
-    if (profileData) {
-      setPatchData({
-        fullName: `${profileData?.user?.first_name} ${profileData?.user?.last_name}`,
-        headline: profileData?.headline,
-        location: `${profileData?.location.split(" ")[0]}
-         ${profileData?.location.split(" ")}`,
-        about: profileData?.about ? profileData?.about : "",
-      });
-    }
-  }, [profileData]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormSubmit(true);
-    if (Object.values(errors).some((error) => error) ||
+    if (
+      Object.values(errors).some((error) => error) ||
       experienceError.some((error) => Object.values(error).some((val) => val))
     ) {
       dispatch({
@@ -120,7 +126,6 @@ const ProfilePatchField = () => {
       }
     }
   };
-
 
   const handleFullNameChange = (event) => {
     setErrors((error) => ({
@@ -198,6 +203,7 @@ const ProfilePatchField = () => {
     setExperienceData(newExperienceData);
     setExperienceError(newExperienceError);
   };
+
   const handleExperienceEndDateChange = (event, index) => {
     const newExperienceData = [...experienceData];
     newExperienceData[index].experienceEndDate = event.target.value;
@@ -218,9 +224,14 @@ const ProfilePatchField = () => {
     setExperienceError(newExperienceError);
   };
 
+  const handleAddExperience = () => {
+    setExperienceData((prevData) => [...prevData, {}]);
+    setExperienceError((prevError) => [...prevError, {}]);
+  };
 
   const handleDeleteExperience = (index) => {
     const newExperienceData = [...experienceData];
+    delUserExperience(accessToken, newExperienceData[index].experienceName);
     newExperienceData.splice(index, 1);
     setExperienceData(newExperienceData);
 
@@ -314,7 +325,7 @@ const ProfilePatchField = () => {
               />
             </Box>
             <ProfilePatchLocation
-              location={profileData?.location}
+              location={patchData?.location}
               handleLocationChange={handleLocationChange}
             />
           </Stack>
@@ -322,7 +333,7 @@ const ProfilePatchField = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           <ProfilePatchMultiline
             handleAboutChange={handleAboutChange}
-            profileData={profileData?.about}
+            profileData={patchData?.about}
             errors={errors.about}
             patchData={patchData?.about}
             text={"About"}
@@ -338,7 +349,7 @@ const ProfilePatchField = () => {
             }}
           >
             <Box
-              onClick={() => setNumExperiences(true)}
+              onClick={handleAddExperience}
               sx={{
                 color: themeMode.textColor,
                 background: themeMode.signUpField,
@@ -356,7 +367,7 @@ const ProfilePatchField = () => {
                 px: 2,
                 mx: 2,
                 my: 0.5,
-                py: 0.3,
+                py: 0.7,
                 fontSize: 12,
                 gap: 1,
               }}

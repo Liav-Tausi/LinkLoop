@@ -49,13 +49,19 @@ const ProfilePatchLocation = (props) => {
       <Box sx={{ color: themeMode.textColor, ml: 2, my: 0.5, fontSize: 12 }}>
         Your location:
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <FormControl
           sx={{
             m: 1,
-            minWidth: isSmallScreen ? 125 : 285,
+            flex: 1,
             backgroundColor: themeMode.signUpField,
             borderRadius: "25px",
+            marginLeft: 0,
           }}
           onClick={handleLocationClick}
         >
@@ -111,9 +117,10 @@ const ProfilePatchLocation = (props) => {
         <FormControl
           sx={{
             m: 1,
-            minWidth: isSmallScreen ? 125 : 285,
+            flex: 1,
             backgroundColor: themeMode.signUpField,
             borderRadius: "25px",
+            marginRight: 0,
           }}
           onClick={handleLocationClick}
         >

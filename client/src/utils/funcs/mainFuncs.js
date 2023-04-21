@@ -1,16 +1,14 @@
 import axios from "axios";
+import { URL } from "../config/conf";
 
 export const getProfileData = async (accessToken, username) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/profile/main/0/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (response.status < 300) {
         return response;
       } else {
@@ -18,7 +16,7 @@ export const getProfileData = async (accessToken, username) => {
       }
     } else if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/profile/main/?username=${username}`
+        `${URL}/api/v1/profile/main/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -41,7 +39,7 @@ export const patchProfileData = async (
   try {
     if (accessToken) {
       const response1 = await axios.patch(
-        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
+        `${URL}/api/v1/profile/main/0/`,
         {
           first_name: elements[0].value.split(" ")[0],
           last_name: elements[0].value.split(" ")[1],
@@ -55,11 +53,46 @@ export const patchProfileData = async (
           },
         }
       );
-
+      if (experienceData) {
+        const experienceResponses = await Promise.all(
+          experienceData.map(async (experience) => {
+            return await axios.post(
+              `${URL}/api/v1/quals/experience/`,
+              {
+                experience_name: experience.experienceName,
+                experience_description: experience.experienceDescription,
+                start_date: experience.experienceStartDate,
+                end_date: experience.experienceEndDate,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            );
+          })
+        );
+        if (
+          response1.status < 300 &&
+          experienceResponses.every((response) => response.status < 300)
+        ) {
+          return [response1, ...experienceResponses];
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  } catch (error) {
+    if (
+      error.response.data.results ===
+      "experience with this experience name already exists."
+    ) {
       const experienceResponses = await Promise.all(
         experienceData.map(async (experience) => {
-          return await axios.post(
-            `http://127.0.0.1:8000/api/v1/quals/experience/`,
+          return await axios.patch(
+            `${URL}/api/v1/quals/experience/0/?experience_name=${experience.experienceName}`,
             {
               experience_name: experience.experienceName,
               experience_description: experience.experienceDescription,
@@ -74,12 +107,27 @@ export const patchProfileData = async (
           );
         })
       );
-      console.log(experienceResponses);
-      if (
-        response1.status < 300 &&
-        experienceResponses.every((response) => response.status < 300)
-      ) {
-        return [response1, ...experienceResponses];
+      if (experienceResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+};
+
+export const getUserExperience = async (accessToken) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(`${URL}/api/v1/quals/experience/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        return response;
       } else {
         return false;
       }
@@ -91,13 +139,11 @@ export const patchProfileData = async (
   }
 };
 
-
-
-export const getUserExperience = async (accessToken) => {
+export const delUserExperience = async (accessToken, experienceName) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/quals/experience/`,
+      const response = await axios.delete(
+        `${URL}/api/v1/quals/experience/0/?experience_name=${experienceName}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -121,7 +167,7 @@ export const getUserData = async (accessToken, username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/users/data/?username=${username}`
+        `${URL}/api/v1/users/data/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -129,14 +175,11 @@ export const getUserData = async (accessToken, username) => {
         return false;
       }
     } else if (accessToken) {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/users/data/0/",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/users/data/0/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (response.status < 300) {
         return response;
       } else {
@@ -154,7 +197,7 @@ export const getVideosOfUser = async (username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/videos/main/?username=${username}`
+        `${URL}/api/v1/videos/main/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -172,19 +215,14 @@ export const getVideosOfUser = async (username) => {
 export const getFeedData = async (accessToken) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/",
-        {
-          Authorization: "Bearer " + accessToken,
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/videos/main/`, {
+        Authorization: "Bearer " + accessToken,
+      });
       if (response.status < 300) {
         return await response.data.results;
       }
     } else {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/"
-      );
+      const response = await axios.get(`${URL}/api/v1/videos/main/`);
       if (response.status < 300) {
         return await response.data.results;
       }
@@ -197,7 +235,7 @@ export const getFeedData = async (accessToken) => {
 export const isLiked = async (videoId, accessToken) => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/0/`,
+      `${URL}/api/v1/videos/${videoId}/likes/0/`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -218,7 +256,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
   try {
     if (videoId && !remove) {
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/`,
+        `${URL}/api/v1/videos/${videoId}/likes/`,
         {},
         {
           headers: {
@@ -233,7 +271,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
       }
     } else if (videoId && remove) {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/0/`,
+        `${URL}/api/v1/videos/${videoId}/likes/0/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

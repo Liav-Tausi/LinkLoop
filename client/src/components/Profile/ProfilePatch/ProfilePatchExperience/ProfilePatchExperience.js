@@ -67,7 +67,7 @@ const ProfilePatchExperience = (props) => {
               autocomplete={"text"}
               handleChange={props.handleExperienceNameChange}
               error={props.experienceError?.experienceNameError}
-              sign={props.experienceData?.experienceName || ""}
+              sign={props.experienceData?.experienceName}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -97,8 +97,13 @@ const ProfilePatchExperience = (props) => {
               maxRows={isSmallScreen ? 2 : 4}
             />
           </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ minWidth: isSmallScreen ? "45%" : "49%" }}>
               <Box
                 sx={{
                   color: themeMode.textColor,
@@ -115,14 +120,14 @@ const ProfilePatchExperience = (props) => {
                 type={"date"}
                 handleChange={props.handleExperienceStartDateChange}
                 error={props.experienceError?.experienceStartDateError}
-                sign={props.experienceData?.experienceStartDate || "0000-00-00"}
+                sign={props.experienceData?.experienceStartDate}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
                 maxRows={1}
-             />
+              />
             </Box>
-            <Box sx={{ width: "100%" }}>
+            <Box sx={{ minWidth: isSmallScreen ? "45%" : "49%" }}>
               <Box
                 sx={{
                   color: themeMode.textColor,
@@ -139,7 +144,7 @@ const ProfilePatchExperience = (props) => {
                 type={"date"}
                 handleChange={props.handleExperienceEndDateChange}
                 error={props.experienceError?.experienceEndDateError}
-                sign={props.experienceData?.experienceEndDate || "0000-00-00"}
+                sign={props.experienceData?.experienceEndDate}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
