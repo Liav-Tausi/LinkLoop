@@ -5,5 +5,5 @@ django-cors-headers
 django-filter
 psycopg2
 python-dotenv
-moviepy
+gunicorn
 boto3
