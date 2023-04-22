@@ -1,6 +1,4 @@
 from django.contrib.auth import get_user_model
-from django_filters import filters
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -35,9 +33,10 @@ class ProfileModelViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     authentication_classes = [JWTAuthentication]
     filterset_class = ProfileFilter
-    allowed_methods = ['GET', 'POST', 'DELETE']
+    allowed_methods = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT']
 
     def create(self, request, *args, **kwargs):
+
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -65,24 +64,30 @@ class ProfileModelViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         partial = kwargs.pop('partial', False)
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id).first()
         serializer = self.get_serializer(profile, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            serializer.is_valid(raise_exception=True)
 
         user = get_user_model().objects.get(pk=user_id)
-        first_name, last_name = request.data.get('first_name', ''), request.data.get('last_name', '')
+        first_name, last_name = request.data.get('first_name'), request.data.get('last_name')
+        if not first_name and not last_name:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-
+        print(first_name, last_name)
         self.perform_update(serializer)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id)
         if not profile:
