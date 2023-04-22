@@ -1,56 +1,39 @@
 import { Box, Stack } from "@mui/material";
-import { isEqual } from "lodash";
 import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
 import {
   APP_ACTIONS,
   AppContext,
   AppDispatchContext,
-  IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
 import ProfilePatchLocation from "./ProfilePatchLocation";
 import {
   validateAbout,
-  validateExperienceDescription,
-  validateExperienceEndDate,
-  validateExperienceName,
-  validateExperienceStartDate,
+  validateEndDate,
   validateFullName,
   validateHeadline,
+  validateQualDescription,
+  validateQualName,
+  validateStartDate,
 } from "../../../utils/funcs/formValidators";
 import {
+  delUserEducation,
   delUserExperience,
   getProfileData,
+  getUserEducation,
   getUserExperience,
   patchProfileData,
 } from "../../../utils/funcs/mainFuncs";
 import ProfilePatchMultiline from "./ProfilePatchMultiline";
 import ProfilePatchExperience from "./ProfilePatchExperience/ProfilePatchExperience";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ProfilePatchEducation from "./ProfilePatchEducation/ProfilePatchEducation";
 
 const ProfilePatchField = () => {
   const { themeMode, accessToken, user } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [formSubmit, setFormSubmit] = useState(true);
-  const [experienceData, setExperienceData] = useState([
-    {
-      experienceName: "",
-      experienceDescription: "",
-      experienceStartDate: "2000-11-11",
-      experienceEndDate: "2000-11-11",
-    },
-  ]);
-
-  const [experienceError, setExperienceError] = useState([
-    {
-      experienceNameError: false,
-      experienceDescriptionError: false,
-      experienceStartDateError: false,
-      experienceEndDateError: false,
-    },
-  ]);
-
   const [patchData, setPatchData] = useState({
     fullName: "",
     headline: "",
@@ -64,6 +47,44 @@ const ProfilePatchField = () => {
     aboutError: false,
   });
 
+  const [educationData, setEducationData] = useState([
+    {
+      educationName: "",
+      educationDescription: "",
+      educationSchool: "",
+      educationStartDate: "0000-00-00",
+      educationEndDate: "0000-00-00",
+    },
+  ]);
+
+  const [educationError, setEducationError] = useState([
+    {
+      educationNameError: false,
+      educationDescriptionError: false,
+      educationSchoolError: false,
+      educationStartDateError: false,
+      educationEndDateError: false,
+    },
+  ]);
+
+  const [experienceData, setExperienceData] = useState([
+    {
+      experienceName: "",
+      experienceDescription: "",
+      experienceStartDate: "0000-00-00",
+      experienceEndDate: "0000-00-00",
+    },
+  ]);
+
+  const [experienceError, setExperienceError] = useState([
+    {
+      experienceNameError: false,
+      experienceDescriptionError: false,
+      experienceStartDateError: false,
+      experienceEndDateError: false,
+    },
+  ]);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       const retVal = await getProfileData(accessToken, null);
@@ -71,20 +92,35 @@ const ProfilePatchField = () => {
       const cityArray = location ? location.split(" ") : [];
       const country = cityArray[0];
       const city = cityArray.slice(1).join(" ");
-      setPatchData({
-        fullName: `${retVal.data?.user?.first_name} ${retVal.data?.user?.last_name}`,
-        headline: retVal.data?.headline,
-        location: `${country} ${city}`,
-        about: retVal.data?.about ? retVal.data?.about : "",
-      });
+      if (retVal) {
+        setPatchData({
+          fullName: `${retVal.data.user.first_name} ${retVal.data.user.last_name}`,
+          headline: retVal.data.headline,
+          location: `${country} ${city}`,
+          about: retVal.data.about ? retVal.data.about : "",
+        });
+      }
       const retVal2 = await getUserExperience(accessToken);
-      const newData = retVal2.data.results.map((experience) => ({
-        experienceName: experience.experience_name,
-        experienceDescription: experience.experience_description,
-        experienceStartDate: experience.start_date,
-        experienceEndDate: experience.end_date,
-      }));
-      setExperienceData(newData);
+      if (retVal2) {
+        const newData = retVal2.data.results.map((experience) => ({
+          experienceName: experience.experience_name,
+          experienceDescription: experience.experience_description,
+          experienceStartDate: experience.start_date,
+          experienceEndDate: experience.end_date,
+        }));
+        setExperienceData(newData);
+      }
+      const retVal3 = await getUserEducation(accessToken);
+      if (retVal3) {
+        const newData = retVal3.data.results.map((education) => ({
+          educationName: education.education_name,
+          educationDescription: education.education_description,
+          educationSchool: education.school_name,
+          educationStartDate: education.start_date,
+          educationEndDate: education.end_date,
+        }));
+        setEducationData(newData);
+      }
     };
 
     fetchProfileData();
@@ -95,7 +131,10 @@ const ProfilePatchField = () => {
     setFormSubmit(true);
     if (
       Object.values(errors).some((error) => error) ||
-      experienceError.some((error) => Object.values(error).some((val) => val))
+      experienceError.some((error) =>
+        Object.values(error).some((val) => val)
+      ) ||
+      educationError.some((error) => Object.values(error).some((val) => val))
     ) {
       dispatch({
         type: APP_ACTIONS.MESSAGE,
@@ -108,7 +147,8 @@ const ProfilePatchField = () => {
       const response = await patchProfileData(
         accessToken,
         elements,
-        experienceData
+        experienceData,
+        educationData
       );
       if (response) {
         dispatch({
@@ -126,6 +166,8 @@ const ProfilePatchField = () => {
       }
     }
   };
+
+  // -------------------- User --------------------
 
   const handleFullNameChange = (event) => {
     setErrors((error) => ({
@@ -155,13 +197,109 @@ const ProfilePatchField = () => {
     setPatchData((data) => ({ ...data, about: event.target.value }));
   };
 
+  // ---------------- Education -----------------
+
+  const handleEducationNameChange = (event, index) => {
+    if (index < 0 || index >= educationData.length) return;
+
+    const newEducationError = [...educationError];
+    newEducationError[index] = {
+      ...newEducationError[index],
+      educationNameError: !validateQualName(event.target.value),
+    };
+    setEducationError(newEducationError);
+
+    const newEducationData = [...educationData];
+    newEducationData[index] = {
+      ...newEducationData[index],
+      educationName: event.target.value,
+    };
+    setEducationData(newEducationData);
+  };
+
+  const handleEducationDescriptionChange = (event, index) => {
+    const newEducationError = [...educationError];
+    newEducationError[index].educationDescriptionError =
+      !validateQualDescription(event.target.value);
+    setEducationError(newEducationError);
+
+    const newEducationData = [...educationData];
+    newEducationData[index].educationDescription = event.target.value;
+    setEducationData(newEducationData);
+  };
+
+  const handleEducationSchoolChange = (event, index) => {
+    const newEducationError = [...educationError];
+    newEducationError[index].educationSchoolError = !validateQualName(
+      event.target.value
+    );
+    setEducationError(newEducationError);
+
+    const newEducationData = [...educationData];
+    newEducationData[index].educationSchool = event.target.value;
+    setEducationData(newEducationData);
+  };
+
+  const handleEducationStartDateChange = (event, index) => {
+    const newEducationData = [...educationData];
+    newEducationData[index].educationStartDate = event.target.value;
+    const newEducationError = [...educationError];
+    newEducationError[index].educationStartDateError = !validateStartDate(
+      event.target.value,
+      educationData[index].educationEndDate
+    );
+    if (educationData[index].educationEndDate) {
+      newEducationError[index].educationEndDateError = !validateEndDate(
+        educationData[index].educationEndDate,
+        event.target.value
+      );
+    }
+    setEducationData(newEducationData);
+    setEducationError(newEducationError);
+  };
+
+  const handleEducationEndDateChange = (event, index) => {
+    const newEducationData = [...educationData];
+    newEducationData[index].educationEndDate = event.target.value;
+    const newEducationError = [...educationError];
+    newEducationError[index].educationEndDateError = !validateEndDate(
+      event.target.value,
+      educationData[index].educationStartDate
+    );
+    if (educationData[index].educationStartDate) {
+      newEducationError[index].educationStartDateError = !validateStartDate(
+        educationData[index].educationStartDate,
+        event.target.value
+      );
+    }
+    setEducationData(newEducationData);
+    setEducationError(newEducationError);
+  };
+
+  const handleAddEducation = () => {
+    setEducationData((prevData) => [...prevData, {}]);
+    setEducationError((prevError) => [...prevError, {}]);
+  };
+  const handleDeleteEducation = (index) => {
+    const newEducationData = [...educationData];
+    delUserEducation(accessToken, newEducationData[index].educationName);
+    newEducationData.splice(index, 1);
+    setEducationData(newEducationData);
+
+    const newEducationError = [...educationError];
+    newEducationError.splice(index, 1);
+    setEducationError(newEducationError);
+  };
+
+  // ---------------- Experience -----------------
+
   const handleExperienceNameChange = (event, index) => {
-    if (index < 0 || index >= experienceData.length) return;
+    if (index < 0 || index >= educationData.length) return;
 
     const newExperienceError = [...experienceError];
     newExperienceError[index] = {
       ...newExperienceError[index],
-      experienceNameError: !validateExperienceName(event.target.value),
+      experienceNameError: !validateQualName(event.target.value),
     };
     setExperienceError(newExperienceError);
 
@@ -176,7 +314,7 @@ const ProfilePatchField = () => {
   const handleExperienceDescriptionChange = (event, index) => {
     const newExperienceError = [...experienceError];
     newExperienceError[index].experienceDescriptionError =
-      !validateExperienceDescription(event.target.value);
+      !validateQualDescription(event.target.value);
     setExperienceError(newExperienceError);
 
     const newExperienceData = [...experienceData];
@@ -188,17 +326,15 @@ const ProfilePatchField = () => {
     const newExperienceData = [...experienceData];
     newExperienceData[index].experienceStartDate = event.target.value;
     const newExperienceError = [...experienceError];
-    newExperienceError[index].experienceStartDateError =
-      !validateExperienceStartDate(
-        event.target.value,
-        experienceData[index].experienceEndDate
-      );
+    newExperienceError[index].experienceStartDateError = !validateStartDate(
+      event.target.value,
+      experienceData[index].experienceEndDate
+    );
     if (experienceData[index].experienceEndDate) {
-      newExperienceError[index].experienceEndDateError =
-        !validateExperienceEndDate(
-          experienceData[index].experienceEndDate,
-          event.target.value
-        );
+      newExperienceError[index].experienceEndDateError = !validateEndDate(
+        experienceData[index].experienceEndDate,
+        event.target.value
+      );
     }
     setExperienceData(newExperienceData);
     setExperienceError(newExperienceError);
@@ -208,17 +344,15 @@ const ProfilePatchField = () => {
     const newExperienceData = [...experienceData];
     newExperienceData[index].experienceEndDate = event.target.value;
     const newExperienceError = [...experienceError];
-    newExperienceError[index].experienceEndDateError =
-      !validateExperienceEndDate(
-        event.target.value,
-        experienceData[index].experienceStartDate
-      );
+    newExperienceError[index].experienceEndDateError = !validateEndDate(
+      event.target.value,
+      experienceData[index].experienceStartDate
+    );
     if (experienceData[index].experienceStartDate) {
-      newExperienceError[index].experienceStartDateError =
-        !validateExperienceStartDate(
-          experienceData[index].experienceStartDate,
-          event.target.value
-        );
+      newExperienceError[index].experienceStartDateError = !validateStartDate(
+        experienceData[index].experienceStartDate,
+        event.target.value
+      );
     }
     setExperienceData(newExperienceData);
     setExperienceError(newExperienceError);
@@ -294,7 +428,7 @@ const ProfilePatchField = () => {
                 autocomplete={"text"}
                 handleChange={handleFullNameChange}
                 error={errors.fullNameError}
-                sign={patchData.fullName}
+                sign={patchData?.fullName}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -356,7 +490,7 @@ const ProfilePatchField = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: "15px",
+                borderRadius: "25px",
                 "&:hover": {
                   backgroundColor: themeMode.signUpFieldHover,
                   cursor: "pointer",
@@ -372,7 +506,7 @@ const ProfilePatchField = () => {
                 gap: 1,
               }}
             >
-              Add New Experiences
+              Add New Experience
               <AddCircleIcon />
             </Box>
           </Box>
@@ -394,6 +528,67 @@ const ProfilePatchField = () => {
                 handleExperienceEndDateChange(event, index)
               }
               handleDeleteExperience={() => handleDeleteExperience(index)}
+            />
+          ))}
+          <Box
+            sx={{
+              mx: 2,
+              py: 0.3,
+              borderRadius: "25px",
+              display: "flex",
+              justifyContent: "start",
+              backgroundColor: themeMode.signUpBubbles,
+            }}
+          >
+            <Box
+              onClick={handleAddEducation}
+              sx={{
+                color: themeMode.textColor,
+                background: themeMode.signUpField,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "25px",
+                "&:hover": {
+                  backgroundColor: themeMode.signUpFieldHover,
+                  cursor: "pointer",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+                px: 2,
+                mx: 2,
+                my: 0.5,
+                py: 0.7,
+                fontSize: 12,
+                gap: 1,
+              }}
+            >
+              Add New Education
+              <AddCircleIcon />
+            </Box>
+          </Box>
+          {educationData.map((education, index) => (
+            <ProfilePatchEducation
+              key={index}
+              educationData={education}
+              educationError={educationError[index]}
+              handleEducationNameChange={(event) =>
+                handleEducationNameChange(event, index)
+              }
+              handleEducationDescriptionChange={(event) =>
+                handleEducationDescriptionChange(event, index)
+              }
+              handleEducationStartDateChange={(event) =>
+                handleEducationStartDateChange(event, index)
+              }
+              handleEducationEndDateChange={(event) =>
+                handleEducationEndDateChange(event, index)
+              }
+              handleEducationSchoolChange={(event) =>
+                handleEducationSchoolChange(event, index)
+              }
+              handleDeleteEducation={() => handleDeleteEducation(index)}
             />
           ))}
         </Box>

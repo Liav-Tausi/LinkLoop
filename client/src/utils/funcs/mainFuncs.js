@@ -34,59 +34,149 @@ export const getProfileData = async (accessToken, username) => {
 export const patchProfileData = async (
   accessToken,
   elements,
-  experienceData
+  experienceData,
+  educationData
 ) => {
-  try {
-    if (accessToken) {
-      const response1 = await axios.patch(
-        `${URL}/api/v1/profile/main/0/`,
-        {
-          first_name: elements[0].value.split(" ")[0],
-          last_name: elements[0].value.split(" ")[1],
-          headline: elements[1].value,
-          location: `${elements[2].value} ${elements[4].value}`,
-          about: elements[6].value,
+  console.log("hey");
+  if (accessToken) {
+    const response = await axios.patch(
+      `${URL}/api/v1/profile/main/0/`,
+      {
+        first_name:
+          elements[0].value.split(" ")[0].charAt(0).toUpperCase() +
+          elements[0].value.split(" ")[0].slice(1),
+        last_name:
+          elements[0].value.split(" ")[1].charAt(0).toUpperCase() +
+          elements[0].value.split(" ")[1].slice(1),
+        headline: elements[1].value,
+        location: `${elements[2].value} ${elements[4].value}`,
+        about: elements[6].value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      if (experienceData) {
-        const experienceResponses = await Promise.all(
-          experienceData.map(async (experience) => {
-            return await axios.post(
-              `${URL}/api/v1/quals/experience/`,
-              {
-                experience_name: experience.experienceName,
-                experience_description: experience.experienceDescription,
-                start_date: experience.experienceStartDate,
-                end_date: experience.experienceEndDate,
+      }
+    );
+    const profileExperience = await patchProfileDataExperience(
+      accessToken,
+      experienceData
+    );
+    const profileEducation = await patchProfileDataEducation(
+      accessToken,
+      educationData
+    );
+    if (response.status < 300 && profileExperience && profileEducation) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+};
+
+export const patchProfileDataEducation = async (accessToken, educationData) => {
+  try {
+    if (educationData) {
+      const educationResponses = await Promise.all(
+        educationData.map(async (education) => {
+          return await axios.post(
+            `${URL}/api/v1/quals/education/`,
+            {
+              education_name: education.educationName,
+              education_description: education.educationDescription,
+              school_name: education.educationSchool,
+              start_date: education.educationStartDate,
+              end_date: education.educationEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
               },
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            );
-          })
-        );
-        if (
-          response1.status < 300 &&
-          experienceResponses.every((response) => response.status < 300)
-        ) {
-          return [response1, ...experienceResponses];
-        } else {
-          return false;
-        }
+            }
+          );
+        })
+      );
+      if (educationResponses.every((response) => response.status < 300)) {
+        return true;
       } else {
         return false;
       }
+    } else {
+      return false;
     }
   } catch (error) {
     if (
-      error.response.data.results ===
+      error.response.data.education_name[0] ===
+      "education with this education name already exists."
+    ) {
+      const educationResponses = await Promise.all(
+        educationData.map(async (education) => {
+          return await axios.patch(
+            `${URL}/api/v1/quals/education/0/?education_name=${education.educationName}`,
+            {
+              education_name: education.educationName,
+              education_description: education.educationDescription,
+              school_name: education.educationSchool,
+              start_date: education.educationStartDate,
+              end_date: education.educationEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (educationResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+};
+
+export const patchProfileDataExperience = async (
+  accessToken,
+  experienceData
+) => {
+  try {
+    console.log(experienceData);
+    if (experienceData) {
+      const experienceResponses = await Promise.all(
+        experienceData.map(async (experience) => {
+          return await axios.post(
+            `${URL}/api/v1/quals/experience/`,
+            {
+              experience_name: experience.experienceName,
+              experience_description: experience.experienceDescription,
+              start_date: experience.experienceStartDate,
+              end_date: experience.experienceEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (experienceResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (
+      error.response.data.experience_name[0] ===
       "experience with this experience name already exists."
     ) {
       const experienceResponses = await Promise.all(
@@ -118,6 +208,30 @@ export const patchProfileData = async (
   }
 };
 
+export const delUserEducation = async (accessToken, educationName) => {
+  try {
+    if (accessToken) {
+      const response = await axios.delete(
+        `${URL}/api/v1/quals/education/0/?education_name=${educationName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 export const getUserExperience = async (accessToken) => {
   try {
     if (accessToken) {
@@ -138,6 +252,29 @@ export const getUserExperience = async (accessToken) => {
     return false;
   }
 };
+
+
+export const getUserEducation = async (accessToken) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(`${URL}/api/v1/quals/education/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 
 export const delUserExperience = async (accessToken, experienceName) => {
   try {
