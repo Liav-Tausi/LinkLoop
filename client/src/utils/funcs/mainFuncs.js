@@ -1,16 +1,14 @@
 import axios from "axios";
+import { URL } from "../config/conf";
 
 export const getProfileData = async (accessToken, username) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/profile/main/0/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (response.status < 300) {
         return response;
       } else {
@@ -18,7 +16,7 @@ export const getProfileData = async (accessToken, username) => {
       }
     } else if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/profile/main/?username=${username}`
+        `${URL}/api/v1/profile/main/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -36,30 +34,124 @@ export const getProfileData = async (accessToken, username) => {
 export const patchProfileData = async (
   accessToken,
   elements,
+  experienceData,
+  educationData
+) => {
+  console.log("hey");
+  if (accessToken) {
+    const response = await axios.patch(
+      `${URL}/api/v1/profile/main/0/`,
+      {
+        first_name:
+          elements[0].value.split(" ")[0].charAt(0).toUpperCase() +
+          elements[0].value.split(" ")[0].slice(1),
+        last_name:
+          elements[0].value.split(" ")[1].charAt(0).toUpperCase() +
+          elements[0].value.split(" ")[1].slice(1),
+        headline: elements[1].value,
+        location: `${elements[2].value} ${elements[4].value}`,
+        about: elements[6].value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const profileExperience = await patchProfileDataExperience(
+      accessToken,
+      experienceData
+    );
+    const profileEducation = await patchProfileDataEducation(
+      accessToken,
+      educationData
+    );
+    if (response.status < 300 && profileExperience && profileEducation) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+};
+
+export const patchProfileDataEducation = async (accessToken, educationData) => {
+  try {
+    if (educationData) {
+      const educationResponses = await Promise.all(
+        educationData.map(async (education) => {
+          return await axios.post(
+            `${URL}/api/v1/quals/education/`,
+            {
+              education_name: education.educationName,
+              education_description: education.educationDescription,
+              school_name: education.educationSchool,
+              start_date: education.educationStartDate,
+              end_date: education.educationEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (educationResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (
+      error.response.data.education_name[0] ===
+      "education with this education name already exists."
+    ) {
+      const educationResponses = await Promise.all(
+        educationData.map(async (education) => {
+          return await axios.patch(
+            `${URL}/api/v1/quals/education/0/?education_name=${education.educationName}`,
+            {
+              education_name: education.educationName,
+              education_description: education.educationDescription,
+              school_name: education.educationSchool,
+              start_date: education.educationStartDate,
+              end_date: education.educationEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (educationResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+};
+
+export const patchProfileDataExperience = async (
+  accessToken,
   experienceData
 ) => {
   try {
-    if (accessToken) {
-      const response1 = await axios.patch(
-        `http://127.0.0.1:8000/api/v1/profile/main/0/`,
-        {
-          first_name: elements[0].value.split(" ")[0],
-          last_name: elements[0].value.split(" ")[1],
-          headline: elements[1].value,
-          location: `${elements[2].value} ${elements[4].value}`,
-          about: elements[6].value,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
+    console.log(experienceData);
+    if (experienceData) {
       const experienceResponses = await Promise.all(
         experienceData.map(async (experience) => {
           return await axios.post(
-            `http://127.0.0.1:8000/api/v1/quals/experience/`,
+            `${URL}/api/v1/quals/experience/`,
             {
               experience_name: experience.experienceName,
               experience_description: experience.experienceDescription,
@@ -74,12 +166,82 @@ export const patchProfileData = async (
           );
         })
       );
-      console.log(experienceResponses);
-      if (
-        response1.status < 300 &&
-        experienceResponses.every((response) => response.status < 300)
-      ) {
-        return [response1, ...experienceResponses];
+      if (experienceResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (
+      error.response.data.experience_name[0] ===
+      "experience with this experience name already exists."
+    ) {
+      const experienceResponses = await Promise.all(
+        experienceData.map(async (experience) => {
+          return await axios.patch(
+            `${URL}/api/v1/quals/experience/0/?experience_name=${experience.experienceName}`,
+            {
+              experience_name: experience.experienceName,
+              experience_description: experience.experienceDescription,
+              start_date: experience.experienceStartDate,
+              end_date: experience.experienceEndDate,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (experienceResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+};
+
+export const delUserEducation = async (accessToken, educationName) => {
+  try {
+    if (accessToken) {
+      const response = await axios.delete(
+        `${URL}/api/v1/quals/education/0/?education_name=${educationName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
+export const getUserExperience = async (accessToken) => {
+  try {
+    if (accessToken) {
+      const response = await axios.get(`${URL}/api/v1/quals/experience/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        return response;
       } else {
         return false;
       }
@@ -92,12 +254,33 @@ export const patchProfileData = async (
 };
 
 
-
-export const getUserExperience = async (accessToken) => {
+export const getUserEducation = async (accessToken) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/quals/experience/`,
+      const response = await axios.get(`${URL}/api/v1/quals/education/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
+
+export const delUserExperience = async (accessToken, experienceName) => {
+  try {
+    if (accessToken) {
+      const response = await axios.delete(
+        `${URL}/api/v1/quals/experience/0/?experience_name=${experienceName}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -121,7 +304,7 @@ export const getUserData = async (accessToken, username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/users/data/?username=${username}`
+        `${URL}/api/v1/users/data/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -129,14 +312,11 @@ export const getUserData = async (accessToken, username) => {
         return false;
       }
     } else if (accessToken) {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/users/data/0/",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/users/data/0/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (response.status < 300) {
         return response;
       } else {
@@ -154,7 +334,7 @@ export const getVideosOfUser = async (username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/videos/main/?username=${username}`
+        `${URL}/api/v1/videos/main/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -172,19 +352,14 @@ export const getVideosOfUser = async (username) => {
 export const getFeedData = async (accessToken) => {
   try {
     if (accessToken) {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/",
-        {
-          Authorization: "Bearer " + accessToken,
-        }
-      );
+      const response = await axios.get(`${URL}/api/v1/videos/main/`, {
+        Authorization: "Bearer " + accessToken,
+      });
       if (response.status < 300) {
         return await response.data.results;
       }
     } else {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/v1/videos/main/"
-      );
+      const response = await axios.get(`${URL}/api/v1/videos/main/`);
       if (response.status < 300) {
         return await response.data.results;
       }
@@ -197,7 +372,7 @@ export const getFeedData = async (accessToken) => {
 export const isLiked = async (videoId, accessToken) => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/0/`,
+      `${URL}/api/v1/videos/${videoId}/likes/0/`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -218,7 +393,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
   try {
     if (videoId && !remove) {
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/`,
+        `${URL}/api/v1/videos/${videoId}/likes/`,
         {},
         {
           headers: {
@@ -233,7 +408,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
       }
     } else if (videoId && remove) {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/v1/videos/${videoId}/likes/0/`,
+        `${URL}/api/v1/videos/${videoId}/likes/0/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

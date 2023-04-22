@@ -1,14 +1,13 @@
 import { Box } from "@mui/material";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import {
   AppContext,
   IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-const ProfilePatchExperience = (props) => {
+const ProfilePatchEducation = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
@@ -31,7 +30,7 @@ const ProfilePatchExperience = (props) => {
           <Box>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
               <Box
-                onClick={props.handleDeleteExperience}
+                onClick={props.handleDeleteEducation}
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -60,14 +59,14 @@ const ProfilePatchExperience = (props) => {
                 fontSize: 12,
               }}
             >
-              Experience Name
+              Education Name
             </Box>
             <SignFieldTemp
               placeholder="Name"
               autocomplete={"text"}
-              handleChange={props.handleExperienceNameChange}
-              error={props.experienceError?.experienceNameError}
-              sign={props.experienceData?.experienceName}
+              handleChange={props.handleEducationNameChange}
+              error={props.educationError?.educationNameError}
+              sign={props.educationData?.educationName}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -83,14 +82,37 @@ const ProfilePatchExperience = (props) => {
                 fontSize: 12,
               }}
             >
-              Experience Description
+              School Name
+            </Box>
+            <SignFieldTemp
+              placeholder="School"
+              autocomplete={"text"}
+              handleChange={props.handleEducationSchoolChange}
+              error={props.educationError?.educationSchoolError}
+              sign={props.educationData?.educationSchool}
+              padding="8px"
+              paddingL="18px"
+              multiline={false}
+              maxRows={1}
+            />
+          </Box>
+          <Box>
+            <Box
+              sx={{
+                color: themeMode.textColor,
+                ml: 2,
+                my: 0.5,
+                fontSize: 12,
+              }}
+            >
+              Education Description
             </Box>
             <SignFieldTemp
               placeholder="Description"
               autocomplete={"text"}
-              handleChange={props.handleExperienceDescriptionChange}
-              error={props.experienceError?.experienceDescriptionError}
-              sign={props.experienceData?.experienceDescription}
+              handleChange={props.handleEducationDescriptionChange}
+              error={props.educationError?.educationDescriptionError}
+              sign={props.educationData?.educationDescription}
               padding="12px"
               paddingL="18px"
               multiline={true}
@@ -118,9 +140,9 @@ const ProfilePatchExperience = (props) => {
                 placeholder="Start Date"
                 autocomplete={"date"}
                 type={"date"}
-                handleChange={props.handleExperienceStartDateChange}
-                error={props.experienceError?.experienceStartDateError}
-                sign={props.experienceData?.experienceStartDate}
+                handleChange={props.handleEducationStartDateChange}
+                error={props.educationError?.educationStartDateError}
+                sign={props.educationData?.educationStartDate}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -142,9 +164,9 @@ const ProfilePatchExperience = (props) => {
                 placeholder="End Date"
                 autocomplete={"date"}
                 type={"date"}
-                handleChange={props.handleExperienceEndDateChange}
-                error={props.experienceError?.experienceEndDateError}
-                sign={props.experienceData?.experienceEndDate}
+                handleChange={props.handleEducationEndDateChange}
+                error={props.educationError?.educationEndDateError}
+                sign={props.educationData?.educationEndDate}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -158,4 +180,4 @@ const ProfilePatchExperience = (props) => {
   );
 };
 
-export default ProfilePatchExperience;
+export default ProfilePatchEducation;

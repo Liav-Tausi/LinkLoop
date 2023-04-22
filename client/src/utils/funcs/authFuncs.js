@@ -1,4 +1,5 @@
 import axios from "axios";
+import { URL } from "../config/conf";
 
 export const isLoggedIn = async (accessToken) => {
   const access = accessToken;
@@ -17,7 +18,7 @@ export const isLoggedIn = async (accessToken) => {
 export const handleRefreshTokenResponse = async (refreshToken) => {
   try {
     const tokenResponse = await axios.post(
-      "http://127.0.0.1:8000/api/v1/auth/token/refresh/",
+      `${URL}/api/v1/auth/token/refresh/`,
       {
         refresh: refreshToken,
       }
@@ -35,7 +36,7 @@ export const handleRefreshTokenResponse = async (refreshToken) => {
 export const handleAccessTokenResponse = async (user) => {
   try {
     const tokenResponse = await axios.post(
-      "http://127.0.0.1:8000/api/v1/auth/token/",
+      `${URL}/api/v1/auth/token/`,
       {
         username: user[0],
         password: user[1],
@@ -54,17 +55,15 @@ export const handleAccessTokenResponse = async (user) => {
 export const signUpUser = async (user) => {
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/v1/users/signup/",
-      {
-        username: user[0].value,
-        first_name: user[1].value.split(" ")[0],
-        last_name: user[1].value.split(" ")[1],
-        email: user[0].value,
-        password: user[2].value,
-        confirm_password: user[4].value,
-        is_staff: false,
-      }
-    );
+      `${URL}/api/v1/users/signup/`, {
+      username: user[0].value,
+      first_name: user[1].value.split(" ")[0],
+      last_name: user[1].value.split(" ")[1],
+      email: user[0].value,
+      password: user[2].value,
+      confirm_password: user[4].value,
+      is_staff: false,
+    });
     if (response.status === 201) {
       const username = user[0].value;
       const password = user[2].value;
@@ -107,7 +106,7 @@ export const signInUser = async (user) => {
 export const logOut = async (refreshToken) => {
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/v1/auth/token/blacklist/",
+      `${URL}/api/v1/auth/token/blacklist/`,
       {
         refresh: refreshToken,
       }

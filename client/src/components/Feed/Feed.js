@@ -62,12 +62,23 @@ const Feed = () => {
             p: 2,
           }}
         >
-          <Skeleton
-            variant="rectangular"
-            width="350px"
-            height="500px"
-            animation="wave"
-          />
+          <>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={100} height={30} animation="wave" />
+            </Box>
+            <Skeleton
+              variant="rectangular"
+              width="350px"
+              height="500px"
+              animation="wave"
+            />
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={100} height={38} animation="wave" />
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Skeleton width={250} height={35} animation="wave" />
+            </Box>
+          </>
         </Paper>
       )}
     </Box>

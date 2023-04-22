@@ -4,7 +4,6 @@ import ProfilePatchField from "./ProfilePatchField";
 import ProfilePatchTitle from "./ProfilePatchTitle";
 
 const ProfilePatch = () => {
-
   return (
     <BlurBack>
       <PaperBack
@@ -12,6 +11,8 @@ const ProfilePatch = () => {
         height={666}
         width={666}
         smallHeight={600}
+        smallWidth={425}
+        verySmallWidth={370}
         boxShadow={10}
       >
         <ProfilePatchTitle />

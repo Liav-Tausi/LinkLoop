@@ -1,48 +1,44 @@
-
-
 export const validateEmail = (email) => {
   const re = /\S+@\S+\.\S+/;
   return re.test(email);
 };
 
 export const validateHeadline = (headline) => {
-  return headline.length >= 3 && headline.length <= 64;
-};
-
-export const validateExperienceName = (experienceName) => {
-  return experienceName.length >= 3 && experienceName.length <= 32;
-};
-
-export const validateExperienceDescription = (experienceDescription) => {
   return (
-    experienceDescription.length >= 3 && experienceDescription.length <= 300
+    headline.length >= 3 && headline.length <= 64 && !/^\s+$/.test(headline)
   );
 };
 
-export const validateExperienceStartDate = (
-  experienceStartDate,
-  experienceEndDate
-) => {
-  console.log(experienceStartDate, experienceEndDate);
-  if (!experienceStartDate || !experienceEndDate) return false; 
-  const startDate = new Date(experienceStartDate);
-  const endDate = new Date(experienceEndDate);
+export const validateQualName = (qualName) => {
+  return (
+    qualName.length >= 3 && qualName.length <= 32 && !/^\s+$/.test(qualName)
+  );
+};
+
+export const validateQualDescription = (qualDescription) => {
+  return (
+    qualDescription.length >= 3 &&
+    qualDescription.length <= 300 &&
+    !/^\s+$/.test(qualDescription)
+  );
+};
+
+export const validateStartDate = (qualStartDate, qualEndDate) => {
+  if (!qualStartDate || !qualEndDate) return false;
+  const startDate = new Date(qualStartDate);
+  const endDate = new Date(qualEndDate);
   return startDate <= endDate;
 };
 
-export const validateExperienceEndDate = (
-  experienceEndDate,
-  experienceStartDate
-) => {
-  if (!experienceStartDate || !experienceEndDate) return false; 
-  const startDate = new Date(experienceStartDate);
-  const endDate = new Date(experienceEndDate);
+export const validateEndDate = (qualEndDate, qualStartDate) => {
+  if (!qualEndDate || !qualStartDate) return false;
+  const startDate = new Date(qualStartDate);
+  const endDate = new Date(qualEndDate);
   return endDate >= startDate;
 };
 
-
-export const validateAbout = (headline) => {
-  return headline.length >= 3 && headline.length <= 500;
+export const validateAbout = (about) => {
+  return about.length >= 3 && about.length <= 500 && !/^\s+$/.test(about);
 };
 
 export const validateFullName = (fullName) => {
@@ -51,7 +47,7 @@ export const validateFullName = (fullName) => {
 };
 
 export const validatePassword = (password) => {
-  return password.length < 8;
+  return !/^\S+$/.test(password) || password.length < 8;
 };
 
 export const validateConfirmPassword = (confirmPassword, password) => {

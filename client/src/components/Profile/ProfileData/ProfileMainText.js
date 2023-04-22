@@ -20,7 +20,7 @@ const ProfileMainText = (props) => {
               mb: 1.5,
               color: themeMode.textColor,
             }}
-          >{`${props.profileData.user.first_name} ${props.profileData.user.last_name}`}</Box>
+          >{`${props.profileData?.user.first_name} ${props.profileData?.user.last_name}`}</Box>
           <Box
             sx={{ whiteSpace: "nowrap", color: themeMode.textColor, mb: 0.8 }}
           >{`${props.profileData.headline}`}</Box>
