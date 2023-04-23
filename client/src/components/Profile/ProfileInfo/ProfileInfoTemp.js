@@ -18,8 +18,8 @@ const ProfileInfoTemp = (props) => {
               gap: 2,
             }}
           >
-            <Box>{props.headerOne}</Box>
-            <Box>{props.textOne}</Box>
+            <Box sx={{ fontSize: 18 }}>{props.headerOne}</Box>
+            <Box sx={{ fontSize: 16 }}>{props.textOne}</Box>
           </Box>
         </Grid>
       )}
@@ -35,8 +35,8 @@ const ProfileInfoTemp = (props) => {
               gap: 2,
             }}
           >
-            <Box>{props.headerTwo}</Box>
-            <Box>{props.textTwo}</Box>
+            <Box sx={{ fontSize: 18 }}>{props.headerTwo}</Box>
+            <Box sx={{ fontSize: 16 }}>{props.textTwo}</Box>
           </Box>
         </Grid>
       )}
@@ -52,13 +52,13 @@ const ProfileInfoTemp = (props) => {
               gap: 2,
             }}
           >
-            <Box>{props.headerThree}</Box>
-            <Box>{props.textThree}</Box>
+            <Box sx={{ fontSize: 18 }}>{props.headerThree}</Box>
+            <Box sx={{ fontSize: 16 }}>{props.textThree}</Box>
           </Box>
         </Grid>
       )}
     </Grid>
   );
-}
+};
 
 export default ProfileInfoTemp;

@@ -1,11 +1,42 @@
 import { Box } from "@mui/material";
-import { useContext } from "react";
-import { AppContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import { useContext, useEffect, useState } from "react";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 import ProfileInfoTemp from "./ProfileInfoTemp";
+import { getProfileData, getUserQual } from "../../../utils/funcs/mainFuncs";
 
 const ProfileInfo = () => {
-  const { themeMode, user} = useContext(AppContext);
+  const { themeMode, connectedUser, accessToken, message } =
+    useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+  const [allData, setAllData] = useState({
+    profile: {},
+    experience: [],
+    education: [],
+    skill: [],
+  });
+
+  useEffect(() => {
+    const getAllProfileData = async () => {
+      const profile = await getProfileData(
+        accessToken,
+        connectedUser?.username
+      );
+      const experience = await getUserQual(accessToken, "experience");
+      const education = await getUserQual(accessToken, "education");
+      const skill = await getUserQual(accessToken, "skill");
+      if (profile && experience && education && skill) {
+        setAllData((data) => ({ ...data, profile: profile }));
+        setAllData((data) => ({ ...data, experience: experience }));
+        setAllData((data) => ({ ...data, education: education }));
+        setAllData((data) => ({ ...data, skill: skill }));
+      } else {
+      }
+    };
+    getAllProfileData();
+  }, [message]);
 
   return (
     <Box
@@ -35,7 +66,11 @@ const ProfileInfo = () => {
             p: 2,
           }}
         >
-          <ProfileInfoTemp headerOne={"About"} textOne={user?.about} border={false} />
+          <ProfileInfoTemp
+            headerOne={"Experience"}
+            headerTwo={""}
+            borderOne={true}
+          />
         </Box>
         <Box
           sx={{
@@ -48,9 +83,9 @@ const ProfileInfo = () => {
           }}
         >
           <ProfileInfoTemp
-            headerOne={"Stats"}
-            headerTwo={""}
-            borderOne={true}
+            headerOne={"About"}
+            textOne={allData?.profile?.data?.about}
+            border={false}
           />
         </Box>
       </Box>
@@ -74,7 +109,7 @@ const ProfileInfo = () => {
             p: 2,
           }}
         >
-          <ProfileInfoTemp headerOne={"Experience"} borderOne={true} />
+          <ProfileInfoTemp headerOne={"Education"} borderOne={true} />
         </Box>
         <Box
           sx={{
@@ -91,10 +126,6 @@ const ProfileInfo = () => {
             textOne={
               "lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw"
             }
-            headerThree={"Education"}
-            textThree={
-              "lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw "
-            }
             borderOne={true}
             borderThree={true}
           />
@@ -103,6 +134,5 @@ const ProfileInfo = () => {
     </Box>
   );
 };
-
 
 export default ProfileInfo;

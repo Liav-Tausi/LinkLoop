@@ -28,6 +28,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ProfilePatchEducation from "./ProfilePatchEducation/ProfilePatchEducation";
 import ProfilePatchSkill from "./ProfilePatchSkill/ProfilePatchSkill";
 import ProfilePatchMainUserData from "./ProfilePatchMainUserData/ProfilePatchMainUserData";
+import Loading from "../../../utils/Comps/Loading";
 
 const ProfilePatchField = () => {
   const { themeMode, accessToken, user } = useContext(AppContext);
@@ -56,8 +57,8 @@ const ProfilePatchField = () => {
   const [skillError, setSkillError] = useState([
     {
       skillNameError: false,
-      skillLevelError: false
-    }
+      skillLevelError: false,
+    },
   ]);
 
   const [educationData, setEducationData] = useState([
@@ -112,7 +113,7 @@ const ProfilePatchField = () => {
           about: retVal.data.about ? retVal.data.about : "",
         });
       }
-      const retVal2 = await getUserQual(accessToken, 'experience');
+      const retVal2 = await getUserQual(accessToken, "experience");
       if (retVal2) {
         const newData = retVal2.data.results.map((experience) => ({
           experienceName: experience.experience_name,
@@ -122,7 +123,7 @@ const ProfilePatchField = () => {
         }));
         setExperienceData(newData);
       }
-      const retVal3 = await getUserQual(accessToken, 'education');
+      const retVal3 = await getUserQual(accessToken, "education");
       if (retVal3) {
         const newData = retVal3.data.results.map((education) => ({
           educationName: education.education_name,
@@ -133,7 +134,7 @@ const ProfilePatchField = () => {
         }));
         setEducationData(newData);
       }
-      const retVal4 = await getUserQual(accessToken, 'skill');
+      const retVal4 = await getUserQual(accessToken, "skill");
       if (retVal4) {
         const newData = retVal4.data.results.map((skill) => ({
           skillName: skill.skill_name,
@@ -165,6 +166,7 @@ const ProfilePatchField = () => {
     } else {
       const form = event.target;
       const elements = form.elements;
+      setFormSubmit(false);
       const response = await patchProfileData(
         accessToken,
         elements,
@@ -219,7 +221,6 @@ const ProfilePatchField = () => {
     setPatchData((data) => ({ ...data, about: event.target.value }));
   };
 
-
   // ---------------- skill --------------------
 
   const handleSkillNameChange = (event, index) => {
@@ -240,7 +241,6 @@ const ProfilePatchField = () => {
     setSkillData(newSkillData);
   };
 
-
   const handleSkillLevelChange = (event, index) => {
     const newSkillError = [...skillError];
     newSkillError[index].skillLevelError = validateLevel(event.target.value);
@@ -251,7 +251,6 @@ const ProfilePatchField = () => {
     setSkillData(newSkillData);
   };
 
-
   const handleAddSkill = () => {
     setSkillData((prevData) => [...prevData, {}]);
     setSkillError((prevError) => [...prevError, {}]);
@@ -259,7 +258,7 @@ const ProfilePatchField = () => {
 
   const handleDeleteSkill = (index) => {
     const newSkillData = [...skillData];
-    delUserQual(accessToken, 'skill' ,newSkillData[index].skillName);
+    delUserQual(accessToken, "skill", newSkillData[index].skillName);
     newSkillData.splice(index, 1);
     setSkillData(newSkillData);
 
@@ -267,7 +266,6 @@ const ProfilePatchField = () => {
     newSkillError.splice(index, 1);
     setSkillError(newSkillError);
   };
-
 
   // ---------------- Education -----------------
 
@@ -354,7 +352,11 @@ const ProfilePatchField = () => {
   };
   const handleDeleteEducation = (index) => {
     const newEducationData = [...educationData];
-    delUserQual(accessToken, 'education' ,newEducationData[index].educationName);
+    delUserQual(
+      accessToken,
+      "education",
+      newEducationData[index].educationName
+    );
     newEducationData.splice(index, 1);
     setEducationData(newEducationData);
 
@@ -439,7 +441,7 @@ const ProfilePatchField = () => {
     const newExperienceData = [...experienceData];
     delUserQual(
       accessToken,
-      'experience',
+      "experience",
       newExperienceData[index].experienceName
     );
     newExperienceData.splice(index, 1);
@@ -451,230 +453,233 @@ const ProfilePatchField = () => {
   };
 
   return (
-    <Box
-      sx={{
-        overflowY: "scroll",
-        maxHeight: "520px",
-        "&::-webkit-scrollbar": {
-          borderRadius: "3px",
-          width: "6px",
-        },
-        "&::-webkit-scrollbar-track": {
-          borderRadius: "3px",
-          background: themeMode.feed,
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: themeMode.signUpBubbles,
-          borderRadius: "3px",
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          background: themeMode.appTheme,
-        },
-      }}
-    >
-      <form onSubmit={handleSubmit}>
-        <ProfilePatchMainUserData
-          patchData={patchData}
-          errors={errors}
-          handleFullNameChange={handleFullNameChange}
-          handleHeadLineChange={handleHeadLineChange}
-          handleLocationChange={handleLocationChange}
-        />
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          <ProfilePatchMultiline
-            handleAboutChange={handleAboutChange}
-            profileData={patchData?.about}
-            errors={errors.about}
-            patchData={patchData?.about}
-            text={"About"}
+    <>
+      {!formSubmit && <Loading />}
+      <Box
+        sx={{
+          overflowY: "scroll",
+          maxHeight: "520px",
+          "&::-webkit-scrollbar": {
+            borderRadius: "3px",
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            borderRadius: "3px",
+            background: themeMode.feed,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: themeMode.signUpBubbles,
+            borderRadius: "3px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: themeMode.appTheme,
+          },
+        }}
+      >
+        <form onSubmit={handleSubmit}>
+          <ProfilePatchMainUserData
+            patchData={patchData}
+            errors={errors}
+            handleFullNameChange={handleFullNameChange}
+            handleHeadLineChange={handleHeadLineChange}
+            handleLocationChange={handleLocationChange}
           />
-          <Box
-            sx={{
-              mx: 2,
-              py: 0.3,
-              borderRadius: "25px",
-              display: "flex",
-              justifyContent: "start",
-              backgroundColor: themeMode.signUpBubbles,
-            }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <ProfilePatchMultiline
+              handleAboutChange={handleAboutChange}
+              profileData={patchData?.about}
+              errors={errors.about}
+              patchData={patchData?.about}
+              text={"About"}
+            />
             <Box
-              onClick={handleAddExperience}
               sx={{
-                color: themeMode.textColor,
-                background: themeMode.signUpField,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "25px",
-                "&:hover": {
-                  backgroundColor: themeMode.signUpFieldHover,
-                  cursor: "pointer",
-                },
-                "&:active": {
-                  transform: "scale(0.98)",
-                },
-                px: 2,
                 mx: 2,
-                my: 0.5,
-                py: 0.7,
-                fontSize: 12,
-                gap: 1,
+                py: 0.3,
+                borderRadius: "25px",
+                display: "flex",
+                justifyContent: "start",
+                backgroundColor: themeMode.signUpBubbles,
               }}
             >
-              Add New Experience
-              <AddCircleIcon />
+              <Box
+                onClick={handleAddExperience}
+                sx={{
+                  color: themeMode.textColor,
+                  background: themeMode.signUpField,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "25px",
+                  "&:hover": {
+                    backgroundColor: themeMode.signUpFieldHover,
+                    cursor: "pointer",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                  px: 2,
+                  mx: 2,
+                  my: 0.5,
+                  py: 0.7,
+                  fontSize: 12,
+                  gap: 1,
+                }}
+              >
+                Add New Experience
+                <AddCircleIcon />
+              </Box>
             </Box>
-          </Box>
-          {experienceData.map((experience, index) => (
-            <ProfilePatchExperience
-              key={index}
-              experienceData={experience}
-              experienceError={experienceError[index]}
-              handleExperienceNameChange={(event) =>
-                handleExperienceNameChange(event, index)
-              }
-              handleExperienceDescriptionChange={(event) =>
-                handleExperienceDescriptionChange(event, index)
-              }
-              handleExperienceStartDateChange={(event) =>
-                handleExperienceStartDateChange(event, index)
-              }
-              handleExperienceEndDateChange={(event) =>
-                handleExperienceEndDateChange(event, index)
-              }
-              handleDeleteExperience={() => handleDeleteExperience(index)}
-            />
-          ))}
-          <Box
-            sx={{
-              mx: 2,
-              py: 0.3,
-              borderRadius: "25px",
-              display: "flex",
-              justifyContent: "start",
-              backgroundColor: themeMode.signUpBubbles,
-            }}
-          >
+            {experienceData.map((experience, index) => (
+              <ProfilePatchExperience
+                key={index}
+                experienceData={experience}
+                experienceError={experienceError[index]}
+                handleExperienceNameChange={(event) =>
+                  handleExperienceNameChange(event, index)
+                }
+                handleExperienceDescriptionChange={(event) =>
+                  handleExperienceDescriptionChange(event, index)
+                }
+                handleExperienceStartDateChange={(event) =>
+                  handleExperienceStartDateChange(event, index)
+                }
+                handleExperienceEndDateChange={(event) =>
+                  handleExperienceEndDateChange(event, index)
+                }
+                handleDeleteExperience={() => handleDeleteExperience(index)}
+              />
+            ))}
             <Box
-              onClick={handleAddEducation}
               sx={{
-                color: themeMode.textColor,
-                background: themeMode.signUpField,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "25px",
-                "&:hover": {
-                  backgroundColor: themeMode.signUpFieldHover,
-                  cursor: "pointer",
-                },
-                "&:active": {
-                  transform: "scale(0.98)",
-                },
-                px: 2,
                 mx: 2,
-                my: 0.5,
-                py: 0.7,
-                fontSize: 12,
-                gap: 1,
+                py: 0.3,
+                borderRadius: "25px",
+                display: "flex",
+                justifyContent: "start",
+                backgroundColor: themeMode.signUpBubbles,
               }}
             >
-              Add New Education
-              <AddCircleIcon />
+              <Box
+                onClick={handleAddEducation}
+                sx={{
+                  color: themeMode.textColor,
+                  background: themeMode.signUpField,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "25px",
+                  "&:hover": {
+                    backgroundColor: themeMode.signUpFieldHover,
+                    cursor: "pointer",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                  px: 2,
+                  mx: 2,
+                  my: 0.5,
+                  py: 0.7,
+                  fontSize: 12,
+                  gap: 1,
+                }}
+              >
+                Add New Education
+                <AddCircleIcon />
+              </Box>
             </Box>
-          </Box>
-          {educationData.map((education, index) => (
-            <ProfilePatchEducation
-              key={index}
-              educationData={education}
-              educationError={educationError[index]}
-              handleEducationNameChange={(event) =>
-                handleEducationNameChange(event, index)
-              }
-              handleEducationDescriptionChange={(event) =>
-                handleEducationDescriptionChange(event, index)
-              }
-              handleEducationStartDateChange={(event) =>
-                handleEducationStartDateChange(event, index)
-              }
-              handleEducationEndDateChange={(event) =>
-                handleEducationEndDateChange(event, index)
-              }
-              handleEducationSchoolChange={(event) =>
-                handleEducationSchoolChange(event, index)
-              }
-              handleDeleteEducation={() => handleDeleteEducation(index)}
-            />
-          ))}
+            {educationData.map((education, index) => (
+              <ProfilePatchEducation
+                key={index}
+                educationData={education}
+                educationError={educationError[index]}
+                handleEducationNameChange={(event) =>
+                  handleEducationNameChange(event, index)
+                }
+                handleEducationDescriptionChange={(event) =>
+                  handleEducationDescriptionChange(event, index)
+                }
+                handleEducationStartDateChange={(event) =>
+                  handleEducationStartDateChange(event, index)
+                }
+                handleEducationEndDateChange={(event) =>
+                  handleEducationEndDateChange(event, index)
+                }
+                handleEducationSchoolChange={(event) =>
+                  handleEducationSchoolChange(event, index)
+                }
+                handleDeleteEducation={() => handleDeleteEducation(index)}
+              />
+            ))}
 
-          <Box
-            sx={{
-              mx: 2,
-              py: 0.3,
-              borderRadius: "25px",
-              display: "flex",
-              justifyContent: "start",
-              backgroundColor: themeMode.signUpBubbles,
-            }}
-          >
             <Box
-              onClick={handleAddSkill}
               sx={{
-                color: themeMode.textColor,
-                background: themeMode.signUpField,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "25px",
-                "&:hover": {
-                  backgroundColor: themeMode.signUpFieldHover,
-                  cursor: "pointer",
-                },
-                "&:active": {
-                  transform: "scale(0.98)",
-                },
-                px: 2,
                 mx: 2,
-                my: 0.5,
-                py: 0.7,
-                fontSize: 12,
-                gap: 1,
+                py: 0.3,
+                borderRadius: "25px",
+                display: "flex",
+                justifyContent: "start",
+                backgroundColor: themeMode.signUpBubbles,
               }}
             >
-              Add New Skill
-              <AddCircleIcon />
+              <Box
+                onClick={handleAddSkill}
+                sx={{
+                  color: themeMode.textColor,
+                  background: themeMode.signUpField,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "25px",
+                  "&:hover": {
+                    backgroundColor: themeMode.signUpFieldHover,
+                    cursor: "pointer",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                  px: 2,
+                  mx: 2,
+                  my: 0.5,
+                  py: 0.7,
+                  fontSize: 12,
+                  gap: 1,
+                }}
+              >
+                Add New Skill
+                <AddCircleIcon />
+              </Box>
             </Box>
+            {skillData.map((skill, index) => (
+              <ProfilePatchSkill
+                key={index}
+                skillData={skill}
+                skillError={skillError[index]}
+                handleSkillNameChange={(event) =>
+                  handleSkillNameChange(event, index)
+                }
+                handleSkillLevelChange={(event) =>
+                  handleSkillLevelChange(event, index)
+                }
+                handleDeleteSkill={() => handleDeleteSkill(index)}
+              />
+            ))}
           </Box>
-          {skillData.map((skill, index) => (
-            <ProfilePatchSkill
-              key={index}
-              skillData={skill}
-              skillError={skillError[index]}
-              handleSkillNameChange={(event) =>
-                handleSkillNameChange(event, index)
-              }
-              handleSkillLevelChange={(event) =>
-                handleSkillLevelChange(event, index)
-              }
-              handleDeleteSkill={() => handleDeleteSkill(index)}
-            />
-          ))}
-        </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            bottom: 22,
-            left: "50%",
-            right: "50%",
-          }}
-        >
-          <SignSubmit />
-        </Box>
-      </form>
-    </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              bottom: 22,
+              left: "50%",
+              right: "50%",
+            }}
+          >
+            <SignSubmit />
+          </Box>
+        </form>
+      </Box>
+    </>
   );
 };
 

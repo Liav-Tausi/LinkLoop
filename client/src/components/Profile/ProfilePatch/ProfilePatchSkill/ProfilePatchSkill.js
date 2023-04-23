@@ -98,7 +98,12 @@ const ProfilePatchSkill = (props) => {
                 name="size-large"
                 value={props.skillData?.skillLevel}
                 onChange={props.handleSkillLevelChange}
-                size="large"
+                sx={{
+                  "&.MuiRating-root": {
+                    color: themeMode.appTheme,
+                  },
+                }}
+                size="medium"
               />
             </Box>
           </Box>

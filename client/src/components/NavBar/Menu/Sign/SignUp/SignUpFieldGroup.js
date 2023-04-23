@@ -25,6 +25,7 @@ import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
 import { signUpUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
+import Loading from "../../../../../utils/Comps/Loading";
 
 const SignUpFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -32,6 +33,7 @@ const SignUpFieldGroup = () => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [signUpData, setSignUpData] = useState({
     signUpEmail: "",
@@ -54,6 +56,7 @@ const SignUpFieldGroup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     setFormSubmit(true);
     if (
       errors.fullNameError ||
@@ -72,6 +75,7 @@ const SignUpFieldGroup = () => {
         const elements = form.elements;
         const access = await signUpUser(elements);
         if (!Array.isArray(access)) {
+          setLoading(false);
           dispatch({
             type: APP_ACTIONS.ACCESS_TOKEN,
             payload: access,
@@ -148,6 +152,7 @@ const SignUpFieldGroup = () => {
 
   return (
     <SignField>
+      {loading && <Loading />}
       <Box
         sx={{
           display: "flex",

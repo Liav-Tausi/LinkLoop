@@ -20,7 +20,10 @@ import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
 import { signInUser } from "../../../../../utils/funcs/authFuncs";
+import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import SignField from "../SignTemp/SignField";
+import Loading from "../../../../../utils/Comps/Loading";
 
 const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -28,6 +31,7 @@ const SignInFieldGroup = () => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [signInData, setSignInData] = useState({
     signUpEmail: "",
@@ -45,6 +49,7 @@ const SignInFieldGroup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     setFormSubmit(true);
     if (errors.passwordError || errors.emailError) {
       dispatch({
@@ -58,6 +63,7 @@ const SignInFieldGroup = () => {
         const elements = form.elements;
         const access = await signInUser(elements);
         if (access) {
+          setLoading(false);
           dispatch({
             type: APP_ACTIONS.ACCESS_TOKEN,
             payload: access,
@@ -100,6 +106,7 @@ const SignInFieldGroup = () => {
 
   return (
     <SignField>
+      {loading && <Loading />}
       <Box
         sx={{
           display: "flex",
