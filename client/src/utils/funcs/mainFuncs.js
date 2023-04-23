@@ -116,8 +116,8 @@ export const patchProfileDataSkill = async (accessToken, skillData) => {
     ) {
       const skillResponses = await Promise.all(
         skillData.map(async (skill) => {
-          return await axios.post(
-            `${URL}/api/v1/quals/skill/`,
+          return await axios.patch(
+            `${URL}/api/v1/quals/skill/0/?skill_name=${skill.skillName}`,
             {
               skill_name: skill.skillName,
               skill_level: skill.skillLevel,

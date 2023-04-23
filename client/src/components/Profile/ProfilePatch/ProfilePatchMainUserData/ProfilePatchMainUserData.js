@@ -80,53 +80,6 @@ const ProfilePatchMainUserData = (props) => {
           />
         </Stack>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <ProfilePatchMultiline
-          handleAboutChange={props.handleAboutChange}
-          profileData={props.patchData?.about}
-          errors={props.errors.about}
-          patchData={props.patchData?.about}
-          text={"About"}
-        />
-        <Box
-          sx={{
-            mx: 2,
-            py: 0.3,
-            borderRadius: "25px",
-            display: "flex",
-            justifyContent: "start",
-            backgroundColor: themeMode.signUpBubbles,
-          }}
-        >
-          <Box
-            onClick={props.handleAddExperience}
-            sx={{
-              color: themeMode.textColor,
-              background: themeMode.signUpField,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "25px",
-              "&:hover": {
-                backgroundColor: themeMode.signUpFieldHover,
-                cursor: "pointer",
-              },
-              "&:active": {
-                transform: "scale(0.98)",
-              },
-              px: 2,
-              mx: 2,
-              my: 0.5,
-              py: 0.7,
-              fontSize: 12,
-              gap: 1,
-            }}
-          >
-            Add New Experience
-            <AddCircleIcon />
-          </Box>
-        </Box>
-      </Box>
     </>
   );
 }
