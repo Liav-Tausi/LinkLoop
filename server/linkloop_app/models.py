@@ -91,6 +91,8 @@ class Education(models.Model):
                                       validators=[MinLengthValidator(5)])
     school_name = models.CharField(db_column="school_name", blank=False, null=False, max_length=128,
                                    validators=[MinLengthValidator(5)])
+    education_description = models.TextField(db_column="education_description", blank=False, null=False, max_length=300,
+                                             validators=[MinLengthValidator(1)], default="")
     start_date = models.DateField(db_column="start_date", blank=False, null=False)
     end_date = models.DateField(db_column="end_date", blank=True, null=True)
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
@@ -103,9 +105,9 @@ class Experience(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     experience_name = models.CharField(db_column="experience_name", blank=False, null=False, max_length=128,
-                                       validators=[MinLengthValidator(1)])
-    experience_description = models.TextField(db_column="description", blank=False, null=False, max_length=300,
-                                       validators=[MinLengthValidator(1)])
+                                       validators=[MinLengthValidator(1)], unique=True)
+    experience_description = models.TextField(db_column="experience_description", blank=False, null=False,
+                                              max_length=300, validators=[MinLengthValidator(1)])
     start_date = models.DateField(db_column="start_date", blank=False, null=False)
     end_date = models.DateField(db_column="end_date", blank=True, null=True)
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)

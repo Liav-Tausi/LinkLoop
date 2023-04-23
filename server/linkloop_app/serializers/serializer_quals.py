@@ -32,10 +32,10 @@ class EducationSerializer(serializers.ModelSerializer):
         education = Education.objects.create(
             user=validated_data.get('user'),
             education_name=validated_data.get('education_name'),
-            school_name=validated_data.hget('school_name'),
+            school_name=validated_data.get('school_name'),
+            education_description=validated_data.get('education_description'),
             start_date=validated_data.get('start_date'),
             end_date=validated_data.get('end_date'),
-            rating=validated_data.get('rating'),
         )
         return education
 
