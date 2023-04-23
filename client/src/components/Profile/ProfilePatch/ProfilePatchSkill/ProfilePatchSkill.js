@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Rating from "@mui/material/Rating";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -73,29 +74,34 @@ const ProfilePatchSkill = (props) => {
               maxRows={1}
             />
           </Box>
-          {/* <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
             <Box
               sx={{
+                display: "flex",
+                justifyContent: "start",
                 color: themeMode.textColor,
                 ml: 2,
                 my: 0.5,
                 fontSize: 12,
               }}
             >
-              Experience Description
+              Skill level
             </Box>
-            <SignFieldTemp
-              placeholder="Description"
-              autocomplete={"text"}
-              handleChange={props.handleExperienceDescriptionChange}
-              error={props.experienceError?.experienceDescriptionError}
-              sign={props.experienceData?.experienceDescription}
-              padding="12px"
-              paddingL="18px"
-              multiline={true}
-              maxRows={isSmallScreen ? 2 : 4}
-            />
-          </Box> */}
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Rating
+                name="size-large"
+                value={props.skillData?.skillLevel}
+                onChange={props.handleSkillLevelChange}
+                size="large"
+              />
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -1,5 +1,4 @@
-import { Box, Stack } from "@mui/material";
-import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
+import { Box } from "@mui/material";
 import {
   APP_ACTIONS,
   AppContext,
@@ -7,28 +6,28 @@ import {
 } from "../../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
-import ProfilePatchLocation from "./ProfilePatchLocation";
 import {
   validateAbout,
   validateEndDate,
   validateFullName,
   validateHeadline,
+  validateLevel,
   validateQualDescription,
   validateQualName,
   validateStartDate,
 } from "../../../utils/funcs/formValidators";
 import {
-  delUserEducation,
-  delUserExperience,
+  delUserQual,
   getProfileData,
-  getUserEducation,
-  getUserExperience,
+  getUserQual,
   patchProfileData,
 } from "../../../utils/funcs/mainFuncs";
 import ProfilePatchMultiline from "./ProfilePatchMultiline";
 import ProfilePatchExperience from "./ProfilePatchExperience/ProfilePatchExperience";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ProfilePatchEducation from "./ProfilePatchEducation/ProfilePatchEducation";
+import ProfilePatchSkill from "./ProfilePatchSkill/ProfilePatchSkill";
+import ProfilePatchMainUserData from "./ProfilePatchMainUserData/ProfilePatchMainUserData";
 
 const ProfilePatchField = () => {
   const { themeMode, accessToken, user } = useContext(AppContext);
@@ -57,8 +56,8 @@ const ProfilePatchField = () => {
   const [skillError, setSkillError] = useState([
     {
       skillNameError: false,
-      skillLevelError: false,
-    },
+      skillLevelError: false
+    }
   ]);
 
   const [educationData, setEducationData] = useState([
@@ -98,7 +97,6 @@ const ProfilePatchField = () => {
       experienceEndDateError: false,
     },
   ]);
-
   useEffect(() => {
     const fetchProfileData = async () => {
       const retVal = await getProfileData(accessToken, null);
@@ -114,7 +112,7 @@ const ProfilePatchField = () => {
           about: retVal.data.about ? retVal.data.about : "",
         });
       }
-      const retVal2 = await getUserExperience(accessToken);
+      const retVal2 = await getUserQual(accessToken, 'experience');
       if (retVal2) {
         const newData = retVal2.data.results.map((experience) => ({
           experienceName: experience.experience_name,
@@ -124,7 +122,7 @@ const ProfilePatchField = () => {
         }));
         setExperienceData(newData);
       }
-      const retVal3 = await getUserEducation(accessToken);
+      const retVal3 = await getUserQual(accessToken, 'education');
       if (retVal3) {
         const newData = retVal3.data.results.map((education) => ({
           educationName: education.education_name,
@@ -134,6 +132,14 @@ const ProfilePatchField = () => {
           educationEndDate: education.end_date,
         }));
         setEducationData(newData);
+      }
+      const retVal4 = await getUserQual(accessToken, 'skill');
+      if (retVal4) {
+        const newData = retVal4.data.results.map((skill) => ({
+          skillName: skill.skill_name,
+          skillLevel: skill.skill_level,
+        }));
+        setSkillData(newData);
       }
     };
 
@@ -236,10 +242,8 @@ const ProfilePatchField = () => {
 
 
   const handleSkillLevelChange = (event, index) => {
-    const newSkillError = [...educationError];
-    newSkillError[index].skillLevelError = !validateQualDescription(
-      event.target.value
-    );
+    const newSkillError = [...skillError];
+    newSkillError[index].skillLevelError = validateLevel(event.target.value);
     setSkillError(newSkillError);
 
     const newSkillData = [...skillData];
@@ -255,7 +259,7 @@ const ProfilePatchField = () => {
 
   const handleDeleteSkill = (index) => {
     const newSkillData = [...skillData];
-    delUserQual(accessToken, skill ,newSkillData[index].skillName);
+    delUserQual(accessToken, 'skill' ,newSkillData[index].skillName);
     newSkillData.splice(index, 1);
     setSkillData(newSkillData);
 
@@ -350,7 +354,7 @@ const ProfilePatchField = () => {
   };
   const handleDeleteEducation = (index) => {
     const newEducationData = [...educationData];
-    delUserQual(accessToken, education ,newEducationData[index].educationName);
+    delUserQual(accessToken, 'education' ,newEducationData[index].educationName);
     newEducationData.splice(index, 1);
     setEducationData(newEducationData);
 
@@ -435,7 +439,7 @@ const ProfilePatchField = () => {
     const newExperienceData = [...experienceData];
     delUserQual(
       accessToken,
-      experience,
+      'experience',
       newExperienceData[index].experienceName
     );
     newExperienceData.splice(index, 1);
@@ -469,73 +473,13 @@ const ProfilePatchField = () => {
       }}
     >
       <form onSubmit={handleSubmit}>
-        <Box
-          sx={{
-            backgroundColor: themeMode.signUpBubbles,
-            borderRadius: "26px",
-            py: 2,
-            px: 2,
-            mx: 2,
-            mb: 3,
-          }}
-        >
-          <Stack
-            sx={{
-              gap: 3,
-            }}
-          >
-            <Box>
-              <Box
-                sx={{
-                  color: themeMode.textColor,
-                  ml: 2,
-                  my: 0.5,
-                  fontSize: 12,
-                }}
-              >
-                How others will see you:
-              </Box>
-              <SignFieldTemp
-                placeholder="Full Name"
-                autocomplete={"text"}
-                handleChange={handleFullNameChange}
-                error={errors.fullNameError}
-                sign={patchData?.fullName}
-                padding="8px"
-                paddingL="18px"
-                multiline={false}
-                maxRows={1}
-              />
-            </Box>
-            <Box>
-              <Box
-                sx={{
-                  color: themeMode.textColor,
-                  ml: 2,
-                  my: 0.5,
-                  fontSize: 12,
-                }}
-              >
-                Your professional headline:
-              </Box>
-              <SignFieldTemp
-                placeholder="Headline"
-                autocomplete={"text"}
-                handleChange={handleHeadLineChange}
-                error={errors.headlineError}
-                sign={patchData.headline}
-                padding="8px"
-                paddingL="18px"
-                multiline={false}
-                maxRows={1}
-              />
-            </Box>
-            <ProfilePatchLocation
-              location={patchData?.location}
-              handleLocationChange={handleLocationChange}
-            />
-          </Stack>
-        </Box>
+        <ProfilePatchMainUserData
+          patchData={patchData}
+          errors={errors}
+          handleFullNameChange={handleFullNameChange}
+          handleHeadLineChange={handleHeadLineChange}
+          handleLocationChange={handleLocationChange}
+        />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           <ProfilePatchMultiline
             handleAboutChange={handleAboutChange}
@@ -663,59 +607,60 @@ const ProfilePatchField = () => {
               handleDeleteEducation={() => handleDeleteEducation(index)}
             />
           ))}
-        </Box>
-        <Box
-          sx={{
-            mx: 2,
-            py: 0.3,
-            borderRadius: "25px",
-            display: "flex",
-            justifyContent: "start",
-            backgroundColor: themeMode.signUpBubbles,
-          }}
-        >
+
           <Box
-            onClick={handleAddSkill}
             sx={{
-              color: themeMode.textColor,
-              background: themeMode.signUpField,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "25px",
-              "&:hover": {
-                backgroundColor: themeMode.signUpFieldHover,
-                cursor: "pointer",
-              },
-              "&:active": {
-                transform: "scale(0.98)",
-              },
-              px: 2,
               mx: 2,
-              my: 0.5,
-              py: 0.7,
-              fontSize: 12,
-              gap: 1,
+              py: 0.3,
+              borderRadius: "25px",
+              display: "flex",
+              justifyContent: "start",
+              backgroundColor: themeMode.signUpBubbles,
             }}
           >
-            Add New Skill
-            <AddCircleIcon />
+            <Box
+              onClick={handleAddSkill}
+              sx={{
+                color: themeMode.textColor,
+                background: themeMode.signUpField,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "25px",
+                "&:hover": {
+                  backgroundColor: themeMode.signUpFieldHover,
+                  cursor: "pointer",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+                px: 2,
+                mx: 2,
+                my: 0.5,
+                py: 0.7,
+                fontSize: 12,
+                gap: 1,
+              }}
+            >
+              Add New Skill
+              <AddCircleIcon />
+            </Box>
           </Box>
+          {skillData.map((skill, index) => (
+            <ProfilePatchSkill
+              key={index}
+              skillData={skill}
+              skillError={skillError[index]}
+              handleSkillNameChange={(event) =>
+                handleSkillNameChange(event, index)
+              }
+              handleSkillLevelChange={(event) =>
+                handleSkillLevelChange(event, index)
+              }
+              handleDeleteSkill={() => handleDeleteSkill(index)}
+            />
+          ))}
         </Box>
-        {skillData.map((skill, index) => (
-          <ProfilePatchSkill
-            key={index}
-            skillData={skill}
-            skillError={skillError[index]}
-            handleSkillNameChange={(event) =>
-              handleSkillNameChange(event, index)
-            }
-            handleSkillLevelChange={(event) =>
-              handleSkillLevelChange(event, index)
-            }
-            handleDeleteSkill={() => handleDeleteSkill(index)}
-          />
-        ))}
         <Box
           sx={{
             position: "absolute",

@@ -35,9 +35,9 @@ export const patchProfileData = async (
   accessToken,
   elements,
   experienceData,
-  educationData
+  educationData,
+  skillData
 ) => {
-  console.log("hey");
   if (accessToken) {
     const response = await axios.patch(
       `${URL}/api/v1/profile/main/0/`,
@@ -111,8 +111,8 @@ export const patchProfileDataSkill = async (accessToken, skillData) => {
     }
   } catch (error) {
     if (
-      error.response.data.education_name[0] ===
-      "education with this education name already exists."
+      error.response.data.skill_name[0] ===
+      "skill with this skill name already exists."
     ) {
       const skillResponses = await Promise.all(
         skillData.map(async (skill) => {
@@ -211,7 +211,6 @@ export const patchProfileDataExperience = async (
   experienceData
 ) => {
   try {
-    console.log(experienceData);
     if (experienceData) {
       const experienceResponses = await Promise.all(
         experienceData.map(async (experience) => {
@@ -274,32 +273,10 @@ export const patchProfileDataExperience = async (
 };
 
 
-export const getUserExperience = async (accessToken) => {
+export const getUserQual= async (accessToken, type) => {
   try {
     if (accessToken) {
-      const response = await axios.get(`${URL}/api/v1/quals/experience/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if (response.status < 300) {
-        return response;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  } catch {
-    return false;
-  }
-};
-
-
-export const getUserEducation = async (accessToken) => {
-  try {
-    if (accessToken) {
-      const response = await axios.get(`${URL}/api/v1/quals/education/`, {
+      const response = await axios.get(`${URL}/api/v1/quals/${type}/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -322,7 +299,7 @@ export const delUserQual = async (accessToken, type, name) => {
   try {
     if (accessToken) {
       const response = await axios.delete(
-        `${URL}/api/v1/quals/${type}/0/?${type}_name=${experienceName}`,
+        `${URL}/api/v1/quals/${type}/0/?${type}_name=${name}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

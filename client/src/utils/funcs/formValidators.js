@@ -15,6 +15,10 @@ export const validateQualName = (qualName) => {
   );
 };
 
+export const validateLevel = (qualLevel) => {
+  return qualLevel > 5 || qualLevel < 1;
+};
+
 export const validateQualDescription = (qualDescription) => {
   return (
     qualDescription.length >= 3 &&
