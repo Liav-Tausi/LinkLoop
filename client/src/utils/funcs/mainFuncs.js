@@ -66,13 +66,78 @@ export const patchProfileData = async (
       accessToken,
       educationData
     );
-    if (response.status < 300 && profileExperience && profileEducation) {
+    const profileSkill = await patchProfileDataSkill(accessToken, skillData);
+    if (
+      response.status < 300 &&
+      profileExperience &&
+      profileEducation &&
+      profileSkill
+    ) {
       return true;
     } else {
       return false;
     }
   } else {
     return false;
+  }
+};
+
+export const patchProfileDataSkill = async (accessToken, skillData) => {
+  try {
+    if (skillData) {
+      const skillResponses = await Promise.all(
+        skillData.map(async (skill) => {
+          return await axios.post(
+            `${URL}/api/v1/quals/skill/`,
+            {
+              skill_name: skill.skillName,
+              skill_level: skill.skillLevel,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (skillResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (
+      error.response.data.education_name[0] ===
+      "education with this education name already exists."
+    ) {
+      const skillResponses = await Promise.all(
+        skillData.map(async (skill) => {
+          return await axios.post(
+            `${URL}/api/v1/quals/skill/`,
+            {
+              skill_name: skill.skillName,
+              skill_level: skill.skillLevel,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        })
+      );
+      if (skillResponses.every((response) => response.status < 300)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 };
 
@@ -208,29 +273,6 @@ export const patchProfileDataExperience = async (
   }
 };
 
-export const delUserEducation = async (accessToken, educationName) => {
-  try {
-    if (accessToken) {
-      const response = await axios.delete(
-        `${URL}/api/v1/quals/education/0/?education_name=${educationName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      if (response.status < 300) {
-        return response;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  } catch {
-    return false;
-  }
-};
 
 export const getUserExperience = async (accessToken) => {
   try {
@@ -276,11 +318,11 @@ export const getUserEducation = async (accessToken) => {
 };
 
 
-export const delUserExperience = async (accessToken, experienceName) => {
+export const delUserQual = async (accessToken, type, name) => {
   try {
     if (accessToken) {
       const response = await axios.delete(
-        `${URL}/api/v1/quals/experience/0/?experience_name=${experienceName}`,
+        `${URL}/api/v1/quals/${type}/0/?${type}_name=${experienceName}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -299,6 +341,8 @@ export const delUserExperience = async (accessToken, experienceName) => {
     return false;
   }
 };
+
+
 
 export const getUserData = async (accessToken, username) => {
   try {

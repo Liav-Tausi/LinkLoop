@@ -47,6 +47,20 @@ const ProfilePatchField = () => {
     aboutError: false,
   });
 
+  const [skillData, setSkillData] = useState([
+    {
+      skillName: "",
+      skillLevel: 0,
+    },
+  ]);
+
+  const [skillError, setSkillError] = useState([
+    {
+      skillNameError: false,
+      skillLevelError: false,
+    },
+  ]);
+
   const [educationData, setEducationData] = useState([
     {
       educationName: "",
@@ -134,7 +148,8 @@ const ProfilePatchField = () => {
       experienceError.some((error) =>
         Object.values(error).some((val) => val)
       ) ||
-      educationError.some((error) => Object.values(error).some((val) => val))
+      educationError.some((error) => Object.values(error).some((val) => val)) ||
+      skillError.some((error) => Object.values(error).some((val) => val))
     ) {
       dispatch({
         type: APP_ACTIONS.MESSAGE,
@@ -148,7 +163,8 @@ const ProfilePatchField = () => {
         accessToken,
         elements,
         experienceData,
-        educationData
+        educationData,
+        skillData
       );
       if (response) {
         dispatch({
@@ -196,6 +212,58 @@ const ProfilePatchField = () => {
     }));
     setPatchData((data) => ({ ...data, about: event.target.value }));
   };
+
+
+  // ---------------- skill --------------------
+
+  const handleSkillNameChange = (event, index) => {
+    if (index < 0 || index >= skillData.length) return;
+
+    const newSkillError = [...skillError];
+    newSkillError[index] = {
+      ...newSkillError[index],
+      skillNameError: !validateQualName(event.target.value),
+    };
+    setSkillError(newSkillError);
+
+    const newSkillData = [...skillData];
+    newSkillData[index] = {
+      ...newSkillData[index],
+      skillName: event.target.value,
+    };
+    setSkillData(newSkillData);
+  };
+
+
+  const handleSkillLevelChange = (event, index) => {
+    const newSkillError = [...educationError];
+    newSkillError[index].skillLevelError = !validateQualDescription(
+      event.target.value
+    );
+    setSkillError(newSkillError);
+
+    const newSkillData = [...skillData];
+    newSkillData[index].skillLevel = event.target.value;
+    setSkillData(newSkillData);
+  };
+
+
+  const handleAddSkill = () => {
+    setSkillData((prevData) => [...prevData, {}]);
+    setSkillError((prevError) => [...prevError, {}]);
+  };
+
+  const handleDeleteSkill = (index) => {
+    const newSkillData = [...skillData];
+    delUserQual(accessToken, skill ,newSkillData[index].skillName);
+    newSkillData.splice(index, 1);
+    setSkillData(newSkillData);
+
+    const newSkillError = [...skillError];
+    newSkillError.splice(index, 1);
+    setSkillError(newSkillError);
+  };
+
 
   // ---------------- Education -----------------
 
@@ -282,7 +350,7 @@ const ProfilePatchField = () => {
   };
   const handleDeleteEducation = (index) => {
     const newEducationData = [...educationData];
-    delUserEducation(accessToken, newEducationData[index].educationName);
+    delUserQual(accessToken, education ,newEducationData[index].educationName);
     newEducationData.splice(index, 1);
     setEducationData(newEducationData);
 
@@ -365,7 +433,11 @@ const ProfilePatchField = () => {
 
   const handleDeleteExperience = (index) => {
     const newExperienceData = [...experienceData];
-    delUserExperience(accessToken, newExperienceData[index].experienceName);
+    delUserQual(
+      accessToken,
+      experience,
+      newExperienceData[index].experienceName
+    );
     newExperienceData.splice(index, 1);
     setExperienceData(newExperienceData);
 
@@ -592,6 +664,58 @@ const ProfilePatchField = () => {
             />
           ))}
         </Box>
+        <Box
+          sx={{
+            mx: 2,
+            py: 0.3,
+            borderRadius: "25px",
+            display: "flex",
+            justifyContent: "start",
+            backgroundColor: themeMode.signUpBubbles,
+          }}
+        >
+          <Box
+            onClick={handleAddSkill}
+            sx={{
+              color: themeMode.textColor,
+              background: themeMode.signUpField,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "25px",
+              "&:hover": {
+                backgroundColor: themeMode.signUpFieldHover,
+                cursor: "pointer",
+              },
+              "&:active": {
+                transform: "scale(0.98)",
+              },
+              px: 2,
+              mx: 2,
+              my: 0.5,
+              py: 0.7,
+              fontSize: 12,
+              gap: 1,
+            }}
+          >
+            Add New Skill
+            <AddCircleIcon />
+          </Box>
+        </Box>
+        {skillData.map((skill, index) => (
+          <ProfilePatchSkill
+            key={index}
+            skillData={skill}
+            skillError={skillError[index]}
+            handleSkillNameChange={(event) =>
+              handleSkillNameChange(event, index)
+            }
+            handleSkillLevelChange={(event) =>
+              handleSkillLevelChange(event, index)
+            }
+            handleDeleteSkill={() => handleDeleteSkill(index)}
+          />
+        ))}
         <Box
           sx={{
             position: "absolute",
