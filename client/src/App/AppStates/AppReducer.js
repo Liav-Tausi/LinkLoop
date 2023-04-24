@@ -43,7 +43,6 @@ export const INITIAL_APP_STATE = {
 export const APP_ACTIONS = {
   APP_LOADED: "appLoaded",
   ACCESS_TOKEN: "accessToken",
-  USER: "user",
   FEED_DATA: "feedData",
   MESSAGE: "message",
   THEME_MODE: "themeMode",
@@ -53,6 +52,7 @@ export const APP_ACTIONS = {
   SIGN_IN_OPEN: "signInOpen",
   PROFILE_PATCH: "profilePatch",
   CHOOSE_LOCATION: "chooseLocation",
+  CONNECTED_USER: "connectedUser"
 };
 
 export const AppReducer = (states, action) => {
