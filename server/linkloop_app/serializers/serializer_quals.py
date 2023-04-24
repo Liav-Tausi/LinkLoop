@@ -15,12 +15,9 @@ class SkillsSerializer(serializers.ModelSerializer):
         skill = Skill.objects.create(
             user=validated_data.get('user'),
             skill_name=validated_data.get('skill_name'),
-            skill_level=validated_data.hget('skill_level'),
+            skill_level=validated_data.get('skill_level'),
         )
         return skill
-
-
-
 
 
 class EducationSerializer(serializers.ModelSerializer):
@@ -40,8 +37,6 @@ class EducationSerializer(serializers.ModelSerializer):
         return education
 
 
-
-
 class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experience
@@ -56,4 +51,6 @@ class ExperienceSerializer(serializers.ModelSerializer):
             end_date=validated_data.get('end_date'),
         )
         return experience
+
+
 
