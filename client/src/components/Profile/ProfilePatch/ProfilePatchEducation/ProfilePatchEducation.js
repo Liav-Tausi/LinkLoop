@@ -10,7 +10,6 @@ import { useContext } from "react";
 const ProfilePatchEducation = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-
   return (
     <Box
       sx={{
@@ -66,7 +65,7 @@ const ProfilePatchEducation = (props) => {
               autocomplete={"text"}
               handleChange={props.handleEducationNameChange}
               error={props.educationError?.educationNameError}
-              sign={props.educationData?.educationName}
+              sign={props.educationData?.education_name}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -89,7 +88,7 @@ const ProfilePatchEducation = (props) => {
               autocomplete={"text"}
               handleChange={props.handleEducationSchoolChange}
               error={props.educationError?.educationSchoolError}
-              sign={props.educationData?.educationSchool}
+              sign={props.educationData?.school_name}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -112,7 +111,7 @@ const ProfilePatchEducation = (props) => {
               autocomplete={"text"}
               handleChange={props.handleEducationDescriptionChange}
               error={props.educationError?.educationDescriptionError}
-              sign={props.educationData?.educationDescription}
+              sign={props.educationData?.education_description}
               padding="12px"
               paddingL="18px"
               multiline={true}
@@ -142,7 +141,7 @@ const ProfilePatchEducation = (props) => {
                 type={"date"}
                 handleChange={props.handleEducationStartDateChange}
                 error={props.educationError?.educationStartDateError}
-                sign={props.educationData?.educationStartDate}
+                sign={props.educationData?.start_date}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -166,7 +165,7 @@ const ProfilePatchEducation = (props) => {
                 type={"date"}
                 handleChange={props.handleEducationEndDateChange}
                 error={props.educationError?.educationEndDateError}
-                sign={props.educationData?.educationEndDate}
+                sign={props.educationData?.end_date}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}

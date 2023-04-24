@@ -101,6 +101,7 @@ const ProfilePatchField = () => {
     },
   ]);
 
+
   useEffect(() => {
     const fetchProfileData = async () => {
       const profile = await getProfileData(accessToken, null);
@@ -116,11 +117,11 @@ const ProfilePatchField = () => {
           about: profile.data.about ? profile.data.about : "",
         });
       }
-      const quals = await getUserQual(params.username);
-      if (quals) {
-        setExperienceData(quals.data.experience);
-        setEducationData(quals.data.education);
-        setSkillData(quals.data.skills);
+      const qualification = await getUserQual(params.username);
+      if (qualification) {
+        setExperienceData(qualification?.data?.experience);
+        setEducationData(qualification?.data?.education);
+        setSkillData(qualification?.data?.skills);
       }
     };
 
@@ -233,8 +234,20 @@ const ProfilePatchField = () => {
   };
 
   const handleAddSkill = () => {
-    setSkillData((prevData) => [...prevData, {}]);
-    setSkillError((prevError) => [...prevError, {}]);
+    setSkillData((prevData) => [
+      ...prevData,
+      {
+        skillName: "",
+        skillLevel: 0,
+      },
+    ]);
+    setSkillError((prevError) => [
+      ...prevError,
+      {
+        skillName: false,
+        skillLevel: false,
+      },
+    ]);
   };
 
   const handleDeleteSkill = (index) => {
@@ -334,9 +347,28 @@ const ProfilePatchField = () => {
   };
 
   const handleAddEducation = () => {
-    setEducationData((prevData) => [...prevData, {}]);
-    setEducationError((prevError) => [...prevError, {}]);
+    setEducationData((prevData) => [
+      ...prevData,
+      {
+        educationName: "",
+        educationDescription: "",
+        educationSchool: "",
+        educationStartDate: "0000-00-00",
+        educationEndDate: "0000-00-00",
+      },
+    ]);
+    setEducationError((prevError) => [
+      ...prevError,
+      {
+        educationNameError: false,
+        educationDescriptionError: false,
+        educationSchool: false,
+        educationStartDateError: false,
+        educationEndDateError: false,
+      },
+    ]);
   };
+
   const handleDeleteEducation = (index) => {
     const newEducationData = [...educationData];
     delUserQual(

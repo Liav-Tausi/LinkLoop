@@ -67,7 +67,7 @@ const ProfilePatchSkill = (props) => {
               autocomplete={"text"}
               handleChange={props.handleSkillNameChange}
               error={props.skillError?.skillNameError}
-              sign={props.skillData?.skillName}
+              sign={props.skillData?.skill_name}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -96,7 +96,7 @@ const ProfilePatchSkill = (props) => {
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Rating
                 name="size-large"
-                value={props.skillData?.skillLevel}
+                value={props.skillData?.skill_level}
                 onChange={props.handleSkillLevelChange}
                 sx={{
                   "&.MuiRating-root": {
