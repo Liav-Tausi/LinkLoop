@@ -75,9 +75,9 @@ class Skill(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     skill_name = models.CharField(db_column="skill_name", max_length=128, blank=False, null=False,
-                                  validators=[MinLengthValidator(3)])
+                                  validators=[MinLengthValidator(3)], unique=True)
     skill_level = models.PositiveSmallIntegerField(db_column="rating", blank=True, null=True,
-                                                   validators=[MinValueValidator(1), MaxValueValidator(10)])
+                                                   validators=[MinValueValidator(1), MaxValueValidator(6)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
@@ -88,7 +88,7 @@ class Education(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     education_name = models.CharField(db_column="education_name", blank=False, null=False, max_length=128,
-                                      validators=[MinLengthValidator(5)])
+                                      validators=[MinLengthValidator(5)], unique=True)
     school_name = models.CharField(db_column="school_name", blank=False, null=False, max_length=128,
                                    validators=[MinLengthValidator(5)])
     education_description = models.TextField(db_column="education_description", blank=False, null=False, max_length=300,
