@@ -7,14 +7,14 @@ const SignField = (props) => {
   return (
     <Box
       sx={{
-        width: 317.5,
+        width: 325,
         mt: 2,
         p: 1,
         pb: 2,
         borderRadius: "25px",
         backgroundColor: themeMode.signUpBubbles,
         "@media (max-width: 600px)": {
-          width: 285,
+          width: 288,
           pt: 0,
           pb: 1.5,
         },

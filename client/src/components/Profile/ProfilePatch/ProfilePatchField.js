@@ -29,11 +29,13 @@ import ProfilePatchEducation from "./ProfilePatchEducation/ProfilePatchEducation
 import ProfilePatchSkill from "./ProfilePatchSkill/ProfilePatchSkill";
 import ProfilePatchMainUserData from "./ProfilePatchMainUserData/ProfilePatchMainUserData";
 import Loading from "../../../utils/Comps/Loading";
+import { useParams } from "react-router-dom";
 
 const ProfilePatchField = () => {
-  const { themeMode, accessToken, user } = useContext(AppContext);
+  const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [formSubmit, setFormSubmit] = useState(true);
+  const params = useParams();
   const [patchData, setPatchData] = useState({
     fullName: "",
     headline: "",
@@ -98,49 +100,27 @@ const ProfilePatchField = () => {
       experienceEndDateError: false,
     },
   ]);
+
   useEffect(() => {
     const fetchProfileData = async () => {
-      const retVal = await getProfileData(accessToken, null);
-      const location = retVal.data.location;
+      const profile = await getProfileData(accessToken, null);
+      const location = profile.data.location;
       const cityArray = location ? location.split(" ") : [];
       const country = cityArray[0];
       const city = cityArray.slice(1).join(" ");
-      if (retVal) {
+      if (profile) {
         setPatchData({
-          fullName: `${retVal.data.user.first_name} ${retVal.data.user.last_name}`,
-          headline: retVal.data.headline,
+          fullName: `${profile.data.user.first_name} ${profile.data.user.last_name}`,
+          headline: profile.data.headline,
           location: `${country} ${city}`,
-          about: retVal.data.about ? retVal.data.about : "",
+          about: profile.data.about ? profile.data.about : "",
         });
       }
-      const retVal2 = await getUserQual(accessToken, "experience");
-      if (retVal2) {
-        const newData = retVal2.data.results.map((experience) => ({
-          experienceName: experience.experience_name,
-          experienceDescription: experience.experience_description,
-          experienceStartDate: experience.start_date,
-          experienceEndDate: experience.end_date,
-        }));
-        setExperienceData(newData);
-      }
-      const retVal3 = await getUserQual(accessToken, "education");
-      if (retVal3) {
-        const newData = retVal3.data.results.map((education) => ({
-          educationName: education.education_name,
-          educationDescription: education.education_description,
-          educationSchool: education.school_name,
-          educationStartDate: education.start_date,
-          educationEndDate: education.end_date,
-        }));
-        setEducationData(newData);
-      }
-      const retVal4 = await getUserQual(accessToken, "skill");
-      if (retVal4) {
-        const newData = retVal4.data.results.map((skill) => ({
-          skillName: skill.skill_name,
-          skillLevel: skill.skill_level,
-        }));
-        setSkillData(newData);
+      const quals = await getUserQual(params.username);
+      if (quals) {
+        setExperienceData(quals.data.experience);
+        setEducationData(quals.data.education);
+        setSkillData(quals.data.skills);
       }
     };
 
@@ -158,6 +138,7 @@ const ProfilePatchField = () => {
       educationError.some((error) => Object.values(error).some((val) => val)) ||
       skillError.some((error) => Object.values(error).some((val) => val))
     ) {
+      setFormSubmit(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -166,7 +147,6 @@ const ProfilePatchField = () => {
     } else {
       const form = event.target;
       const elements = form.elements;
-      setFormSubmit(false);
       const response = await patchProfileData(
         accessToken,
         elements,
@@ -175,6 +155,7 @@ const ProfilePatchField = () => {
         skillData
       );
       if (response) {
+        setFormSubmit(false);
         dispatch({
           type: APP_ACTIONS.MESSAGE,
           payload: "Saved successfully.",
@@ -289,6 +270,9 @@ const ProfilePatchField = () => {
 
   const handleEducationDescriptionChange = (event, index) => {
     const newEducationError = [...educationError];
+    if (!newEducationError[index]) {
+      newEducationError[index] = { educationDescriptionError: false };
+    }
     newEducationError[index].educationDescriptionError =
       !validateQualDescription(event.target.value);
     setEducationError(newEducationError);
@@ -300,6 +284,9 @@ const ProfilePatchField = () => {
 
   const handleEducationSchoolChange = (event, index) => {
     const newEducationError = [...educationError];
+    if (!newEducationError[index]) {
+      newEducationError[index] = { educationSchoolError: false };
+    }
     newEducationError[index].educationSchoolError = !validateQualName(
       event.target.value
     );
@@ -368,7 +355,7 @@ const ProfilePatchField = () => {
   // ---------------- Experience -----------------
 
   const handleExperienceNameChange = (event, index) => {
-    if (index < 0 || index >= educationData.length) return;
+    if (index < 0 || index >= experienceData.length) return;
 
     const newExperienceError = [...experienceError];
     newExperienceError[index] = {
@@ -387,6 +374,9 @@ const ProfilePatchField = () => {
 
   const handleExperienceDescriptionChange = (event, index) => {
     const newExperienceError = [...experienceError];
+    if (!newExperienceError[index]) {
+      newExperienceError[index] = { experienceDescriptionError: false };
+    }
     newExperienceError[index].experienceDescriptionError =
       !validateQualDescription(event.target.value);
     setExperienceError(newExperienceError);
@@ -433,8 +423,24 @@ const ProfilePatchField = () => {
   };
 
   const handleAddExperience = () => {
-    setExperienceData((prevData) => [...prevData, {}]);
-    setExperienceError((prevError) => [...prevError, {}]);
+    setExperienceData((prevData) => [
+      ...prevData,
+      {
+        experienceName: "",
+        experienceDescription: "",
+        experienceStartDate: "0000-00-00",
+        experienceEndDate: "0000-00-00",
+      },
+    ]);
+    setExperienceError((prevError) => [
+      ...prevError,
+      {
+        experienceNameError: false,
+        experienceDescriptionError: false,
+        experienceStartDateError: false,
+        experienceEndDateError: false,
+      },
+    ]);
   };
 
   const handleDeleteExperience = (index) => {

@@ -1,63 +1,49 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
-import { AppContext } from "../../../App/AppStates/AppReducer";
+import {
+  AppContext,
+  IsSmallScreenContext,
+} from "../../../App/AppStates/AppReducer";
 
 const ProfileInfoTemp = (props) => {
   const { themeMode } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext);
+
+  const { name, description, start_date, end_date, school } = props.data;
+
   return (
-    <Grid container spacing={2} sx={{ color: themeMode.textColor }}>
-      {props.headerOne && (
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              borderBottom:
-                props.borderOne && "solid 1px" + themeMode.textColor,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: 2,
-            }}
+    <Box
+      alignItems="center"
+      sx={{ borderBottom: start_date ? "solid 1px #000" : "none" }}
+    >
+      <Box>
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          {name}
+        </Typography>
+        {school && (
+          <Typography
+            variant="subtitle1"
+            sx={{ color: themeMode.secTextColor }}
           >
-            <Box sx={{ fontSize: 18 }}>{props.headerOne}</Box>
-            <Box sx={{ fontSize: 16 }}>{props.textOne}</Box>
-          </Box>
-        </Grid>
-      )}
-      {props.headerTwo && (
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              borderBottom:
-                props.borderTwo && "solid 1px" + themeMode.textColor,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: 2,
-            }}
+            {school}
+          </Typography>
+        )}
+        <Typography variant="body1" sx={{ color: themeMode.secTextColor }}>
+          {description}
+        </Typography>
+      </Box>
+      <Box>
+        {start_date && (
+          <Typography
+            variant="body2"
+            sx={{ textAlign: "left", mt: isSmallScreen ? 3 : 5, mt: 1 }}
           >
-            <Box sx={{ fontSize: 18 }}>{props.headerTwo}</Box>
-            <Box sx={{ fontSize: 16 }}>{props.textTwo}</Box>
-          </Box>
-        </Grid>
-      )}
-      {props.headerThree && (
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              borderBottom:
-                props.borderThree && "solid 1px" + themeMode.textColor,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: 2,
-            }}
-          >
-            <Box sx={{ fontSize: 18 }}>{props.headerThree}</Box>
-            <Box sx={{ fontSize: 16 }}>{props.textThree}</Box>
-          </Box>
-        </Grid>
-      )}
-    </Grid>
+            {start_date}&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
+            {end_date}
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 };
 

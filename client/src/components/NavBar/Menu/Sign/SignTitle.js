@@ -7,14 +7,14 @@ import {
 import AppLogo from "../../../../assets/imgs/AppLogo.svg";
 
 const SignTitle = () => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, signUpOpen} = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   return (
     <Box
       sx={{
-        mt: 2,
+        mt: signUpOpen ? 1:  5 ,
         py: 1,
-        px: 2,
+        px: 2.4,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -30,7 +30,7 @@ const SignTitle = () => {
     >
       <img
         style={{
-          width: isSmallScreen ? "60px" : "80px",
+          width: isSmallScreen ? "72px" : "80px",
           padding: isSmallScreen ? "3px" : "6px",
         }}
         src={AppLogo}

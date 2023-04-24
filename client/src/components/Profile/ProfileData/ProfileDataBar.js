@@ -22,10 +22,11 @@ const ProfileDataBar = (props) => {
   return (
     <Box
       sx={{
+        mb: 5,
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: isSmallScreen ? 2 : 3,
+        gap: 3,
       }}
     >
       <Box
@@ -76,7 +77,7 @@ const ProfileDataBar = (props) => {
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          gap: isSmallScreen ? 2 : 3,
+          gap: 3,
           mx: 2,
           px: 5,
           "@media (max-width: 1200px)": {
@@ -94,7 +95,7 @@ const ProfileDataBar = (props) => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            gap: isSmallScreen ? 2 : 5,
+            gap: isSmallScreen ? 1.5 : 5,
           }}
         >
           <ProfileShowButtonTemp

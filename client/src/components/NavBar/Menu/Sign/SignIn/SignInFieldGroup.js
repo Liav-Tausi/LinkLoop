@@ -127,10 +127,10 @@ const SignInFieldGroup = () => {
               gap: 2,
               pt: 1,
               pb: 2,
-              width: 280,
+              width: 305,
               color: themeMode.textColor,
               "@media (max-width: 600px)": {
-                width: 270,
+                width: 280,
                 pt: "8px",
                 pb: "16px",
               },

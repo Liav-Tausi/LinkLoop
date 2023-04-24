@@ -9,7 +9,7 @@ import BlurBack from "../../../../../utils/Comps/BlurBack";
 import PaperBack from "../../../../../utils/Comps/PaperBack";
 
 const SignTemp = (props) => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, signUpOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
@@ -18,8 +18,8 @@ const SignTemp = (props) => {
         id={props.SignId}
         height={666}
         width={440}
-        smallHeight={435}
-        boxShadow={0}
+        smallHeight={450}
+        verySmallWidth={360}
       >
         <Box
           sx={{

@@ -3,7 +3,7 @@ import { AppContext, Ref } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
 const PaperBack = (props) => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, signUpOpen } = useContext(AppContext);
   const ref = useContext(Ref);
 
   return (
@@ -11,7 +11,8 @@ const PaperBack = (props) => {
       ref={ref}
       id={props.id}
       sx={{
-        mt: 1,
+        mt: 2.2,
+        py: 1,
         zIndex: 9996,
         borderRadius: "25px",
         backgroundColor: themeMode.sign,
@@ -21,7 +22,6 @@ const PaperBack = (props) => {
         height: props.height,
         width: props.width,
         transform: "translate(-50%, -50%)",
-        boxShadow: props.boxShadow,
         "@media (max-width: 600px)": {
           height: props.smallHeight,
           width: props.smallWidth,
@@ -30,6 +30,9 @@ const PaperBack = (props) => {
           height: 650,
           width: props.verySmallWidth,
         },
+        boxShadow: signUpOpen
+          ? "0px 4px 11px rgba(0, 0, 0, 0.3)"
+          : "0px 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       {props.children}
