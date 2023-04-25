@@ -22,12 +22,13 @@ const ProfileInfo = () => {
 
   useEffect(() => {
     const getAllProfileData = async () => {
-      const profile = await getProfileData(accessToken, params.username);
+      const profile = await getProfileData(null, params.username);
+      console.log(profile);
       const allQualData = await getUserQual(params.username);
       if (allQualData) {
         setAllData((data) => ({
           ...data,
-          profile: profile,
+          profile: profile.data.results[0],
           experience: allQualData.data.experience,
           education: allQualData.data.education,
           skill: allQualData.data.skills,
@@ -37,7 +38,7 @@ const ProfileInfo = () => {
       }
     };
     getAllProfileData();
-  }, [message]);
+  }, [message, params]);
 
   const orderByEndDate = (a, b) => {
     if (!a.end_date) {
@@ -91,8 +92,10 @@ const ProfileInfo = () => {
           >
             <Box sx={{ fontSize: 18 }}>About</Box>
           </Box>
-          {allData?.profile?.data?.about ? (
-            <ProfileInfoTemp data={{ name: allData?.profile?.data?.about }} />
+          {allData?.profile?.about ? (
+            <ProfileInfoTemp
+              data={{ name: allData?.profile?.about, about: true }}
+            />
           ) : (
             <Box
               sx={{
@@ -225,19 +228,47 @@ const ProfileInfo = () => {
             width: "100%",
             borderRadius: "17px",
             backgroundColor: themeMode.profileBack,
+            color: themeMode.textColor,
             display: "flex",
-            justifyContent: "center",
+            flexDirection: "column",
             p: 2,
+            gap: 2,
           }}
         >
-          {/* <ProfileInfoTemp
-            headerOne={"Skills"}
-            textOne={
-              "lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw lofwe fewfwefwefwe fwefwefwf we f fffffffffffff fwefwefw"
-            }
-            borderOne={true}
-            borderThree={true}
-          /> */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "start",
+              mb: 2,
+            }}
+          >
+            <Box sx={{ fontSize: 18 }}>Skills</Box>
+          </Box>
+          {allData.skill && allData.skill.length > 0 ? (
+            allData.skill.map((data, index) => (
+              <ProfileInfoTemp
+                key={index}
+                data={{
+                  name: data.skill_name,
+                  skill_level: data.skill_level,
+                }}
+              />
+            ))
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress
+                thickness={2}
+                size="2rem"
+                sx={{ color: themeMode.appTheme }}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

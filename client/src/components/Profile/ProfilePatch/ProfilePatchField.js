@@ -34,7 +34,7 @@ import { useParams } from "react-router-dom";
 const ProfilePatchField = () => {
   const { themeMode, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-  const [formSubmit, setFormSubmit] = useState(true);
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const [patchData, setPatchData] = useState({
     fullName: "",
@@ -51,8 +51,8 @@ const ProfilePatchField = () => {
 
   const [skillData, setSkillData] = useState([
     {
-      skillName: "",
-      skillLevel: 0,
+      skill_name: "",
+      skill_level: 0,
     },
   ]);
 
@@ -65,11 +65,11 @@ const ProfilePatchField = () => {
 
   const [educationData, setEducationData] = useState([
     {
-      educationName: "",
-      educationDescription: "",
-      educationSchool: "",
-      educationStartDate: "0000-00-00",
-      educationEndDate: "0000-00-00",
+      education_name: "",
+      education_description: "",
+      school_name: "",
+      start_date: "0000-00-00",
+      end_date: "0000-00-00",
     },
   ]);
 
@@ -85,10 +85,10 @@ const ProfilePatchField = () => {
 
   const [experienceData, setExperienceData] = useState([
     {
-      experienceName: "",
-      experienceDescription: "",
-      experienceStartDate: "0000-00-00",
-      experienceEndDate: "0000-00-00",
+      experience_name: "",
+      experience_description: "",
+      start_date: "0000-00-00",
+      end_date: "0000-00-00",
     },
   ]);
 
@@ -100,7 +100,6 @@ const ProfilePatchField = () => {
       experienceEndDateError: false,
     },
   ]);
-
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -130,7 +129,6 @@ const ProfilePatchField = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setFormSubmit(true);
     if (
       Object.values(errors).some((error) => error) ||
       experienceError.some((error) =>
@@ -139,13 +137,14 @@ const ProfilePatchField = () => {
       educationError.some((error) => Object.values(error).some((val) => val)) ||
       skillError.some((error) => Object.values(error).some((val) => val))
     ) {
-      setFormSubmit(false);
+      setLoading(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
           "Please correct the errors in the form before submitting again.",
       });
     } else {
+      setLoading(true);
       const form = event.target;
       const elements = form.elements;
       const response = await patchProfileData(
@@ -155,8 +154,8 @@ const ProfilePatchField = () => {
         educationData,
         skillData
       );
+
       if (response) {
-        setFormSubmit(false);
         dispatch({
           type: APP_ACTIONS.MESSAGE,
           payload: "Saved successfully.",
@@ -164,6 +163,7 @@ const ProfilePatchField = () => {
         dispatch({
           type: APP_ACTIONS.PROFILE_PATCH,
         });
+        setLoading(false);
       } else {
         dispatch({
           type: APP_ACTIONS.MESSAGE,
@@ -218,18 +218,21 @@ const ProfilePatchField = () => {
     const newSkillData = [...skillData];
     newSkillData[index] = {
       ...newSkillData[index],
-      skillName: event.target.value,
+      skill_name: event.target.value,
     };
     setSkillData(newSkillData);
   };
 
   const handleSkillLevelChange = (event, index) => {
     const newSkillError = [...skillError];
+    if (!newSkillError[index]) {
+      newSkillError[index] = { skillLevelError: false };
+    }
     newSkillError[index].skillLevelError = validateLevel(event.target.value);
     setSkillError(newSkillError);
 
     const newSkillData = [...skillData];
-    newSkillData[index].skillLevel = event.target.value;
+    newSkillData[index].skill_level = event.target.value;
     setSkillData(newSkillData);
   };
 
@@ -237,22 +240,22 @@ const ProfilePatchField = () => {
     setSkillData((prevData) => [
       ...prevData,
       {
-        skillName: "",
-        skillLevel: 0,
+        skill_name: "",
+        skill_level: 0,
       },
     ]);
     setSkillError((prevError) => [
       ...prevError,
       {
-        skillName: false,
-        skillLevel: false,
+        skillNameError: false,
+        skillLevelError: false,
       },
     ]);
   };
 
   const handleDeleteSkill = (index) => {
     const newSkillData = [...skillData];
-    delUserQual(accessToken, "skill", newSkillData[index].skillName);
+    delUserQual(accessToken, "skill", newSkillData[index].skill_name);
     newSkillData.splice(index, 1);
     setSkillData(newSkillData);
 
@@ -276,7 +279,7 @@ const ProfilePatchField = () => {
     const newEducationData = [...educationData];
     newEducationData[index] = {
       ...newEducationData[index],
-      educationName: event.target.value,
+      education_name: event.target.value,
     };
     setEducationData(newEducationData);
   };
@@ -291,7 +294,7 @@ const ProfilePatchField = () => {
     setEducationError(newEducationError);
 
     const newEducationData = [...educationData];
-    newEducationData[index].educationDescription = event.target.value;
+    newEducationData[index].education_description = event.target.value;
     setEducationData(newEducationData);
   };
 
@@ -306,21 +309,21 @@ const ProfilePatchField = () => {
     setEducationError(newEducationError);
 
     const newEducationData = [...educationData];
-    newEducationData[index].educationSchool = event.target.value;
+    newEducationData[index].school_name = event.target.value;
     setEducationData(newEducationData);
   };
 
   const handleEducationStartDateChange = (event, index) => {
     const newEducationData = [...educationData];
-    newEducationData[index].educationStartDate = event.target.value;
+    newEducationData[index].start_date = event.target.value;
     const newEducationError = [...educationError];
     newEducationError[index].educationStartDateError = !validateStartDate(
       event.target.value,
-      educationData[index].educationEndDate
+      educationData[index].end_date
     );
-    if (educationData[index].educationEndDate) {
+    if (educationData[index].end_date) {
       newEducationError[index].educationEndDateError = !validateEndDate(
-        educationData[index].educationEndDate,
+        educationData[index].end_date,
         event.target.value
       );
     }
@@ -330,15 +333,15 @@ const ProfilePatchField = () => {
 
   const handleEducationEndDateChange = (event, index) => {
     const newEducationData = [...educationData];
-    newEducationData[index].educationEndDate = event.target.value;
+    newEducationData[index].end_date = event.target.value;
     const newEducationError = [...educationError];
     newEducationError[index].educationEndDateError = !validateEndDate(
       event.target.value,
-      educationData[index].educationStartDate
+      educationData[index].end_date
     );
-    if (educationData[index].educationStartDate) {
+    if (educationData[index].start_date) {
       newEducationError[index].educationStartDateError = !validateStartDate(
-        educationData[index].educationStartDate,
+        educationData[index].start_date,
         event.target.value
       );
     }
@@ -350,11 +353,11 @@ const ProfilePatchField = () => {
     setEducationData((prevData) => [
       ...prevData,
       {
-        educationName: "",
-        educationDescription: "",
-        educationSchool: "",
-        educationStartDate: "0000-00-00",
-        educationEndDate: "0000-00-00",
+        education_name: "",
+        education_description: "",
+        education_school: "",
+        start_date: "0000-00-00",
+        end_date: "0000-00-00",
       },
     ]);
     setEducationError((prevError) => [
@@ -374,7 +377,7 @@ const ProfilePatchField = () => {
     delUserQual(
       accessToken,
       "education",
-      newEducationData[index].educationName
+      newEducationData[index].education_name
     );
     newEducationData.splice(index, 1);
     setEducationData(newEducationData);
@@ -399,7 +402,7 @@ const ProfilePatchField = () => {
     const newExperienceData = [...experienceData];
     newExperienceData[index] = {
       ...newExperienceData[index],
-      experienceName: event.target.value,
+      experience_name: event.target.value,
     };
     setExperienceData(newExperienceData);
   };
@@ -414,21 +417,21 @@ const ProfilePatchField = () => {
     setExperienceError(newExperienceError);
 
     const newExperienceData = [...experienceData];
-    newExperienceData[index].experienceDescription = event.target.value;
+    newExperienceData[index].experience_description = event.target.value;
     setExperienceData(newExperienceData);
   };
 
   const handleExperienceStartDateChange = (event, index) => {
     const newExperienceData = [...experienceData];
-    newExperienceData[index].experienceStartDate = event.target.value;
+    newExperienceData[index].start_date = event.target.value;
     const newExperienceError = [...experienceError];
     newExperienceError[index].experienceStartDateError = !validateStartDate(
       event.target.value,
-      experienceData[index].experienceEndDate
+      experienceData[index].end_date
     );
-    if (experienceData[index].experienceEndDate) {
+    if (experienceData[index].end_date) {
       newExperienceError[index].experienceEndDateError = !validateEndDate(
-        experienceData[index].experienceEndDate,
+        experienceData[index].end_date,
         event.target.value
       );
     }
@@ -438,15 +441,15 @@ const ProfilePatchField = () => {
 
   const handleExperienceEndDateChange = (event, index) => {
     const newExperienceData = [...experienceData];
-    newExperienceData[index].experienceEndDate = event.target.value;
+    newExperienceData[index].end_date = event.target.value;
     const newExperienceError = [...experienceError];
     newExperienceError[index].experienceEndDateError = !validateEndDate(
       event.target.value,
-      experienceData[index].experienceStartDate
+      experienceData[index].start_date
     );
-    if (experienceData[index].experienceStartDate) {
+    if (experienceData[index].start_date) {
       newExperienceError[index].experienceStartDateError = !validateStartDate(
-        experienceData[index].experienceStartDate,
+        experienceData[index].start_date,
         event.target.value
       );
     }
@@ -458,10 +461,10 @@ const ProfilePatchField = () => {
     setExperienceData((prevData) => [
       ...prevData,
       {
-        experienceName: "",
-        experienceDescription: "",
-        experienceStartDate: "0000-00-00",
-        experienceEndDate: "0000-00-00",
+        experience_name: "",
+        experience_description: "",
+        start_date: "0000-00-00",
+        end_date: "0000-00-00",
       },
     ]);
     setExperienceError((prevError) => [
@@ -480,7 +483,7 @@ const ProfilePatchField = () => {
     delUserQual(
       accessToken,
       "experience",
-      newExperienceData[index].experienceName
+      newExperienceData[index].experience_name
     );
     newExperienceData.splice(index, 1);
     setExperienceData(newExperienceData);
@@ -492,7 +495,7 @@ const ProfilePatchField = () => {
 
   return (
     <>
-      {!formSubmit && <Loading />}
+      {loading && <Loading />}
       <Box
         sx={{
           overflowY: "scroll",

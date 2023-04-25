@@ -2,6 +2,7 @@ import axios from "axios";
 import { URL } from "../config/conf";
 
 export const getProfileData = async (accessToken, username) => {
+  console.log(username);
   try {
     if (accessToken) {
       const response = await axios.get(`${URL}/api/v1/profile/main/0/`, {
@@ -85,7 +86,6 @@ export const patchProfileData = async (
 export const patchProfileDataSkill = async (accessToken, skillData) => {
   try {
     if (skillData) {
-      console.log(skillData);
       const skillResponses = await Promise.all(
         skillData.map(async (skill) => {
           return await axios.post(
@@ -111,33 +111,61 @@ export const patchProfileDataSkill = async (accessToken, skillData) => {
       return false;
     }
   } catch (error) {
-    if (
-      error.response.data.skill_name[0] ===
-      "skill with this skill name already exists."
-    ) {
-      const skillResponses = await Promise.all(
-        skillData.map(async (skill) => {
-          return await axios.patch(
-            `${URL}/api/v1/quals/skill/0/?skill_name=${skill.skill_name}`,
-            {
-              skill_name: skill.skill_name,
-              skill_level: skill.skill_level,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
+    try {
+      if (
+        error.response.data?.skill_name?.map(
+          (val) => val === "skill with this skill name already exists."
+        )
+      ) {
+        let name = "";
+        error.response.data?.skill_name?.map((val) => (name = val));
+        if (skillData) {
+          let response = null;
+          const skillResponses = await Promise.all(
+            skillData.map(async (skill) => {
+              if (name === "skill with this skill name already exists.") {
+                response = await delUserQual(
+                  accessToken,
+                  "skill",
+                  skill.skill_name,
+                  "name"
+                );
+              }
+              if (response.status === 204) {
+                return await axios.post(
+                  `${URL}/api/v1/quals/skill/`,
+                  {
+                    skill_name: skill.skill_name,
+                    skill_level: skill.skill_level,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  }
+                );
+              }
+            })
           );
-        })
-      );
-      if (skillResponses.every((response) => response.status < 300)) {
+          if (skillResponses.every((response) => response.status < 300)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    } catch (error) {
+      if (
+        error.response.data?.skill_name?.map(
+          (val) => val === "skill with this skill name already exists."
+        )
+      ) {
         return true;
       } else {
         return false;
       }
-    } else {
-      return false;
     }
   }
 };
@@ -151,8 +179,8 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
             `${URL}/api/v1/quals/education/`,
             {
               education_name: education.education_name,
-              education_description: education.education_description,
               school_name: education.school_name,
+              education_description: education.education_description,
               start_date: education.start_date,
               end_date: education.end_date,
             },
@@ -173,36 +201,88 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
       return false;
     }
   } catch (error) {
-    if (
-      error.response.data.education_name[0] ===
-      "education with this education name already exists."
-    ) {
-      const educationResponses = await Promise.all(
-        educationData.map(async (education) => {
-          return await axios.patch(
-            `${URL}/api/v1/quals/education/0/?education_name=${education.education_name}`,
-            {
-              education_name: education.education_name,
-              education_description: education.education_description,
-              school_name: education.school_name,
-              start_date: education.start_date,
-              end_date: education.end_date,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
+    try {
+      if (
+        error.response.data?.education_name?.map(
+          (val) => val === "education with this education name already exists."
+        ) ||
+        error.response.data?.education_description?.map(
+          (val) =>
+            val === "education with this education description already exists."
+        )
+      ) {
+        let description = "";
+        let name = "";
+        error.response.data?.education_name?.map((val) => (name = val)) ||
+          error.response.data?.education_description?.map(
+            (val) => (description = val)
           );
-        })
-      );
-      if (educationResponses.every((response) => response.status < 300)) {
+
+        if (educationData) {
+          let response = null;
+          const educationResponses = await Promise.all(
+            educationData.map(async (education) => {
+              if (
+                name === "education with this education name already exists."
+              ) {
+                response = await delUserQual(
+                  accessToken,
+                  "education",
+                  education.education_description,
+                  "description"
+                );
+              } else if (
+                description ===
+                "education with this education description already exists."
+              ) {
+                response = await delUserQual(
+                  accessToken,
+                  "education",
+                  education.education_name
+                );
+              }
+              if (response.status === 204) {
+                return await axios.post(
+                  `${URL}/api/v1/quals/education/`,
+                  {
+                    education_name: education.education_name,
+                    education_description: education.education_description,
+                    school_name: education.school_name,
+                    start_date: education.start_date,
+                    end_date: education.end_date,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  }
+                );
+              }
+            })
+          );
+          if (educationResponses.every((response) => response.status < 300)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    } catch (error) {
+      if (
+        error.response.data?.education_name?.map(
+          (val) => val === "education with this education name already exists."
+        ) ||
+        error.response.data?.education_description?.map(
+          (val) =>
+            val === "education with this education description already exists."
+        )
+      ) {
         return true;
       } else {
         return false;
       }
-    } else {
-      return false;
     }
   }
 };
@@ -240,6 +320,7 @@ export const patchProfileDataExperience = async (
       return false;
     }
   } catch (error) {
+    console.log(error);
     try {
       if (
         error.response.data?.experience_name?.map(
@@ -258,19 +339,18 @@ export const patchProfileDataExperience = async (
           error.response.data?.experience_description?.map(
             (val) => (description = val)
           );
-
         if (experienceData) {
           let response = null;
           const experienceResponses = await Promise.all(
             experienceData.map(async (experience) => {
+              console.log(experience);
               if (
                 name === "experience with this experience name already exists."
               ) {
                 response = await delUserQual(
                   accessToken,
                   "experience",
-                  experience.experience_description,
-                  "description"
+                  experience.experience_name
                 );
               } else if (
                 description ===
@@ -279,7 +359,8 @@ export const patchProfileDataExperience = async (
                 response = await delUserQual(
                   accessToken,
                   "experience",
-                  experience.experience_name
+                  experience.experience_description,
+                  "description"
                 );
               }
               if (response.status === 204) {

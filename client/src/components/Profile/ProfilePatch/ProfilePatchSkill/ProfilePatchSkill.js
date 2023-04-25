@@ -1,7 +1,6 @@
-import { Box } from "@mui/material";
+import { Box, Rating } from "@mui/material";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import Rating from "@mui/material/Rating";
 import {
   AppContext,
   IsSmallScreenContext,
