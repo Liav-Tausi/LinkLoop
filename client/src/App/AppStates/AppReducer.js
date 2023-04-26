@@ -38,6 +38,7 @@ export const INITIAL_APP_STATE = {
   userProfileData: "",
   profilePatch: false,
   chooseLocation: false,
+  searchBar: false,
 };
 
 export const APP_ACTIONS = {
@@ -52,7 +53,8 @@ export const APP_ACTIONS = {
   SIGN_IN_OPEN: "signInOpen",
   PROFILE_PATCH: "profilePatch",
   CHOOSE_LOCATION: "chooseLocation",
-  CONNECTED_USER: "connectedUser"
+  CONNECTED_USER: "connectedUser",
+  SEARCH_BAR: "searchBar",
 };
 
 export const AppReducer = (states, action) => {
@@ -67,6 +69,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         connectedUser: action.payload,
+      };
+    }
+    case APP_ACTIONS.SEARCH_BAR: {
+      return {
+        ...states,
+        searchBar: !states.searchBar,
       };
     }
     case APP_ACTIONS.FEED_DATA: {

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
-import { useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -7,12 +8,23 @@ import {
 import AppLogo from "../../../../assets/imgs/AppLogo.svg";
 
 const SignTitle = () => {
-  const { themeMode, signUpOpen} = useContext(AppContext);
+  const { themeMode, signUpOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+  const [appLogoLoaded, setAppLogoLoaded] = useState(false);
+
+  useEffect(() => {
+    const appLogoFunc = () => {
+      const img = new Image();
+      img.src = AppLogo;
+      img.onload = () => setAppLogoLoaded(true);
+    };
+    appLogoFunc();
+  }, [AppLogo]);
+
   return (
     <Box
       sx={{
-        mt: signUpOpen ? 1:  5 ,
+        mt: signUpOpen ? 1 : 5,
         py: 1,
         px: 2.4,
         display: "flex",
@@ -28,14 +40,30 @@ const SignTitle = () => {
         },
       }}
     >
-      <img
-        style={{
-          width: isSmallScreen ? "72px" : "80px",
-          padding: isSmallScreen ? "3px" : "6px",
-        }}
-        src={AppLogo}
-        alt="linkLoop logo, dancer with a suit-case"
-      />
+      {!appLogoLoaded ? (
+        <Box
+          sx={{
+            width: isSmallScreen ? "72px" : "80px",
+            padding: isSmallScreen ? "3px" : "6px",
+          }}
+        >
+          <CircularProgress
+            thickness={2}
+            size="4.8rem"
+            sx={{ color: themeMode.appTheme }}
+          />
+        </Box>
+      ) : (
+        <img
+          style={{
+            width: isSmallScreen ? "72px" : "80px",
+            padding: isSmallScreen ? "3px" : "6px",
+            opacity: appLogoLoaded ? 1 : 0,
+          }}
+          src={AppLogo}
+          alt="linkLoop logo, dancer with a suit-case"
+        />
+      )}
       <Box>
         <Box
           style={{

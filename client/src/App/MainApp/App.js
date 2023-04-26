@@ -25,6 +25,7 @@ const App = () => {
     menuOpen,
     accessToken,
     chooseLocation,
+    searchBar,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
@@ -91,6 +92,10 @@ const App = () => {
         menuOpen &&
         event.target.id !== "hamburgerMenu"
       ) {
+        dispatch({
+          type: APP_ACTIONS.MENU_OPEN_CLOSE,
+        });
+      } else if (ref.current.id === "combo-box-demo" && searchBar) {
         dispatch({
           type: APP_ACTIONS.MENU_OPEN_CLOSE,
         });
