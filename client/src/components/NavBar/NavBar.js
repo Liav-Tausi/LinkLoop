@@ -56,7 +56,7 @@ const NavBar = () => {
               alignItems: "center",
               justifyContent: "center",
               gap: isSmallScreen ? 0 : 1.8,
-              ml: accessToken ? 11.8 : 0,
+              ml: accessToken && !isSmallScreen ? 11.8 : 0,
             }}
           >
             <ProfilePic />

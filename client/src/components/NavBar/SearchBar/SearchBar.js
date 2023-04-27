@@ -5,28 +5,36 @@ import {
   Paper,
   useMediaQuery,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../App/AppStates/AppReducer";
+import { useContext, useEffect, useRef, useState } from "react";
+import {
+  AppContext,
+  IsSmallScreenContext,
+  Ref,
+} from "../../../App/AppStates/AppReducer";
 import SearchBarSmallIcon from "./SearchSmallIcon";
 
 const data = ["The Shawshank Redemption", "The Godfather", "The Dark Knight"];
 
 const SearchBar = () => {
   const { themeMode, searchBar } = useContext(AppContext);
-  const [showSearchSmallIcon, setShowSearchSmallIcon] = useState(false);
-  const [flag, setFlag] = useState(false);
+  const isSmallScreen = useContext(IsSmallScreenContext);
+  const [showSearchSmallIcon, setShowSearchSmallIcon] = useState(true);
+  const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
+
+  useEffect(() => {
+    setShowSearchSmallIcon(searchBar);
+  }, [searchBar]);
 
   useEffect(() => {
     setShowSearchSmallIcon(under900);
     if (!under900) {
-      setFlag(false);
+      setShowSearchSmallIcon(false);
     }
-  }, [under900, flag]);
+  }, [under900]);
 
   const handleSearchSmallIcon = () => {
     setShowSearchSmallIcon(false);
-    setFlag(true);
   };
 
   return (
@@ -34,25 +42,22 @@ const SearchBar = () => {
       sx={{
         flex: 1,
         display: "flex",
-        justifyContent: showSearchSmallIcon || flag ? "start" : "center",
+        justifyContent: showSearchSmallIcon ? "start" : "center",
         alignItems: "center",
       }}
     >
       {!showSearchSmallIcon ? (
         <Autocomplete
+          ref={ref}
           disablePortal
-          id="combo-box-demo"
+          id={"combo-box-demo"}
           options={data}
           sx={{
             flex: 1,
             maxWidth: "552.8px",
             my: "6px",
-            px: 5,
-          }}
-          MenuProps={{
-            style: {
-              marginTop: 50,
-            },
+            pl: isSmallScreen ? 1.5 : 5,
+            pr: isSmallScreen ? 1.5 : 5,
           }}
           PaperComponent={({ children }) => (
             <Paper
@@ -91,7 +96,9 @@ const SearchBar = () => {
           }}
         />
       ) : (
-        <SearchBarSmallIcon handleSearchSmallIcon={handleSearchSmallIcon} />
+        <Box sx={{ pl: isSmallScreen ? 2 : 0 }}>
+          <SearchBarSmallIcon handleSearchSmallIcon={handleSearchSmallIcon} />
+        </Box>
       )}
     </Box>
   );

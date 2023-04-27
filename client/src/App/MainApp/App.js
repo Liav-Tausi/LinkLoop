@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import {
   AppContext,
@@ -29,6 +30,7 @@ const App = () => {
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
+  const under900 = useMediaQuery("(max-width:900px)");
 
   useEffect(() => {
     if (signUpOpen || signInOpen || profilePatch) {
@@ -71,6 +73,7 @@ const App = () => {
 
   const closeWhenOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
+      console.log(ref.current.id);
       if (ref.current.id === "signUp" && signUpOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_UP_OPEN,
@@ -95,9 +98,9 @@ const App = () => {
         dispatch({
           type: APP_ACTIONS.MENU_OPEN_CLOSE,
         });
-      } else if (ref.current.id === "combo-box-demo" && searchBar) {
+      } else if (ref.current.id !== "combo-box-demo" && under900) {
         dispatch({
-          type: APP_ACTIONS.MENU_OPEN_CLOSE,
+          type: APP_ACTIONS.SEARCH_BAR,
         });
       }
     }

@@ -28,7 +28,7 @@ const SearchBarSmallIcon = (props) => {
         id={"SearchBar"}
         sx={{
           color: themeMode.textColor,
-          fontSize: accessToken ? "29px" : "23px",
+          fontSize: accessToken ? "24px" : "20px",
         }}
       />
     </Box>
