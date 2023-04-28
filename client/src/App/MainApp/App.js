@@ -98,7 +98,14 @@ const App = () => {
         dispatch({
           type: APP_ACTIONS.MENU_OPEN_CLOSE,
         });
-      } else if (ref.current.id !== "combo-box-demo" && under900) {
+      } else if (
+        ref.current.id !== "search-container" &&
+        ref.current.id !== "combo-box-demo" &&
+        ref.current.id !== "search-paper-container" &&
+        ref.current.id !== "search-input-container" &&
+        under900
+      ) {
+        console.log(ref.current.id);
         dispatch({
           type: APP_ACTIONS.SEARCH_BAR,
         });

@@ -1,8 +1,26 @@
 import axios from "axios";
 import { URL } from "../config/conf";
 
+export const searchQuery = async (query) => {
+  try {
+    if (query) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/search/query/?q=${query}`
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 export const getProfileData = async (accessToken, username) => {
-  console.log(username);
   try {
     if (accessToken) {
       const response = await axios.get(`${URL}/api/v1/profile/main/0/`, {
@@ -320,7 +338,6 @@ export const patchProfileDataExperience = async (
       return false;
     }
   } catch (error) {
-    console.log(error);
     try {
       if (
         error.response.data?.experience_name?.map(
@@ -343,7 +360,6 @@ export const patchProfileDataExperience = async (
           let response = null;
           const experienceResponses = await Promise.all(
             experienceData.map(async (experience) => {
-              console.log(experience);
               if (
                 name === "experience with this experience name already exists."
               ) {

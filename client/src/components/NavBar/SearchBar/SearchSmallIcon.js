@@ -7,16 +7,16 @@ const SearchBarSmallIcon = (props) => {
   const { themeMode, accessToken } = useContext(AppContext);
   return (
     <Box
-      onClick={props.handleSearchSmallIcon}
+      onClick={props.func}
       sx={{
         display: "flex",
         justifyContent: "center",
-        py: accessToken ? "5px" : "4px",
-        px: accessToken ? "5.5px" : "4.5px",
+        py: accessToken ? "6px" : "5px",
+        px: accessToken ? "6.5px" : "5.5px",
         borderRadius: "50%",
-        backgroundColor: themeMode.navInputColor,
+        backgroundColor: themeMode.searchBarHover,
         "&:hover": {
-          backgroundColor: themeMode.navInputColorHover,
+          backgroundColor: themeMode.navInputColor,
           cursor: "pointer",
         },
         "&:active": {
@@ -28,7 +28,7 @@ const SearchBarSmallIcon = (props) => {
         id={"SearchBar"}
         sx={{
           color: themeMode.textColor,
-          fontSize: accessToken ? "24px" : "20px",
+          fontSize: accessToken ? "24px" : "23px",
         }}
       />
     </Box>
