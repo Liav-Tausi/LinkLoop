@@ -1,7 +1,5 @@
 import django_filters
 from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -100,7 +98,7 @@ class SkillsModelViewSet(ModelViewSet):
 
 class EducationFilter(django_filters.FilterSet):
     education_name = django_filters.CharFilter(field_name='education_name', lookup_expr='iexact')
-    education_description = django_filters.CharFilter(field_name='education_description', lookup_expr='iexact')
+    education_description = django_filters.CharFilter(field_name='education_description', lookup_expr='icontains')
     education_school = django_filters.CharFilter(field_name='education_school', lookup_expr='iexact')
     start_date = django_filters.CharFilter(field_name='start_date', lookup_expr='iexact')
     end_date = django_filters.NumberFilter(field_name='end_date', lookup_expr='exact')
@@ -147,7 +145,11 @@ class EducationModelViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         user_id = request.user.pk
         education_name = request.query_params.get('education_name')
-        education = Education.objects.filter(user=user_id, education_name=education_name)
+        education_description = request.query_params.get('education_description')
+        if education_description:
+            education = Education.objects.filter(user=user_id, education_description=education_description).first()
+        else:
+            education = Education.objects.filter(user=user_id, education_name=education_name).first()
         if not education:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -204,11 +206,10 @@ class ExperienceModelViewSet(ModelViewSet):
         user_id = request.user.pk
         experience_name = request.query_params.get('experience_name')
         experience_description = request.query_params.get('experience_description')
-        print(experience_description, experience_name)
         if experience_description:
-            experience = Experience.objects.filter(user=user_id, experience_description=experience_description).first()
+            experience = Experience.objects.filter(user=user_id, experience_description=experience_description)
         else:
-            experience = Experience.objects.filter(user=user_id, experience_name=experience_name).first()
+            experience = Experience.objects.filter(user=user_id, experience_name=experience_name)
         print(experience)
         if not experience:
             return Response(status=status.HTTP_404_NOT_FOUND)
