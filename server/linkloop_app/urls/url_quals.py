@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from ..views.views_quals import (
+from ..views.view_quals import (
     SkillsModelViewSet,
     EducationModelViewSet,
     ExperienceModelViewSet,
