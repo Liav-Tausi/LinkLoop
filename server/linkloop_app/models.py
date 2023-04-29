@@ -1,13 +1,19 @@
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MinLengthValidator,
+    MaxValueValidator,
+    MinValueValidator
+)
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Profile(models.Model):
     class Meta:
         db_table = "user_profile"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.URLField(verbose_name="profile_pic_url", blank=True, null=True)
     headline = models.CharField(db_column="headline", default="", blank=True, null=True, max_length=64,
                                 validators=[MinLengthValidator(3)])
@@ -19,6 +25,12 @@ class Profile(models.Model):
                                               validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 
 class Video(models.Model):
@@ -107,7 +119,7 @@ class Experience(models.Model):
     experience_name = models.CharField(db_column="experience_name", blank=False, null=False, max_length=128,
                                        validators=[MinLengthValidator(1)], unique=True)
     experience_description = models.TextField(db_column="experience_description", blank=False, null=False,
-                                              max_length=300, validators=[MinLengthValidator(1)])
+                                              max_length=300, validators=[MinLengthValidator(1)], unique=True)
     start_date = models.DateField(db_column="start_date", blank=False, null=False)
     end_date = models.DateField(db_column="end_date", blank=True, null=True)
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
