@@ -24,9 +24,7 @@ const Logo = () => {
       >
         <Link to="/">
           {isSmallScreen ? (
-            <AppLogo
-              style={{ marginTop: 3, width: "42px", padding: "0.12em" }}
-            />
+            <AppLogo style={{ marginTop: 3, width: "42px", py: "0.12em" }} />
           ) : themeMode.theme === "light" ? (
             <AppLogoBlack style={{ width: "200px" }} />
           ) : (

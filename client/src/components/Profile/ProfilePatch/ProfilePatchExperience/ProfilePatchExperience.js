@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -67,7 +66,7 @@ const ProfilePatchExperience = (props) => {
               autocomplete={"text"}
               handleChange={props.handleExperienceNameChange}
               error={props.experienceError?.experienceNameError}
-              sign={props.experienceData?.experienceName}
+              sign={props.experienceData?.experience_name}
               padding="8px"
               paddingL="18px"
               multiline={false}
@@ -90,7 +89,7 @@ const ProfilePatchExperience = (props) => {
               autocomplete={"text"}
               handleChange={props.handleExperienceDescriptionChange}
               error={props.experienceError?.experienceDescriptionError}
-              sign={props.experienceData?.experienceDescription}
+              sign={props.experienceData?.experience_description}
               padding="12px"
               paddingL="18px"
               multiline={true}
@@ -120,7 +119,7 @@ const ProfilePatchExperience = (props) => {
                 type={"date"}
                 handleChange={props.handleExperienceStartDateChange}
                 error={props.experienceError?.experienceStartDateError}
-                sign={props.experienceData?.experienceStartDate}
+                sign={props.experienceData?.start_date}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
@@ -144,7 +143,7 @@ const ProfilePatchExperience = (props) => {
                 type={"date"}
                 handleChange={props.handleExperienceEndDateChange}
                 error={props.experienceError?.experienceEndDateError}
-                sign={props.experienceData?.experienceEndDate}
+                sign={props.experienceData?.end_date}
                 padding="8px"
                 paddingL="18px"
                 multiline={false}
