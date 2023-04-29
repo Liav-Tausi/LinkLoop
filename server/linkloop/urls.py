@@ -26,6 +26,5 @@ urlpatterns = [
     path(r'api/v1/quals/', include(r'linkloop_app.urls.url_quals')),
     path(r'api/v1/comms/', include(r'linkloop_app.urls.url_comms')),
 
-
     path('admin/', admin.site.urls),
 ]
