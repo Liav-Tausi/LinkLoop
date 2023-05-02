@@ -3,25 +3,13 @@ import {
   AppContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import { useContext, useEffect, useRef, useState } from "react";
-import { isLiked } from "../../../utils/funcs/mainFuncs";
+import { useContext, useState } from "react";
 import VideoCardData from "./VideoCardData";
 
 const VideoCardMain = (props) => {
-  const { themeMode, accessToken } = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const isSmallScreen = useContext(IsSmallScreenContext);
-  const [liked, setLiked] = useState(false);
-
-  useEffect(() => {
-    const getLikedStatus = async () => {
-      if (accessToken) {
-        const likedStatus = await isLiked(props.videoId, accessToken);
-        setLiked(likedStatus);
-      }
-    };
-    getLikedStatus();
-  }, [props.videoId, accessToken]);
 
   return (
     <Paper
@@ -55,11 +43,11 @@ const VideoCardMain = (props) => {
           <VideoCardData
             videoUrl={props.video_url}
             date={props.date}
+            userProfile={props.userProfile}
             description={props.description}
             title={props.title}
             videoNumber={props.videoNumber}
             videoId={props.videoId}
-            liked={liked}
           />
         )}
       </Grid>

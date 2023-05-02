@@ -70,7 +70,10 @@ const ProfileInfoTemp = (props) => {
           </Typography>
         )}
         {description && (
-          <Typography variant="body1" sx={{ color: themeMode.secTextColor }}>
+          <Typography
+            variant="body1"
+            sx={{ color: themeMode.secTextColor, whiteSpace: "pre-wrap" }}
+          >
             {description}
           </Typography>
         )}

@@ -10,31 +10,36 @@ import { useParams } from "react-router-dom";
 
 const Feed = () => {
   const { feedData, themeMode } = useContext(AppContext);
+  const { video: videoId } = useParams();
   const dispatch = useContext(AppDispatchContext);
   const [videos, setVideos] = useState([]);
-  const { video } = useParams();
+  const [video, setVideo] = useState(null);
 
   useEffect(() => {
-    const fetchVideos = async () => {
+    const fetchVideo = async () => {
       try {
         const data = await feedData;
         if (data) {
           setVideos(data);
+        }
+        const foundVideo = data.find(
+          (element) => element.video_id_name === videoId
+        );
+        if (foundVideo) {
+          setVideo(foundVideo);
         } else {
+          setVideo(null);
           dispatch({
             type: APP_ACTIONS.MESSAGE,
-            payload: "ERROR! Connection Error",
+            payload: "ERROR! No Video Found",
           });
         }
       } catch (error) {
-        dispatch({
-          type: APP_ACTIONS.MESSAGE,
-          payload: "ERROR! Connection Error",
-        });
+        console.error(error);
       }
     };
-    fetchVideos();
-  }, [feedData]);
+    fetchVideo();
+  }, [feedData, videoId]);
 
   return (
     <Box
@@ -44,18 +49,17 @@ const Feed = () => {
         gap: 3,
       }}
     >
-      {videos.length > 0 ? (
-        videos.map((element) => (
-          <VideoCardMain
-            key={element.id}
-            videoId={element.id}
-            videoNumber={element.video_url.split("/").pop()}
-            video_url={element.video_url}
-            title={element.title}
-            description={element.description}
-            date={element.created_time}
-          />
-        ))
+      {video ? (
+        <VideoCardMain
+          key={video.id}
+          videoId={video.id}
+          videoNumber={video.video_url.split("/").pop()}
+          video_url={video.video_url}
+          title={video.title}
+          userProfile={video.profile}
+          description={video.description}
+          date={video.created_time}
+        />
       ) : (
         <Paper
           sx={{

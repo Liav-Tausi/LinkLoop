@@ -42,7 +42,7 @@ const ProfileInfo = () => {
       }
     };
     getAllProfileData();
-  }, [params.username]);
+  }, [params.username, message]);
 
   const orderByEndDate = (a, b) => {
     if (!a.end_date) {

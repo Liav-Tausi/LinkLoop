@@ -26,7 +26,6 @@ const SearchBar = () => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [searchedData, setSearchedData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
   const [showSearchSmallIcon, setShowSearchSmallIcon] = useState(true);
   const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
@@ -79,23 +78,27 @@ const SearchBar = () => {
   }, [searchValue]);
 
   const handleSubmit = (event, option) => {
+    console.log(option);
+    const foundObject = searchedData.find((obj) => obj.name === option);
+    const username = foundObject ? foundObject.username : null;
+
     event.preventDefault();
-    console.log(option)
+    console.log(username);
     if (option) {
-      if (option.type === "user") {
+      if (username) {
+        navigate(`/profile/${username}`);
+      } else if (option.username) {
         navigate(`/profile/${option.username}`);
-      } else if (option.type === "video") {
+      } else if (option.idName) {
         navigate(`/feed/${option.idName}`);
       } else {
         dispatch({
           type: APP_ACTIONS.MESSAGE,
-          payload: "ERROR! Invalid Search",
+          payload: "ERROR! Does Not Exist",
         });
       }
     }
   };
-
-  console.log(selectedOption);
 
   return (
     <Box
@@ -110,142 +113,144 @@ const SearchBar = () => {
       }}
     >
       {!showSearchSmallIcon ? (
-          <Autocomplete
-            onChange={(event, option) => handleSubmit(event, option)}
-            disablePortal
-            id={"combo-box-demo"}
-            options={searchedData}
-            getOptionLabel={(option) => option.name || ""}
-            renderOption={(props, option) => {
-              return (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "start",
-                    gap: 2,
-                  }}
-                  {...props}
-                >
-                  {option.type === "user" ? (
-                    <Box
-                      sx={{
-                        width: 33,
-                        height: 33,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {option.profilePic ? (
-                        <img
-                          src={option.profilePic}
-                          alt={option.name}
-                          style={{
-                            width: "86%",
-                            height: "86%",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      ) : (
-                        <AccountCircleIcon
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            color: themeMode.anonymousPicture,
-                          }}
-                        />
-                      )}
-                    </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 33,
-                        height: 33,
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <PlayCircleOutlinedIcon
+        <Autocomplete
+          onChange={(event, value) => {
+            handleSubmit(event, value);
+          }}
+          disablePortal
+          id={"combo-box-demo"}
+          options={searchedData}
+          getOptionLabel={(option) => option.name || ""}
+          renderOption={(props, option) => {
+            return (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "start",
+                  gap: 2,
+                }}
+                {...props}
+              >
+                {option.type === "user" ? (
+                  <Box
+                    sx={{
+                      width: 33,
+                      height: 33,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {option.profilePic ? (
+                      <img
+                        src={option.profilePic}
+                        alt={option.name}
+                        style={{
+                          width: "86%",
+                          height: "86%",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    ) : (
+                      <AccountCircleIcon
                         sx={{
                           width: "100%",
                           height: "100%",
                           color: themeMode.anonymousPicture,
                         }}
                       />
-                    </Box>
-                  )}
-                  <Box sx={{ textAlign: "left" }}>{option.name}</Box>
-                </Box>
-              );
-            }}
-            freeSolo
-            disableClearable
-            isOptionEqualToValue={(value, data) => value === data.value}
-            sx={{
-              flex: 1,
-              maxWidth: "552.8px",
-              my: "6px",
-              pl: isSmallScreen ? 1.5 : 5,
-              pr: isSmallScreen ? 1.5 : 5,
-              ".MuiAutocomplete-clearIndicator": {
-                color: themeMode.textColor,
-              },
-              ".MuiAutocomplete-popupIndicator": {
-                mr: 1,
-                color: themeMode.textColor,
-              },
-            }}
-            PaperComponent={({ children }) => (
-              <Paper
-                id={"search-paper-container"}
-                elevation={0}
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      width: 33,
+                      height: 33,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <PlayCircleOutlinedIcon
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        color: themeMode.anonymousPicture,
+                      }}
+                    />
+                  </Box>
+                )}
+                <Box sx={{ textAlign: "left" }}>{option.name}</Box>
+              </Box>
+            );
+          }}
+          freeSolo
+          disableClearable
+          isOptionEqualToValue={(value, data) => value === data.value}
+          sx={{
+            flex: 1,
+            maxWidth: "552.8px",
+            my: "6px",
+            pl: isSmallScreen ? 1.5 : 5,
+            pr: isSmallScreen ? 1.5 : 5,
+            ".MuiAutocomplete-clearIndicator": {
+              color: themeMode.textColor,
+            },
+            ".MuiAutocomplete-popupIndicator": {
+              mr: 1,
+              color: themeMode.textColor,
+            },
+          }}
+          PaperComponent={({ children }) => (
+            <Paper
+              id={"search-paper-container"}
+              elevation={0}
+              sx={{
+                mt: 1,
+                borderRadius: "10px",
+                fontWeight: "thin",
+              }}
+            >
+              {children}
+            </Paper>
+          )}
+          renderInput={(params) => {
+            const { InputLabelProps, InputProps, ...rest } = params;
+            return (
+              <InputBase
+                id={"search-input-container"}
+                {...params.InputProps}
+                {...rest}
+                autoComplete="on"
+                placeholder="Search"
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
                 sx={{
-                  mt: 1,
-                  borderRadius: "10px",
-                  fontWeight: "thin",
-                }}
-              >
-                {children}
-              </Paper>
-            )}
-            renderInput={(params) => {
-              const { InputLabelProps, InputProps, ...rest } = params;
-              return (
-                <InputBase
-                  id={"search-input-container"}
-                  {...params.InputProps}
-                  {...rest}
-                  autoComplete="on"
-                  placeholder="Search"
-                  value={searchValue}
-                  onChange={(event) => setSearchValue(event.target.value)}
-                  sx={{
-                    opacity: 1,
-                    backgroundColor: themeMode.searchBar,
-                    border: "solid 1px " + themeMode.searchBarBorder,
+                  opacity: 1,
+                  backgroundColor: themeMode.searchBar,
+                  border: "solid 1px " + themeMode.searchBarBorder,
+                  color: themeMode.textColor,
+                  fontSize: "15px",
+                  borderRadius: "25px",
+                  height: "42px",
+                  size: "small",
+                  px: "18px",
+                  "&:hover": {
+                    backgroundColor: themeMode.searchBarHover,
+                  },
+                  "::placeholder": {
                     color: themeMode.textColor,
-                    fontSize: "15px",
-                    borderRadius: "25px",
-                    height: "42px",
-                    size: "small",
-                    px: "18px",
-                    "&:hover": {
-                      backgroundColor: themeMode.searchBarHover,
-                    },
-                    "::placeholder": {
-                      color: themeMode.textColor,
-                    },
-                  }}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <SearchBarSmallIcon inSearch={true} />
-                    </InputAdornment>
-                  }
-                />
-              );
-            }}
-          />
+                  },
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <SearchBarSmallIcon inSearch={true} />
+                  </InputAdornment>
+                }
+              />
+            );
+          }}
+        />
       ) : (
         <Box sx={{ pl: isSmallScreen ? 2 : 0 }}>
           <SearchBarSmallIcon func={handleSearchSmallIcon} />

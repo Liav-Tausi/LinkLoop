@@ -3,6 +3,8 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import { useContext, useEffect, useState } from "react";
 import {
   APP_ACTIONS,
@@ -10,40 +12,61 @@ import {
   AppDispatchContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import { videoLike } from "../../../utils/funcs/mainFuncs";
+import {
+  countComments,
+  countLikes,
+  isLiked,
+  videoLike,
+} from "../../../utils/funcs/mainFuncs";
 import SignIn from "../../NavBar/Menu/Sign/SignIn/SignIn";
 import VideoIcons from "./VideoIcons";
+import { Link } from "react-router-dom";
 
 const VideoCardData = (props) => {
   const { themeMode, accessToken, signInOpen } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-  const [likeState, setLikeState] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [amountLikes, setAmountLikes] = useState(0);
+  const [amountComments, setAmountComments] = useState(0);
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    if (props.liked) {
-      setLikeState(true);
-    }
-  }, []);
-
-  useEffect(() => {
     if (!accessToken) {
-      setLikeState(false);
+      setLiked(false);
     }
   }, [accessToken]);
 
+  useEffect(() => {
+    const getLikedStatus = async () => {
+      if (accessToken) {
+        setLiked(await isLiked(props.videoId, accessToken));
+      }
+    };
+    getLikedStatus();
+  }, [props.videoId, accessToken]);
+
+  useEffect(() => {
+    const getLikes = async () => {
+      setAmountLikes(await countLikes(accessToken, props.videoId));
+    };
+    getLikes();
+    const getComments = async () => {
+      setAmountComments(await countComments(accessToken, props.videoId));
+    };
+    getComments();
+  }, [liked]);
+
   const handleLike = async () => {
     if (accessToken) {
-      if (!likeState) {
-        setLikeState(true);
+      if (!liked) {
         await videoLike(props.videoId, accessToken, false);
-      } else if (likeState) {
-        setLikeState(false);
+      } else if (liked) {
         await videoLike(props.videoId, accessToken, true);
       } else {
         return false;
       }
+      setLiked(!liked);
     } else {
       dispatch({
         type: APP_ACTIONS.SIGN_IN_OPEN,
@@ -53,6 +76,7 @@ const VideoCardData = (props) => {
       }
     }
   };
+
   return (
     <>
       {signInOpen && <SignIn />}
@@ -107,7 +131,6 @@ const VideoCardData = (props) => {
             </Box>
           </Grid>
         </Box>
-
         <Box
           sx={{
             position: "absolute",
@@ -131,54 +154,132 @@ const VideoCardData = (props) => {
             textShadow: "0px 1px 11px #000",
           }}
         >
-          <Stack gap={4} color={"white"}>
-            <VideoIcons>
-              <FavoriteRoundedIcon
-                onClick={handleLike}
+          <Stack gap={5} color="white">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Box
                 sx={{
-                  color: likeState
-                    ? themeMode.appTheme
-                    : themeMode.theme === "light"
-                    ? "#c7c7c7"
-                    : themeMode.textColor,
-                  transform: "scale(1.1)",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    cursor: "pointer",
-                  },
-                  "&:active": {
-                    transform: "scale(1)",
-                  },
+                  display: "flex",
+                  justifyContent: "center",
+                  position: "relative",
+                  cursor: "pointer",
                 }}
-              />
-            </VideoIcons>
-            <VideoIcons>
-              <ChatBubbleRoundedIcon
+              >
+                <Link to={`/profile/${props.userProfile?.user?.username}`}>
+                  {props.userProfile?.profile_picture ? (
+                    <Box sx={{ width: 43, height: 40 }}>
+                      <img
+                        style={{
+                          width: "100%",
+                          borderRadius: "50%",
+                        }}
+                        src={props.userProfile.profile_picture}
+                        alt="profile picture"
+                      />
+                    </Box>
+                  ) : (
+                    <AccountCircleIcon
+                      sx={{
+                        mt: 0.45,
+                        transform: "scale(1.95)",
+                        color: themeMode.anonymousPicture,
+                        mx: 1,
+                      }}
+                    />
+                  )}
+                </Link>
+              </Box>
+              <Box
                 sx={{
-                  color:
-                    themeMode.theme === "light"
-                      ? "#c7c7c7"
-                      : themeMode.textColor,
-                  transform: "scale(0.95)",
-                  "&:hover": {
-                    transform: "scale(0.93)",
-                    cursor: "pointer",
-                  },
-                  "&:active": {
-                    transform: "scale(0.9)",
-                  },
+                  mt: 1,
+                  top: 40,
+                  right: 2,
+                  whiteSpace: "nowrap",
+                  position: "absolute",
+                  color: themeMode.textColor,
+                  display: "flex",
+                  justifyContent: "center",
+                  fontSize: "8px",
+                  textShadow: 0,
                 }}
-              />
-            </VideoIcons>
+              >
+                {`${props.userProfile?.user?.first_name} ${props.userProfile?.user?.last_name}`}
+              </Box>
+            </Box>
+            <Box>
+              <VideoIcons>
+                <FavoriteRoundedIcon
+                  onClick={handleLike}
+                  sx={{
+                    position: "relative",
+                    color: liked ? themeMode.appTheme : themeMode.textColor,
+                    transform: "scale(1.1)",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                      cursor: "pointer",
+                    },
+                    "&:active": {
+                      transform: "scale(1)",
+                    },
+                  }}
+                />
+              </VideoIcons>
+              <Box
+                sx={{
+                  mt: 1,
+                  top: 117,
+                  right: 16,
+                  position: "absolute",
+                  color: themeMode.textColor,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {amountLikes}
+              </Box>
+            </Box>
+            <Box>
+              <VideoIcons>
+                <ChatBubbleRoundedIcon
+                  sx={{
+                    position: "relative",
+                    color: themeMode.textColor,
+                    transform: "scale(0.95)",
+                    "&:hover": {
+                      transform: "scale(0.93)",
+                      cursor: "pointer",
+                    },
+                    "&:active": {
+                      transform: "scale(0.9)",
+                    },
+                  }}
+                />
+              </VideoIcons>
+              <Box
+                sx={{
+                  mt: 1,
+                  top: 200,
+                  right: 16,
+                  position: "absolute",
+                  color: themeMode.textColor,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {amountComments}
+              </Box>
+            </Box>
             <VideoIcons>
               <ReplyOutlinedIcon
                 sx={{
                   pb: 0.2,
                   px: 0.1,
-                  color:
-                    themeMode.theme === "light"
-                      ? "#c7c7c7"
-                      : themeMode.textColor,
+                  color: themeMode.textColor,
                   transform: "scale(1.4)",
                   "&:hover": {
                     transform: "scale(1.35)",

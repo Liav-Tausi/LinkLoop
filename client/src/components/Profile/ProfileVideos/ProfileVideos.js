@@ -50,6 +50,7 @@ const ProfileVideos = (props) => {
               video_url={element.video_url}
               title={element.title}
               description={element.description}
+              userProfile={element.profile}
               date={element.created_time}
             />
           </Box>

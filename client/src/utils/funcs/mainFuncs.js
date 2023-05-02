@@ -528,15 +528,48 @@ export const getFeedData = async (accessToken) => {
         Authorization: "Bearer " + accessToken,
       });
       if (response.status < 300) {
-        console.log(response.data.results);
         return await response.data.results;
       }
     } else {
       const response = await axios.get(`${URL}/api/v1/videos/main/`);
       if (response.status < 300) {
-        console.log(response.data.results);
         return await response.data.results;
       }
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const countLikes = async (accessToken, videoId) => {
+  try {
+    const response = await axios.get(`${URL}/api/v1/videos/${videoId}/likes/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const likeCount = response.data.like_count;
+    if (response.status < 300) {
+      return likeCount;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const countComments = async (accessToken, videoId) => {
+  try {
+    const response = await axios.get(
+      `${URL}/api/v1/videos/${videoId}/comments/`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const commentCount = response.data.comment_count;
+    if (response.status < 300) {
+      return commentCount;
     }
   } catch (error) {
     return false;
