@@ -34,7 +34,6 @@ class VideosModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     filterset_class = VideoFilter
     depth = 3
-
     serializer_class = {
         "list": BaseVideoSerializer,
         "retrieve": BaseVideoSerializer,
@@ -84,11 +83,9 @@ class LikesModelViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         video_id = kwargs['video_pk']
         user_id = request.user.pk
-        print(kwargs)
         existing_like = VideoLike.objects.filter(video=video_id, user=user_id).exists()
         if existing_like:
             return Response({'detail': 'You have already liked this video'}, status=status.HTTP_400_BAD_REQUEST)
-
         data_copy = request.data.copy()
         data_copy["video"] = video_id
         data_copy["user"] = user_id
@@ -100,12 +97,8 @@ class LikesModelViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         video_pk = kwargs.get('video_pk')
-        like = VideoLike.objects.filter(video=video_pk)
-        if like:
-            serializer = self.get_serializer(like, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        like_count = VideoLike.objects.filter(video=video_pk).count()
+        return Response({'like_count': like_count})
 
     def retrieve(self, request, *args, **kwargs):
         video_id = kwargs['video_pk']
@@ -146,14 +139,15 @@ class CommentsModelViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         video_pk = kwargs.get('video_pk')
+        comment_count = VideoComment.objects.filter(video=video_pk).count()
         comments = VideoComment.objects.filter(video=video_pk)
         if comments.exists():
             serializer = self.get_serializer(comments, many=True)
-            return Response(serializer.data)
+            return Response({'comment_count': comment_count}, serializer.data)
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'comment_count': comment_count})
 
-
+0
 class ImpressionModelViewSet(ModelViewSet):
     queryset = VideoImpression.objects.all()
     permission_classes = [AllowAny]
