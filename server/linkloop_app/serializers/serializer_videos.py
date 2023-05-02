@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
+from .serializer_profile import ProfileSerializer
+from .serializer_user import UserSerializer
 from ..models import (
     Video,
     VideoLike,
@@ -15,9 +17,14 @@ from ..models import (
 
 
 class BaseVideoSerializer(serializers.ModelSerializer):
+    profile = serializers.SerializerMethodField()
+
     class Meta:
         model = Video
         fields = '__all__'
+
+    def get_profile(self, obj):
+        return ProfileSerializer(obj.user.profile).data
 
 
 class CreateVideoSerializer(serializers.ModelSerializer):
@@ -55,6 +62,7 @@ class CreateVideoSerializer(serializers.ModelSerializer):
 
 
 class LikeVideoSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = VideoLike
         fields = '__all__'
@@ -77,6 +85,7 @@ class LikeVideoSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = VideoComment
         fields = '__all__'
@@ -97,6 +106,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ImpressionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = VideoImpression
         fields = '__all__'
@@ -124,5 +134,3 @@ class ImpressionSerializer(serializers.ModelSerializer):
                 video=validated_data.get('video'),
             )
         return impression
-
-
