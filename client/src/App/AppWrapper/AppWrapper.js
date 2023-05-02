@@ -6,7 +6,7 @@ const AppWrapper = () => {
   return (
     <BrowserRouter>
       <AppProvider>
-        <App />
+        <App/>
       </AppProvider>
     </BrowserRouter>
   );

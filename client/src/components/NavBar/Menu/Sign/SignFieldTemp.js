@@ -20,6 +20,7 @@ const SignFieldTemp = (props) => {
       multiline={props.multiline}
       maxRows={props.maxRows}
       sx={{
+        whiteSpace: "pre-wrap",
         border: `solid 1px ${
           props.sign && props.error
             ? themeMode.appTheme

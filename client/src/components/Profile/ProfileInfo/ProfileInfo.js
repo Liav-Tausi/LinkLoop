@@ -8,10 +8,12 @@ import ProfileInfoTemp from "./ProfileInfoTemp";
 import CircularProgress from "@mui/material/CircularProgress";
 import { getProfileData, getUserQual } from "../../../utils/funcs/mainFuncs";
 import { useParams } from "react-router-dom";
+import ContentPasteOffIcon from "@mui/icons-material/ContentPasteOff";
 
 const ProfileInfo = () => {
-  const { themeMode, accessToken, message } = useContext(AppContext);
+  const { themeMode, message } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const [allData, setAllData] = useState({
     profile: {},
@@ -21,9 +23,9 @@ const ProfileInfo = () => {
   });
 
   useEffect(() => {
+    setLoading(true);
     const getAllProfileData = async () => {
       const profile = await getProfileData(null, params.username);
-      console.log(profile);
       const allQualData = await getUserQual(params.username);
       if (allQualData) {
         setAllData((data) => ({
@@ -33,12 +35,14 @@ const ProfileInfo = () => {
           education: allQualData.data.education,
           skill: allQualData.data.skills,
         }));
+        setLoading(false);
       } else {
+        setLoading(false);
         return false;
       }
     };
     getAllProfileData();
-  }, [message, params]);
+  }, [params.username, message]);
 
   const orderByEndDate = (a, b) => {
     if (!a.end_date) {
@@ -92,7 +96,21 @@ const ProfileInfo = () => {
           >
             <Box sx={{ fontSize: 18 }}>About</Box>
           </Box>
-          {allData?.profile?.about ? (
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress
+                thickness={2}
+                size="2rem"
+                sx={{ color: themeMode.appTheme }}
+              />
+            </Box>
+          ) : allData?.profile?.about ? (
             <ProfileInfoTemp
               data={{ name: allData?.profile?.about, about: true }}
             />
@@ -104,11 +122,7 @@ const ProfileInfo = () => {
                 alignItem: "center",
               }}
             >
-              <CircularProgress
-                thickness={2}
-                size="2rem"
-                sx={{ color: themeMode.appTheme }}
-              />
+              <ContentPasteOffIcon sx={{ color: themeMode.appTheme }} />
             </Box>
           )}
         </Box>
@@ -133,7 +147,21 @@ const ProfileInfo = () => {
           >
             <Box sx={{ fontSize: 18 }}>Experience</Box>
           </Box>
-          {allData.experience && allData.experience.length > 0 ? (
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress
+                thickness={2}
+                size="2rem"
+                sx={{ color: themeMode.appTheme }}
+              />
+            </Box>
+          ) : allData.experience && allData.experience.length > 0 ? (
             experienceDataSorted.map((data, index) => (
               <ProfileInfoTemp
                 key={index}
@@ -151,14 +179,10 @@ const ProfileInfo = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItem: "center",
               }}
             >
-              <CircularProgress
-                thickness={2}
-                size="2rem"
-                sx={{ color: themeMode.appTheme }}
-              />
+              <ContentPasteOffIcon sx={{ color: themeMode.appTheme }} />
             </Box>
           )}
         </Box>
@@ -194,7 +218,21 @@ const ProfileInfo = () => {
           >
             <Box sx={{ fontSize: 18 }}>Education</Box>
           </Box>
-          {allData.education && allData.education.length > 0 ? (
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress
+                thickness={2}
+                size="2rem"
+                sx={{ color: themeMode.appTheme }}
+              />
+            </Box>
+          ) : allData.education && allData.education.length > 0 ? (
             educationDataSorted.map((data, index) => (
               <ProfileInfoTemp
                 key={index}
@@ -215,11 +253,7 @@ const ProfileInfo = () => {
                 alignItems: "center",
               }}
             >
-              <CircularProgress
-                thickness={2}
-                size="2rem"
-                sx={{ color: themeMode.appTheme }}
-              />
+              <ContentPasteOffIcon sx={{ color: themeMode.appTheme }} />
             </Box>
           )}
         </Box>
@@ -244,7 +278,21 @@ const ProfileInfo = () => {
           >
             <Box sx={{ fontSize: 18 }}>Skills</Box>
           </Box>
-          {allData.skill && allData.skill.length > 0 ? (
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress
+                thickness={2}
+                size="2rem"
+                sx={{ color: themeMode.appTheme }}
+              />
+            </Box>
+          ) : allData.skill && allData.skill.length > 0 ? (
             allData.skill.map((data, index) => (
               <ProfileInfoTemp
                 key={index}
@@ -262,11 +310,7 @@ const ProfileInfo = () => {
                 alignItems: "center",
               }}
             >
-              <CircularProgress
-                thickness={2}
-                size="2rem"
-                sx={{ color: themeMode.appTheme }}
-              />
+              <ContentPasteOffIcon sx={{ color: themeMode.appTheme }} />
             </Box>
           )}
         </Box>

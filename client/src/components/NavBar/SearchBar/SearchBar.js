@@ -8,21 +8,28 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import {
+  APP_ACTIONS,
   AppContext,
+  AppDispatchContext,
   IsSmallScreenContext,
   Ref,
 } from "../../../App/AppStates/AppReducer";
 import SearchBarSmallIcon from "./SearchSmallIcon";
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { searchQuery } from "../../../utils/funcs/mainFuncs";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const { themeMode, searchBar } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [searchedData, setSearchedData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [showSearchSmallIcon, setShowSearchSmallIcon] = useState(true);
   const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setShowSearchSmallIcon(searchBar);
@@ -43,19 +50,19 @@ const SearchBar = () => {
     const search = async () => {
       try {
         const response = await searchQuery(searchValue);
-        console.log(response);
         const videos = response.data.videos.map((video) => ({
           type: "video",
-          value: video.title,
-          title: video.title,
+          name: video.title,
+          idName: video.video_id_name,
         }));
         const profiles = response.data.profiles.map((profile) => ({
           type: "user",
-          value: `${profile.user.first_name} ${profile.user.last_name}`,
+          name: `${profile.user.first_name} ${profile.user.last_name}`,
+          username: profile.user.username,
+          profilePic: profile.profile_picture,
         }));
         if (response) {
           if (videos && profiles) {
-            console.log(videos.concat(profiles));
             setSearchedData(videos.concat(profiles));
           } else if (videos && !profiles) {
             setSearchedData(videos);
@@ -70,6 +77,29 @@ const SearchBar = () => {
     search();
   }, [searchValue]);
 
+  const handleSubmit = (event, option) => {
+    console.log(option);
+    const foundObject = searchedData.find((obj) => obj.name === option);
+    const username = foundObject ? foundObject.username : null;
+
+    event.preventDefault();
+    console.log(username);
+    if (option) {
+      if (username) {
+        navigate(`/profile/${username}`);
+      } else if (option.username) {
+        navigate(`/profile/${option.username}`);
+      } else if (option.idName) {
+        navigate(`/feed/${option.idName}`);
+      } else {
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "ERROR! Does Not Exist",
+        });
+      }
+    }
+  };
+
   return (
     <Box
       ref={ref}
@@ -79,17 +109,80 @@ const SearchBar = () => {
         display: "flex",
         justifyContent: showSearchSmallIcon ? "start" : "center",
         alignItems: "center",
+        fontWeight: "thin",
       }}
     >
       {!showSearchSmallIcon ? (
         <Autocomplete
+          onChange={(event, value) => {
+            handleSubmit(event, value);
+          }}
           disablePortal
           id={"combo-box-demo"}
           options={searchedData}
-          getOptionLabel={(option) => {
-            return option.type === "video"
-              ? "Video: " + option.value
-              : "user: " + option.value;
+          getOptionLabel={(option) => option.name || ""}
+          renderOption={(props, option) => {
+            return (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "start",
+                  gap: 2,
+                }}
+                {...props}
+              >
+                {option.type === "user" ? (
+                  <Box
+                    sx={{
+                      width: 33,
+                      height: 33,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {option.profilePic ? (
+                      <img
+                        src={option.profilePic}
+                        alt={option.name}
+                        style={{
+                          width: "86%",
+                          height: "86%",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    ) : (
+                      <AccountCircleIcon
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          color: themeMode.anonymousPicture,
+                        }}
+                      />
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      width: 33,
+                      height: 33,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <PlayCircleOutlinedIcon
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        color: themeMode.anonymousPicture,
+                      }}
+                    />
+                  </Box>
+                )}
+                <Box sx={{ textAlign: "left" }}>{option.name}</Box>
+              </Box>
+            );
           }}
           freeSolo
           disableClearable

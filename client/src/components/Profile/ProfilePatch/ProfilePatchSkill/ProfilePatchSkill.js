@@ -9,7 +9,6 @@ import { useContext } from "react";
 
 const ProfilePatchSkill = (props) => {
   const { themeMode } = useContext(AppContext);
-  const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
     <Box
@@ -95,7 +94,7 @@ const ProfilePatchSkill = (props) => {
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Rating
                 name="size-large"
-                value={props.skillData?.skill_level}
+                value={Number(props.skillData?.skill_level)}
                 onChange={props.handleSkillLevelChange}
                 sx={{
                   "&.MuiRating-root": {

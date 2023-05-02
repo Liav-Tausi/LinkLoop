@@ -1,90 +1,90 @@
-import { Box, Grid, Paper, Skeleton } from "@mui/material";
-import { AppContext } from "../../../App/AppStates/AppReducer";
-import { useContext, useEffect, useRef, useState } from "react";
-import VideoData from "./VideoData";
-import { isLiked } from "../../../utils/funcs/mainFuncs";
+// import { Box, Grid, Paper, Skeleton } from "@mui/material";
+// import { AppContext } from "../../../App/AppStates/AppReducer";
+// import { useContext, useEffect, useRef, useState } from "react";
+// import { isLiked } from "../../../utils/funcs/mainFuncs";
+// import VideoCardData from "./VideoCardData";
 
-const VideoCard = (props) => {
-  const { themeMode, accessToken } = useContext(AppContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [playerState, setPlayerState] = useState(1);
-  const [liked, setLiked] = useState(false);
-  const playerRef = useRef(null);
+// const VideoCard = (props) => {
+//   const { themeMode, accessToken } = useContext(AppContext);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [playerState, setPlayerState] = useState(1);
+//   const [liked, setLiked] = useState(false);
+//   const playerRef = useRef(null);
 
-  const script = document.createElement("script");
-  script.src = "https://www.youtube.com/player_api";
-  document.head.appendChild(script);
+//   const script = document.createElement("script");
+//   script.src = "https://www.youtube.com/player_api";
+//   document.head.appendChild(script);
 
-  script.onload = () => {
-    window.YT.ready(() => {
-      playerRef.current = new window.YT.Player(props.videoNumber, {
-        videoId: props.videoNumber,
-        width: "100%",
-        playerVars: {
-          loop: 1,
-          playlist: props.videoNumber,
-        },
-        events: {
-          onStateChange: (e) => {
-            setPlayerState(e.data);
-          },
-        },
-      });
-      setIsLoading(false);
-    });
-  };
+//   script.onload = () => {
+//     window.YT.ready(() => {
+//       playerRef.current = new window.YT.Player(props.videoNumber, {
+//         videoId: props.videoNumber,
+//         width: "100%",
+//         playerVars: {
+//           loop: 1,
+//           playlist: props.videoNumber,
+//         },
+//         events: {
+//           onStateChange: (e) => {
+//             setPlayerState(e.data);
+//           },
+//         },
+//       });
+//       setIsLoading(false);
+//     });
+//   };
 
-  useEffect(() => {
-    const getLikedStatus = async () => {
-      if (accessToken) {
-        const likedStatus = await isLiked(props.videoId, accessToken);
-        setLiked(likedStatus);
-      }
-    };
+//   useEffect(() => {
+//     const getLikedStatus = async () => {
+//       if (accessToken) {
+//         const likedStatus = await isLiked(props.videoId, accessToken);
+//         setLiked(likedStatus);
+//       }
+//     };
 
-    getLikedStatus();
-  }, [props.videoId, accessToken]);
+//     getLikedStatus();
+//   }, [props.videoId, accessToken]);
 
-  return (
-    <Paper
-      sx={{
-        backgroundColor: themeMode.feed,
-        boxShadow: 10,
-        p: 1,
-      }}
-    >
-      <Grid>
-        {isLoading ? (
-          <>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={100} height={30} animation="wave" />
-            </Box>
-            <Skeleton
-              variant="rectangular"
-              width="350px"
-              height="500px"
-              animation="wave"
-            />
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={100} height={38} animation="wave" />
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={250} height={35} animation="wave" />
-            </Box>
-          </>
-        ) : (
-          <VideoData
-            date={props.date}
-            description={props.description}
-            title={props.title}
-            videoNumber={props.videoNumber}
-            videoId={props.videoId}
-            liked={liked}
-          />
-        )}
-      </Grid>
-    </Paper>
-  );
-};
+//   return (
+//     <Paper
+//       sx={{
+//         backgroundColor: themeMode.feed,
+//         boxShadow: 10,
+//         p: 1,
+//       }}
+//     >
+//       <Grid>
+//         {isLoading ? (
+//           <>
+//             <Box sx={{ display: "flex", justifyContent: "end" }}>
+//               <Skeleton width={100} height={30} animation="wave" />
+//             </Box>
+//             <Skeleton
+//               variant="rectangular"
+//               width="350px"
+//               height="500px"
+//               animation="wave"
+//             />
+//             <Box sx={{ display: "flex", justifyContent: "end" }}>
+//               <Skeleton width={100} height={38} animation="wave" />
+//             </Box>
+//             <Box sx={{ display: "flex", justifyContent: "end" }}>
+//               <Skeleton width={250} height={35} animation="wave" />
+//             </Box>
+//           </>
+//         ) : (
+//           <VideoCardData
+//             date={props.date}
+//             description={props.description}
+//             title={props.title}
+//             videoNumber={props.videoNumber}
+//             videoId={props.videoId}
+//             liked={liked}
+//           />
+//         )}
+//       </Grid>
+//     </Paper>
+//   );
+// };
 
-export default VideoCard;
+// export default VideoCard;

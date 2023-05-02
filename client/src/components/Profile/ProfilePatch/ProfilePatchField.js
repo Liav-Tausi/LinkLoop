@@ -127,50 +127,61 @@ const ProfilePatchField = () => {
     fetchProfileData();
   }, []);
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (
-      Object.values(errors).some((error) => error) ||
-      experienceError.some((error) =>
-        Object.values(error).some((val) => val)
-      ) ||
-      educationError.some((error) => Object.values(error).some((val) => val)) ||
-      skillError.some((error) => Object.values(error).some((val) => val))
-    ) {
-      setLoading(false);
-      dispatch({
-        type: APP_ACTIONS.MESSAGE,
-        payload:
-          "Please correct the errors in the form before submitting again.",
-      });
-    } else {
-      setLoading(true);
-      const form = event.target;
-      const elements = form.elements;
-      const response = await patchProfileData(
-        accessToken,
-        elements,
-        experienceData,
-        educationData,
-        skillData
-      );
-
-      if (response) {
-        dispatch({
-          type: APP_ACTIONS.MESSAGE,
-          payload: "Saved successfully.",
-        });
-        dispatch({
-          type: APP_ACTIONS.PROFILE_PATCH,
-        });
+    try {
+      if (
+        Object.values(errors).some((error) => error) ||
+        experienceError.some((error) =>
+          Object.values(error).some((val) => val)
+        ) ||
+        educationError.some((error) =>
+          Object.values(error).some((val) => val)
+        ) ||
+        skillError
+          .filter((error) => error !== undefined)
+          .some((error) => Object.values(error).some((val) => val))
+      ) {
         setLoading(false);
-      } else {
         dispatch({
           type: APP_ACTIONS.MESSAGE,
-          payload: "ERROR! Did Not Save successfully.",
+          payload:
+            "Please correct the errors in the form before submitting again.",
         });
+      } else {
+        setLoading(true);
+        const form = event.target;
+        const elements = form.elements;
+        const response = await patchProfileData(
+          accessToken,
+          elements,
+          experienceData,
+          educationData,
+          skillData
+        );
+        if (response) {
+          dispatch({
+            type: APP_ACTIONS.MESSAGE,
+            payload: "Saved successfully.",
+          });
+          dispatch({
+            type: APP_ACTIONS.PROFILE_PATCH,
+          });
+          setLoading(false);
+        } else {
+          dispatch({
+            type: APP_ACTIONS.MESSAGE,
+            payload: "ERROR! Did Not Save successfully.",
+          });
+        }
       }
-    }
+  } catch (error) {
+    dispatch({
+      type: APP_ACTIONS.MESSAGE,
+      payload: "ERROR! Did Not Save successfully.",
+    });
+  }
   };
 
   // -------------------- User --------------------
@@ -205,7 +216,7 @@ const ProfilePatchField = () => {
 
   // ---------------- skill --------------------
 
-  const handleSkillNameChange = (event, index) => {
+    const handleSkillNameChange = (event, index) => {
     if (index < 0 || index >= skillData.length) return;
 
     const newSkillError = [...skillError];
@@ -221,9 +232,11 @@ const ProfilePatchField = () => {
       skill_name: event.target.value,
     };
     setSkillData(newSkillData);
-  };
+  }
 
   const handleSkillLevelChange = (event, index) => {
+    if (index < 0 || index >= skillData.length) return;
+
     const newSkillError = [...skillError];
     if (!newSkillError[index]) {
       newSkillError[index] = { skillLevelError: false };
@@ -253,6 +266,7 @@ const ProfilePatchField = () => {
     ]);
   };
 
+
   const handleDeleteSkill = (index) => {
     const newSkillData = [...skillData];
     delUserQual(accessToken, "skill", newSkillData[index].skill_name);
@@ -260,7 +274,7 @@ const ProfilePatchField = () => {
     setSkillData(newSkillData);
 
     const newSkillError = [...skillError];
-    newSkillError.splice(index, 1);
+    newSkillError.splice(index, 1); 
     setSkillError(newSkillError);
   };
 

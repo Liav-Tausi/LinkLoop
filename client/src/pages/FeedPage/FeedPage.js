@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 import Feed from "../../components/Feed/Feed";
+import { useParams } from "react-router-dom";
 
 const FeedPage = () => {
   return (

@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -8,6 +8,10 @@ import {
 const ProfileShowButtonTemp = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+
+  useEffect(() => {
+    console.log("ProfileShowButtonTemp refresh");
+  }, []);
 
   return (
     <Button
