@@ -17,6 +17,10 @@ const ProfileData = (props) => {
     fetchUserData();
   }, [accessToken, props.username, message]);
 
+  useEffect(() => {
+    console.log("ProfileData refresh" );
+  },[]);
+
   return (
     <Box>
       {profilePatch && <ProfilePatch />}

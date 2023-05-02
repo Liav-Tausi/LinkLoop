@@ -5,12 +5,14 @@ import {
   AppDispatchContext,
 } from "../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
-import VideoCard from "./VideoCard/VideoCard";
+import VideoCardMain from "./VideoCard/VideoCardMain";
+import { useParams } from "react-router-dom";
 
 const Feed = () => {
   const { feedData, themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [videos, setVideos] = useState([]);
+  const { video } = useParams();
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -44,7 +46,7 @@ const Feed = () => {
     >
       {videos.length > 0 ? (
         videos.map((element) => (
-          <VideoCard
+          <VideoCardMain
             key={element.id}
             videoId={element.id}
             videoNumber={element.video_url.split("/").pop()}

@@ -3,11 +3,15 @@ import {
   AppContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const ProfileMainText = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
+
+  useEffect(() => {
+    console.log("ProfileMainText refresh");
+  }, []);
 
   return (
     <Box sx={{ display: "flex", mt: isSmallScreen ? 2 : 5.5 }}>

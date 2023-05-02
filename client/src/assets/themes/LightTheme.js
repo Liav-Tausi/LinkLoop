@@ -1,7 +1,7 @@
 const LIGHT_THEME = {
   theme: "light",
   body: "#f7f7f7",
-  anonymousPicture: "#CFCFCF",
+  anonymousPicture: "#A8A8A8",
   profileBack: "#EBEBEB",
   profileVideoInfoButtonHover: "#CFCFCF",
   ProfileVideoInfoButtonDisabled: "#EEEEEE",

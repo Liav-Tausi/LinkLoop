@@ -27,7 +27,6 @@ const ProfileInfo = () => {
     const getAllProfileData = async () => {
       const profile = await getProfileData(null, params.username);
       const allQualData = await getUserQual(params.username);
-
       if (allQualData) {
         setAllData((data) => ({
           ...data,
@@ -43,7 +42,7 @@ const ProfileInfo = () => {
       }
     };
     getAllProfileData();
-  }, [message, params]);
+  }, [params.username]);
 
   const orderByEndDate = (a, b) => {
     if (!a.end_date) {

@@ -1,6 +1,6 @@
 import BlurBack from "./BlurBack";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import AppLogo from "../../assets/imgs/AppLogo.svg";

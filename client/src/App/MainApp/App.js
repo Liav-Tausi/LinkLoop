@@ -128,7 +128,7 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Home />}>
-          <Route path="/" element={<FeedPage />} />
+          <Route path="Feed/:video" element={<FeedPage />} />
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>

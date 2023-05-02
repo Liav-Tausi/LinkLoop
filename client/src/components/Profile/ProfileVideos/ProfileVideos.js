@@ -1,12 +1,14 @@
 import { Box } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import VideoCard from "../../Feed/VideoCard/VideoCard";
+import { useEffect, useState } from "react";
+import VideoCardMain from "../../Feed/VideoCard/VideoCardMain";
 import { getVideosOfUser } from "../../../utils/funcs/mainFuncs";
-import { IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
 
 const ProfileVideos = (props) => {
-  const isSmallScreen = useContext(IsSmallScreenContext);
   const [videosUser, setVideosUser] = useState([]);
+
+  useEffect(() => {
+    console.log("ProfileVideos refresh");
+  }, []);
 
   useEffect(() => {
     const fetchVideosData = async () => {
@@ -42,7 +44,7 @@ const ProfileVideos = (props) => {
               mb: 4,
             }}
           >
-            <VideoCard
+            <VideoCardMain
               videoId={element.id}
               videoNumber={element.video_url.split("/").pop()}
               video_url={element.video_url}
@@ -53,9 +55,9 @@ const ProfileVideos = (props) => {
           </Box>
         ))
       ) : (
-          <Box sx={{display: "flex", justifyContent: "center", width: "100%"}}>
-            No Videos Yet
-          </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          No Videos Yet
+        </Box>
       )}
     </Box>
   );

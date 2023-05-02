@@ -528,11 +528,13 @@ export const getFeedData = async (accessToken) => {
         Authorization: "Bearer " + accessToken,
       });
       if (response.status < 300) {
+        console.log(response.data.results);
         return await response.data.results;
       }
     } else {
       const response = await axios.get(`${URL}/api/v1/videos/main/`);
       if (response.status < 300) {
+        console.log(response.data.results);
         return await response.data.results;
       }
     }

@@ -14,7 +14,7 @@ const SearchBarSmallIcon = (props) => {
         py: accessToken ? "6px" : "5px",
         px: accessToken ? "6.5px" : "5.5px",
         borderRadius: "50%",
-        backgroundColor: themeMode.searchBarHover,
+        backgroundColor: themeMode.searchBar,
         "&:hover": {
           backgroundColor: themeMode.navInputColor,
           cursor: "pointer",
