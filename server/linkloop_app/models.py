@@ -7,6 +7,7 @@ from django.core.validators import (
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import uuid
 
 
 class Profile(models.Model):
@@ -33,20 +34,28 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 
+
+
 class Video(models.Model):
     class Meta:
         db_table = "video"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
+    video_id_name = models.CharField(max_length=32, unique=True, editable=False, default='')
     video_url = models.URLField(verbose_name="video_url", blank=False, null=False)
     topic = models.CharField(db_column="topic", blank=False, null=False, max_length=128,
                              validators=[MinLengthValidator(1)])
-    title = models.CharField(db_column="title", default='', blank=False, null=False, max_length=64,
+    title = models.CharField(db_column="title", blank=False, null=False, max_length=64,
                              validators=[MinLengthValidator(1)])
     description = models.TextField(db_column="description", blank=False, null=False, max_length=300,
                                    validators=[MinLengthValidator(1)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.video_id_name:
+            self.video_id_name = str(uuid.uuid4().hex)[:32]
+        super(Video, self).save(*args, **kwargs)
 
 
 class VideoLike(models.Model):
@@ -54,9 +63,10 @@ class VideoLike(models.Model):
         db_table = "video_like"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='likes')
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
+
 
 
 class VideoComment(models.Model):
