@@ -37,6 +37,7 @@ export const INITIAL_APP_STATE = {
   signInOpen: false,
   userProfileData: "",
   profilePatch: false,
+  addVideo: false,
   chooseLocation: false,
   searchBar: false,
 };
@@ -52,6 +53,7 @@ export const APP_ACTIONS = {
   SIGN_UP_OPEN: "signUpOpen",
   SIGN_IN_OPEN: "signInOpen",
   PROFILE_PATCH: "profilePatch",
+  ADD_VIDEO: "addVideo",
   CHOOSE_LOCATION: "chooseLocation",
   CONNECTED_USER: "connectedUser",
   SEARCH_BAR: "searchBar",
@@ -113,6 +115,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         profilePatch: !states.profilePatch,
+      };
+    }
+    case APP_ACTIONS.ADD_VIDEO: {
+      return {
+        ...states,
+        addVideo: !states.addVideo,
       };
     }
     case APP_ACTIONS.CHOOSE_LOCATION: {

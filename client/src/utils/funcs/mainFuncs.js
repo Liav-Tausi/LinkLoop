@@ -541,13 +541,11 @@ export const getFeedData = async (accessToken) => {
   }
 };
 
-export const countLikes = async (accessToken, videoId) => {
+export const countLikes = async (videoId) => {
   try {
-    const response = await axios.get(`${URL}/api/v1/videos/${videoId}/likes/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      `${URL}/api/v1/videos/${videoId}/likes/`,
+    );
     const likeCount = response.data.like_count;
     if (response.status < 300) {
       return likeCount;
@@ -557,15 +555,10 @@ export const countLikes = async (accessToken, videoId) => {
   }
 };
 
-export const countComments = async (accessToken, videoId) => {
+export const countComments = async (videoId) => {
   try {
     const response = await axios.get(
       `${URL}/api/v1/videos/${videoId}/comments/`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
     );
     const commentCount = response.data.comment_count;
     if (response.status < 300) {

@@ -14,9 +14,10 @@ import MenuIcon from "./MenuIcon";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InMenuTemp from "./logButtons/InMenu/InMenuTemp";
 import { logOut } from "../../../utils/funcs/authFuncs";
+import ToolTip from "../../../utils/Comps/ToolTip";
 
 const Menu = () => {
-  const { themeMode, accessToken, menuOpen} = useContext(AppContext);
+  const { themeMode, accessToken, menuOpen } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [menuDisplaySettings, setMenuDisplaySettings] = useState(false);
@@ -61,7 +62,9 @@ const Menu = () => {
         }}
       >
         {!accessToken && !isSmallScreen && <LogButtons />}
-        <MenuIcon />
+        <ToolTip label={"Menu"} where={"50%"}>
+          <MenuIcon />
+        </ToolTip>
       </Box>
       {menuOpen && (
         <Paper

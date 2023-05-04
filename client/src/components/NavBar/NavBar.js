@@ -10,6 +10,7 @@ import AppMessage from "../../App/MainApp/AppMessage/AppMessage";
 import SearchBar from "./SearchBar/SearchBar";
 import ProfilePic from "./ProfilePic/ProfilePic";
 import SearchBarSmallIcon from "./SearchBar/SearchSmallIcon";
+import ToolTip from "../../utils/Comps/ToolTip";
 
 const NavBar = () => {
   const { themeMode, message, accessToken } = useContext(AppContext);
@@ -47,9 +48,10 @@ const NavBar = () => {
             },
           }}
         >
-          <Logo />
+          <ToolTip label={"LinkLoop"} where={"35%"}>
+            <Logo />
+          </ToolTip>
           <SearchBar />
-
           <Box
             sx={{
               display: "flex",
@@ -59,7 +61,11 @@ const NavBar = () => {
               ml: accessToken && !isSmallScreen ? 11.8 : 0,
             }}
           >
-            <ProfilePic />
+            {accessToken && (
+              <ToolTip label={"Profile"} where={"50%"}>
+                <ProfilePic />
+              </ToolTip>
+            )}
             <Menu />
           </Box>
         </Toolbar>

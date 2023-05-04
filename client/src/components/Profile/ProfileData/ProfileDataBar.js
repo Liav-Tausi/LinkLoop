@@ -12,6 +12,7 @@ import ProfileEditButton from "./ProfileEditButton";
 import ProfileShowButtonTemp from "./ProfileShowButtonTemp";
 import ProfileInfo from "../ProfileInfo/ProfileInfo";
 import ProfileVideos from "../ProfileVideos/ProfileVideos";
+import AddVideo from "./AddVideo";
 
 const ProfileDataBar = (props) => {
   const { themeMode, connectedUser } = useContext(AppContext);
@@ -59,7 +60,15 @@ const ProfileDataBar = (props) => {
             <ProfileMainText profileData={props.profileData} />
           </Box>
           {connectedUser?.username === props.username && (
-            <Box sx={{ position: "relative", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                position: "relative",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
               <ProfileEditButton
                 sizeX={1.3}
                 sizeY={1.25}
@@ -69,6 +78,18 @@ const ProfileDataBar = (props) => {
                 func={() =>
                   dispatch({
                     type: APP_ACTIONS.PROFILE_PATCH,
+                  })
+                }
+              />
+              <AddVideo
+                sizeX={1.3}
+                sizeY={1.25}
+                hoverColor={themeMode.navInputColor}
+                scale={"scale(1.5)"}
+                background="none"
+                func={() =>
+                  dispatch({
+                    type: APP_ACTIONS.ADD_VIDEO,
                   })
                 }
               />

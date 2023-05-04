@@ -30,6 +30,7 @@ import ProfilePatchSkill from "./ProfilePatchSkill/ProfilePatchSkill";
 import ProfilePatchMainUserData from "./ProfilePatchMainUserData/ProfilePatchMainUserData";
 import Loading from "../../../utils/Comps/Loading";
 import { useParams } from "react-router-dom";
+import ScrollBar from "../../../utils/Comps/ScrollBar";
 
 const ProfilePatchField = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -127,7 +128,6 @@ const ProfilePatchField = () => {
     fetchProfileData();
   }, []);
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -176,12 +176,12 @@ const ProfilePatchField = () => {
           });
         }
       }
-  } catch (error) {
-    dispatch({
-      type: APP_ACTIONS.MESSAGE,
-      payload: "ERROR! Did Not Save successfully.",
-    });
-  }
+    } catch (error) {
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "ERROR! Did Not Save successfully.",
+      });
+    }
   };
 
   // -------------------- User --------------------
@@ -216,7 +216,7 @@ const ProfilePatchField = () => {
 
   // ---------------- skill --------------------
 
-    const handleSkillNameChange = (event, index) => {
+  const handleSkillNameChange = (event, index) => {
     if (index < 0 || index >= skillData.length) return;
 
     const newSkillError = [...skillError];
@@ -232,7 +232,7 @@ const ProfilePatchField = () => {
       skill_name: event.target.value,
     };
     setSkillData(newSkillData);
-  }
+  };
 
   const handleSkillLevelChange = (event, index) => {
     if (index < 0 || index >= skillData.length) return;
@@ -266,7 +266,6 @@ const ProfilePatchField = () => {
     ]);
   };
 
-
   const handleDeleteSkill = (index) => {
     const newSkillData = [...skillData];
     delUserQual(accessToken, "skill", newSkillData[index].skill_name);
@@ -274,7 +273,7 @@ const ProfilePatchField = () => {
     setSkillData(newSkillData);
 
     const newSkillError = [...skillError];
-    newSkillError.splice(index, 1); 
+    newSkillError.splice(index, 1);
     setSkillError(newSkillError);
   };
 
@@ -510,27 +509,7 @@ const ProfilePatchField = () => {
   return (
     <>
       {loading && <Loading />}
-      <Box
-        sx={{
-          overflowY: "scroll",
-          maxHeight: "520px",
-          "&::-webkit-scrollbar": {
-            borderRadius: "3px",
-            width: "6px",
-          },
-          "&::-webkit-scrollbar-track": {
-            borderRadius: "3px",
-            background: themeMode.feed,
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: themeMode.signUpBubbles,
-            borderRadius: "3px",
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            background: themeMode.appTheme,
-          },
-        }}
-      >
+      <ScrollBar maxHeight={"520px"}>
         <form onSubmit={handleSubmit}>
           <ProfilePatchMainUserData
             patchData={patchData}
@@ -733,7 +712,7 @@ const ProfilePatchField = () => {
             <SignSubmit />
           </Box>
         </form>
-      </Box>
+      </ScrollBar>
     </>
   );
 };
