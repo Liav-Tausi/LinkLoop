@@ -47,7 +47,7 @@ class Video(models.Model):
                              validators=[MinLengthValidator(1)])
     title = models.CharField(db_column="title", blank=False, null=False, max_length=64,
                              validators=[MinLengthValidator(1)])
-    description = models.TextField(db_column="description", blank=False, null=False, max_length=300,
+    description = models.TextField(db_column="description", blank=False, null=False, max_length=150,
                                    validators=[MinLengthValidator(1)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
