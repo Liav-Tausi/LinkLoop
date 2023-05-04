@@ -29,6 +29,23 @@ class VideoFilter(django_filters.FilterSet):
         fields = ['username']
 
 
+class VideoLikeFilter(django_filters.FilterSet):
+    username = django_filters.CharFilter(field_name='user__username', lookup_expr='iexact')
+
+    class Meta:
+        model = VideoLike
+        fields = ['username']
+
+
+class VideoCommentFilter(django_filters.FilterSet):
+    username = django_filters.CharFilter(field_name='user__username', lookup_expr='iexact')
+
+    class Meta:
+        model = VideoComment
+        fields = ['username']
+
+
+
 class VideosModelViewSet(ModelViewSet):
     queryset = Video.objects.all()
     permission_classes = [AllowAny]
@@ -75,12 +92,15 @@ class VideosModelViewSet(ModelViewSet):
 
 class LikesModelViewSet(ModelViewSet):
     queryset = VideoLike.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = LikeVideoSerializer
+    filterset_class = VideoLikeFilter
     authentication_classes = [JWTAuthentication]
     allowed_methods = ['GET', 'POST', 'DELETE']
 
     def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         video_id = kwargs['video_pk']
         user_id = request.user.pk
         existing_like = VideoLike.objects.filter(video=video_id, user=user_id).exists()
@@ -110,6 +130,8 @@ class LikesModelViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         video_id = kwargs['video_pk']
         user_id = request.user.pk
         like = VideoLike.objects.filter(video=video_id, user=user_id)
@@ -122,11 +144,15 @@ class LikesModelViewSet(ModelViewSet):
 
 class CommentsModelViewSet(ModelViewSet):
     queryset = VideoComment.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    filterset_class = VideoCommentFilter
     serializer_class = CommentSerializer
     authentication_classes = [JWTAuthentication]
+    allowed_methods = ['GET', 'POST', 'DELETE']
 
     def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         video_id = kwargs['video_pk']
         data_copy = request.data.copy()
         data_copy["video"] = video_id
@@ -147,7 +173,7 @@ class CommentsModelViewSet(ModelViewSet):
         else:
             return Response({'comment_count': comment_count})
 
-0
+
 class ImpressionModelViewSet(ModelViewSet):
     queryset = VideoImpression.objects.all()
     permission_classes = [AllowAny]
