@@ -76,11 +76,12 @@ const SignInFieldGroup = () => {
             payload: "Welcome back to linkLoop!",
           });
         } else {
+          setLoading(false);
+          setFormSubmit(false);
           dispatch({
             type: APP_ACTIONS.MESSAGE,
             payload: "Sorry, we couldn't find this account",
           });
-          setFormSubmit(false);
           setErrors((error) => ({ ...error, emailError: true }));
           setErrors((error) => ({ ...error, passwordError: true }));
         }

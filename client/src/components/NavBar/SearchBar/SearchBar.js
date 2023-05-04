@@ -19,6 +19,7 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { searchQuery } from "../../../utils/funcs/mainFuncs";
 import { useNavigate } from "react-router-dom";
+import ToolTip from "../../../utils/Comps/ToolTip";
 
 const SearchBar = () => {
   const { themeMode, searchBar } = useContext(AppContext);
@@ -78,12 +79,10 @@ const SearchBar = () => {
   }, [searchValue]);
 
   const handleSubmit = (event, option) => {
-    console.log(option);
     const foundObject = searchedData.find((obj) => obj.name === option);
     const username = foundObject ? foundObject.username : null;
 
     event.preventDefault();
-    console.log(username);
     if (option) {
       if (username) {
         navigate(`/profile/${username}`);
@@ -217,37 +216,44 @@ const SearchBar = () => {
           renderInput={(params) => {
             const { InputLabelProps, InputProps, ...rest } = params;
             return (
-              <InputBase
-                id={"search-input-container"}
-                {...params.InputProps}
-                {...rest}
-                autoComplete="on"
-                placeholder="Search"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.target.value)}
-                sx={{
-                  opacity: 1,
-                  backgroundColor: themeMode.searchBar,
-                  border: "solid 1px " + themeMode.searchBarBorder,
-                  color: themeMode.textColor,
-                  fontSize: "15px",
-                  borderRadius: "25px",
-                  height: "42px",
-                  size: "small",
-                  px: "18px",
-                  "&:hover": {
-                    backgroundColor: themeMode.searchBarHover,
-                  },
-                  "::placeholder": {
+              <ToolTip label={"Search"} where={"94%"}>
+                <InputBase
+                  id={"search-input-container"}
+                  {...params.InputProps}
+                  {...rest}
+                  autoComplete="on"
+                  placeholder="Search"
+                  value={searchValue}
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  sx={{
+                    opacity: 1,
+                    backgroundColor: themeMode.searchBar,
+                    border: "solid 1px " + themeMode.searchBarBorder,
                     color: themeMode.textColor,
-                  },
-                }}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <SearchBarSmallIcon inSearch={true} />
-                  </InputAdornment>
-                }
-              />
+                    fontSize: "15px",
+                    borderRadius: "25px",
+                    height: "42px",
+                    size: "small",
+                    px: "18px",
+                    "&:hover": {
+                      backgroundColor: themeMode.searchBarHover,
+                    },
+                    "::placeholder": {
+                      color: themeMode.textColor,
+                    },
+                  }}
+                  endAdornment={
+                    <InputAdornment
+                      position="end"
+                      onClick={(event) => {
+                        handleSubmit(event, searchValue);
+                      }}
+                    >
+                      <SearchBarSmallIcon inSearch={true} />
+                    </InputAdornment>
+                  }
+                />
+              </ToolTip>
             );
           }}
         />

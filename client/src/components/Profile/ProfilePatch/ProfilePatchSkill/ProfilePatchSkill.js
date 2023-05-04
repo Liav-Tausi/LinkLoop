@@ -1,10 +1,7 @@
 import { Box, Rating } from "@mui/material";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import {
-  AppContext,
-  IsSmallScreenContext,
-} from "../../../../App/AppStates/AppReducer";
+import { AppContext } from "../../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
 const ProfilePatchSkill = (props) => {

@@ -48,11 +48,11 @@ const VideoCardData = (props) => {
 
   useEffect(() => {
     const getLikes = async () => {
-      setAmountLikes(await countLikes(accessToken, props.videoId));
+      setAmountLikes(await countLikes(props.videoId));
     };
     getLikes();
     const getComments = async () => {
-      setAmountComments(await countComments(accessToken, props.videoId));
+      setAmountComments(await countComments(props.videoId));
     };
     getComments();
   }, [liked]);
@@ -233,7 +233,7 @@ const VideoCardData = (props) => {
                 sx={{
                   mt: 1,
                   top: 117,
-                  right: 16,
+                  right: 16.5,
                   position: "absolute",
                   color: themeMode.textColor,
                   display: "flex",

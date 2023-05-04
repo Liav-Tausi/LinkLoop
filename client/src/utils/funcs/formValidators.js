@@ -9,6 +9,10 @@ export const validateHeadline = (headline) => {
   );
 };
 
+export const validateVideoTitle = (title) => {
+  return title.length >= 3 && title.length <= 30 && !/^\s+$/.test(title);
+};
+
 export const validateQualName = (qualName) => {
   return (
     qualName.length >= 3 && qualName.length <= 32 && !/^\s+$/.test(qualName)
@@ -17,6 +21,14 @@ export const validateQualName = (qualName) => {
 
 export const validateLevel = (qualLevel) => {
   return qualLevel > 5 || qualLevel < 1;
+};
+
+export const validateVideoDescription = (videoDescription) => {
+  return (
+    videoDescription.length >= 3 &&
+    videoDescription.length <= 150 &&
+    !/^\s+$/.test(videoDescription)
+  );
 };
 
 export const validateQualDescription = (qualDescription) => {

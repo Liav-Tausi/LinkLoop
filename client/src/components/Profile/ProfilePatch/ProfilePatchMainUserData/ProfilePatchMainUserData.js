@@ -9,7 +9,6 @@ import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 const ProfilePatchMainUserData = (props) => {
     const { themeMode } = useContext(AppContext);
   return (
-    <>
       <Box
         sx={{
           backgroundColor: themeMode.signUpBubbles,
@@ -77,7 +76,6 @@ const ProfilePatchMainUserData = (props) => {
           />
         </Stack>
       </Box>
-    </>
   );
 }
 

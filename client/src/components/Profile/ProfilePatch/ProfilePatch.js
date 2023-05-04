@@ -1,9 +1,12 @@
 import BlurBack from "../../../utils/Comps/BlurBack";
 import PaperBack from "../../../utils/Comps/PaperBack";
 import ProfilePatchField from "./ProfilePatchField";
-import ProfilePatchTitle from "./ProfilePatchTitle";
+import { APP_ACTIONS, AppDispatchContext } from "../../../App/AppStates/AppReducer";
+import { useContext } from "react";
+import ProfileVideoANDPatchTitle from "../ProfileVideoANDPatchTitle";
 
 const ProfilePatch = () => {
+  const dispatch = useContext(AppDispatchContext)
   return (
     <BlurBack>
       <PaperBack
@@ -15,7 +18,7 @@ const ProfilePatch = () => {
         verySmallWidth={370}
         boxShadow={10}
       >
-        <ProfilePatchTitle />
+        <ProfileVideoANDPatchTitle text={"Edit Your Personal Info:"} func={() => dispatch({type: APP_ACTIONS.PROFILE_PATCH })}/>
         <ProfilePatchField />
       </PaperBack>
     </BlurBack>

@@ -1,17 +1,12 @@
 import { Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
-import AppLogo from "../../../assets/imgs/AppLogo.svg";
+import AppLogo from "../../assets/imgs/AppLogo.svg"
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import {
-  APP_ACTIONS,
-  AppContext,
-  AppDispatchContext,
-} from "../../../App/AppStates/AppReducer";
+import { AppContext } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-const ProfilePatchTitle = () => {
+const ProfileVideoANDPatchTitle = (props) => {
   const { themeMode } = useContext(AppContext);
-  const dispatch = useContext(AppDispatchContext);
 
   return (
     <Container
@@ -43,23 +38,15 @@ const ProfilePatchTitle = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onClick={() => {
-              dispatch({
-                type: APP_ACTIONS.PROFILE_PATCH,
-              });
-            }}
+            onClick={props.func}
           >
             <img src={AppLogo} style={{ width: 35 }} alt="linkLoop logo"></img>
           </Box>
         </Link>
-        Edit Personal Info:
+        {props.text}
       </Box>
       <Box
-        onClick={() => {
-          dispatch({
-            type: APP_ACTIONS.PROFILE_PATCH,
-          });
-        }}
+        onClick={props.func}
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -83,4 +70,4 @@ const ProfilePatchTitle = () => {
   );
 };
 
-export default ProfilePatchTitle;
+export default ProfileVideoANDPatchTitle;

@@ -26,19 +26,19 @@ const App = () => {
     menuOpen,
     accessToken,
     chooseLocation,
-    searchBar,
+    addVideo,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
 
   useEffect(() => {
-    if (signUpOpen || signInOpen || profilePatch) {
+    if (signUpOpen || signInOpen || profilePatch || addVideo) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [signUpOpen, signInOpen, profilePatch]);
+  }, [signUpOpen, signInOpen, profilePatch, addVideo]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,6 +108,10 @@ const App = () => {
         console.log(ref.current.id);
         dispatch({
           type: APP_ACTIONS.SEARCH_BAR,
+        });
+      } else if (ref.current.id === "addVideo" && addVideo && !chooseLocation) {
+        dispatch({
+          type: APP_ACTIONS.ADD_VIDEO,
         });
       }
     }
