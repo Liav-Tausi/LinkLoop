@@ -77,6 +77,7 @@ const VideoCardData = (props) => {
     }
   };
 
+
   return (
     <>
       {signInOpen && <SignIn />}
@@ -94,20 +95,18 @@ const VideoCardData = (props) => {
             height: "595px",
           }}
         >
-          <iframe
-            title={props.videoUrl}
+          <video
             style={{
               height: "100%",
               width: "100%",
               cursor: "pointer",
               borderRadius: isSmallScreen ? "7px" : "12px",
-              visibility: load ? "visible" : "hidden",
             }}
             onLoad={() => setLoad(true)}
             src={props.videoUrl}
-            frameBorder="0"
-            allowFullScreen
-          ></iframe>
+            controls
+            required
+          ></video>
         </Box>
         <Box
           sx={{

@@ -1,7 +1,9 @@
 import { Box, Stack, Button } from "@mui/material";
 import { useContext, useState } from "react";
 import {
+  APP_ACTIONS,
   AppContext,
+  AppDispatchContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
 import SignFieldTemp from "../../NavBar/Menu/Sign/SignFieldTemp";
@@ -14,9 +16,11 @@ import ScrollBar from "../../../utils/Comps/ScrollBar";
 import Loading from "../../../utils/Comps/Loading";
 import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { postVideo } from "../../../utils/funcs/mainFuncs";
 
 const ProfileAddVideoField = () => {
-  const { themeMode } = useContext(AppContext);
+  const { themeMode, accessToken} = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext)
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [videoUrl, setVideoUrl] = useState("");
   const [file, setFile] = useState("");
@@ -36,9 +40,8 @@ const ProfileAddVideoField = () => {
   });
 
   const handleChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file);
-    if (file.size > 1650000) {
+    const addedFile = event.target.files[0];
+    if (addedFile.size > 1650000) {
       setErrors((error) => ({
         ...error,
         fileError: true,
@@ -49,8 +52,8 @@ const ProfileAddVideoField = () => {
         ...error,
         fileError: false,
       }));
-      setFile(file);
-      setVideoUrl(URL.createObjectURL(file));
+      setFile(addedFile);
+      setVideoUrl(URL.createObjectURL(addedFile));
     }
   };
 
@@ -83,9 +86,42 @@ const ProfileAddVideoField = () => {
     setVideoUrl("")
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const title = event.target[0].value
+    const topic = event.target[1].value;
+    const description = event.target[2].value;
+    if (
+      errors.titleError ||
+      errors.topicError ||
+      errors.descriptionError ||
+      errors.fileError
+    ) {
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload:
+          "Please correct the errors in the form before submitting again.",
+      });
+    } else {
+      setLoading(true);
+      const response = await postVideo(
+        accessToken,
+        title,
+        topic,
+        description,
+        file
+      );
+      if (response) {
+        setLoading(false)
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "Video Has Been Added!"
+        })
+        dispatch({
+          type: APP_ACTIONS.ADD_VIDEO
+        });
+      }
+    }
   };
   return (
     <>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL } from "../config/conf";
+import { URL, APIV1, AUTH} from "../config/conf";
 
 export const isLoggedIn = async (accessToken) => {
   const access = accessToken;
@@ -18,7 +18,7 @@ export const isLoggedIn = async (accessToken) => {
 export const handleRefreshTokenResponse = async (refreshToken) => {
   try {
     const tokenResponse = await axios.post(
-      `${URL}/api/v1/auth/token/refresh/`,
+      `${URL}${APIV1}${AUTH}token/refresh/`,
       {
         refresh: refreshToken,
       }
@@ -35,13 +35,10 @@ export const handleRefreshTokenResponse = async (refreshToken) => {
 
 export const handleAccessTokenResponse = async (user) => {
   try {
-    const tokenResponse = await axios.post(
-      `${URL}/api/v1/auth/token/`,
-      {
-        username: user[0],
-        password: user[1],
-      }
-    );
+    const tokenResponse = await axios.post(`${URL}${APIV1}${AUTH}token/`, {
+      username: user[0],
+      password: user[1],
+    });
     if (tokenResponse.status < 300) {
       return tokenResponse;
     } else {
@@ -52,10 +49,11 @@ export const handleAccessTokenResponse = async (user) => {
   }
 };
 
+
+
 export const signUpUser = async (user) => {
   try {
-    const response = await axios.post(
-      `${URL}/api/v1/users/signup/`, {
+    const response = await axios.post(`${URL}${APIV1}users/signup/`, {
       username: user[0].value,
       first_name: user[1].value.split(" ")[0],
       last_name: user[1].value.split(" ")[1],
@@ -105,12 +103,9 @@ export const signInUser = async (user) => {
 
 export const logOut = async (refreshToken) => {
   try {
-    const response = await axios.post(
-      `${URL}/api/v1/auth/token/blacklist/`,
-      {
-        refresh: refreshToken,
-      }
-    );
+    const response = await axios.post(`${URL}${APIV1}${AUTH}token/blacklist/`, {
+      refresh: refreshToken,
+    });
     if (response.status < 300) {
       localStorage.removeItem("refresh");
       return true;

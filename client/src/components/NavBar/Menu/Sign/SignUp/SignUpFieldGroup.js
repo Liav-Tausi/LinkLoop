@@ -305,7 +305,6 @@ const SignUpFieldGroup = () => {
                 }}
               />
             </Box>
-            <SignGoogleTemp text={"Sign up using Google"} />
           </Box>
           <SignSubmit />
         </form>

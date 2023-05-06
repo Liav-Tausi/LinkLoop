@@ -1,9 +1,14 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "../../Feed/VideoCard/VideoCardMain";
-import { getVideosOfUser } from "../../../utils/funcs/mainFuncs";
+import { deleteVideo, getVideosOfUser } from "../../../utils/funcs/mainFuncs";
+import { APP_ACTIONS, AppContext, AppDispatchContext, IsSmallScreenContext } from "../../../App/AppStates/AppReducer";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ProfileVideos = (props) => {
+  const {message, themeMode, accessToken } = useContext(AppContext)
+  const isSmallScreen = useContext(IsSmallScreenContext)
+  const dispatch = useContext(AppDispatchContext)
   const [videosUser, setVideosUser] = useState([]);
 
   useEffect(() => {
@@ -16,7 +21,20 @@ const ProfileVideos = (props) => {
       setVideosUser(retVal.data.results);
     };
     fetchVideosData();
-  }, [props.username]);
+  }, [props.username, message]);
+
+
+  const handleDeleteFile = async (accessToken, videoId) => {
+    const response = await deleteVideo(accessToken, videoId);
+    if (response) {
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "Video Has Been Deleted!"
+      })
+    }
+  }
+
+
 
   return (
     <Box
@@ -41,9 +59,40 @@ const ProfileVideos = (props) => {
               flex: "1 1 25%",
               display: "flex",
               justifyContent: "center",
+              position: "relative",
               mb: 4,
             }}
           >
+            <Box
+              onClick={() => handleDeleteFile(accessToken, element.id)}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "50%",
+                position: "absolute",
+                top: 15,
+                left: isSmallScreen ? 16 : 65,
+                zIndex: 1000,
+                px: 0.7,
+                py: 0.7,
+                backgroundColor: themeMode.navInputColor,
+                "&:hover": {
+                  backgroundColor: themeMode.navInputColorHover,
+                  cursor: "pointer",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+              }}
+            >
+              <CloseRoundedIcon
+                sx={{
+                  transform: "scale(1.2)",
+                  color: themeMode.textColor,
+                }}
+              />
+            </Box>
             <VideoCardMain
               videoId={element.id}
               videoNumber={element.video_url.split("/").pop()}

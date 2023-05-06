@@ -20,8 +20,6 @@ import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
 import { signInUser } from "../../../../../utils/funcs/authFuncs";
-import LinearProgress from "@mui/material/LinearProgress";
-import CircularProgress from "@mui/material/CircularProgress";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
 
