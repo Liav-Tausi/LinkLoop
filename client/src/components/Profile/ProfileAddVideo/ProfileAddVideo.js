@@ -2,7 +2,7 @@ import { APP_ACTIONS, AppDispatchContext } from "../../../App/AppStates/AppReduc
 import PaperBack from "../../../utils/Comps/PaperBack";
 import BlurBack from "../../../utils/Comps/BlurBack";
 import { useContext } from "react";
-import ProfileVideoANDPatchTitle from "../ProfileVideoANDPatchTitle";
+import ProfileVideoAndPatchAndPicTitle from "../ProfileVideoAndPatchAndPicTitle";
 import ProfileAddVideoField from "./ProfileAddVideoField";
 
 const ProfileAddVideo = () => {
@@ -13,13 +13,13 @@ const ProfileAddVideo = () => {
       <PaperBack
         id="addVideo"
         height={600}
-        width={555}
+        width={575}
         smallHeight={600}
         smallWidth={425}
         verySmallWidth={370}
         boxShadow={10}
       >
-        <ProfileVideoANDPatchTitle
+        <ProfileVideoAndPatchAndPicTitle
           text={"Add a New Video: "}
           func={() => dispatch({ type: APP_ACTIONS.ADD_VIDEO })}
         />

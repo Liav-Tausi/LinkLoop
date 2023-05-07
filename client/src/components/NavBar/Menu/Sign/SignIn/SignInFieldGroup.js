@@ -31,6 +31,10 @@ const SignInFieldGroup = () => {
   const [formSubmit, setFormSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const handleSetLoading = (flag) => {
+    setLoading(flag);
+  }
+
   const [signInData, setSignInData] = useState({
     signUpEmail: "",
     signUpPassword: "",
@@ -205,7 +209,7 @@ const SignInFieldGroup = () => {
                 }}
               />
             </Box>
-            <SignGoogleTemp text={"Sign in using Google"} />
+            <SignGoogleTemp handleSetLoading={(flag) => handleSetLoading(flag)} />
           </Box>
           <SignSubmit />
         </form>

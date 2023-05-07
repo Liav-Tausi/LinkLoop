@@ -19,7 +19,15 @@ export const isLoggedIn = async (accessToken) => {
 
 export const signUpWithGoogle = async (credential) => {
   try {
-    if (credential) {
+    const decodedToken = jwt_decode(credential);
+    const accessTokenResponse = await handleAccessTokenResponse([
+      decodedToken.email,
+      decodedToken.sub + decodedToken.email,
+    ]);
+    if (accessTokenResponse) {
+      localStorage.setItem("refresh", accessTokenResponse.data.refresh);
+      return accessTokenResponse.data.access;
+    } else {
       const response = await axios.post(
         `${URL}${APIV1}${AUTH}google_client_id/`,
         {
@@ -41,6 +49,7 @@ export const signUpWithGoogle = async (credential) => {
       }
     }
   } catch (error) {
+    console.log(error)
     return false;
   }
 };

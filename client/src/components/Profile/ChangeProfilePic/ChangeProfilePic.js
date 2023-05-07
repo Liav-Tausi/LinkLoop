@@ -1,31 +1,31 @@
 import BlurBack from "../../../utils/Comps/BlurBack";
 import PaperBack from "../../../utils/Comps/PaperBack";
-import ProfilePatchField from "./ProfilePatchField";
-import { APP_ACTIONS, AppDispatchContext } from "../../../App/AppStates/AppReducer";
-import { useContext } from "react";
+import {APP_ACTIONS, AppDispatchContext } from "../../../App/AppStates/AppReducer";
 import ProfileVideoAndPatchAndPicTitle from "../ProfileVideoAndPatchAndPicTitle";
+import { useContext } from "react";
+import ChangeProfilePicField from "./ChangeProfilePicField";
 
-const ProfilePatch = () => {
+const ChangeProfilePic = () => {
   const dispatch = useContext(AppDispatchContext)
   return (
     <BlurBack>
       <PaperBack
-        id="profilePatch"
-        height={666}
-        width={666}
+        id="changeProfilePic"
+        height={600}
+        width={500}
         smallHeight={600}
         smallWidth={425}
         verySmallWidth={370}
         boxShadow={10}
       >
         <ProfileVideoAndPatchAndPicTitle
-          text={"Edit Your Personal Info:"}
-          func={() => dispatch({ type: APP_ACTIONS.PROFILE_PATCH })}
+          text={"Change Your Profile Pic: "}
+          func={() => dispatch({ type: APP_ACTIONS.CHANGE_PROFILE_PIC })}
         />
-        <ProfilePatchField />
+        <ChangeProfilePicField/>
       </PaperBack>
     </BlurBack>
   );
 };
 
-export default ProfilePatch;
+export default ChangeProfilePic;

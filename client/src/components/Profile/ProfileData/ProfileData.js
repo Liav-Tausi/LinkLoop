@@ -5,10 +5,11 @@ import { Box } from "@mui/material";
 import ProfilePatch from "../ProfilePatch/ProfilePatch";
 import ProfileDataBar from "./ProfileDataBar";
 import ProfileAddVideo from "../ProfileAddVideo/ProfileAddVideo";
+import ChangeProfilePic from "../ChangeProfilePic/ChangeProfilePic";
 
 
 const ProfileData = (props) => {
-  const { accessToken, profilePatch, message, addVideo } =
+  const { accessToken, profilePatch, message, addVideo, changeProfilePic } =
     useContext(AppContext);
   const [profileData, setProfileData] = useState(null);
 
@@ -27,6 +28,7 @@ const ProfileData = (props) => {
   return (
     <>
       {profilePatch && <ProfilePatch />}
+      {changeProfilePic && <ChangeProfilePic/>}
       {addVideo && <ProfileAddVideo />}
       <Box
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

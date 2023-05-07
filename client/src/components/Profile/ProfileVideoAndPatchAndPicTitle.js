@@ -5,7 +5,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-const ProfileVideoANDPatchTitle = (props) => {
+const ProfileVideoAndPatchAndPicTitle = (props) => {
   const { themeMode } = useContext(AppContext);
 
   return (
@@ -70,4 +70,4 @@ const ProfileVideoANDPatchTitle = (props) => {
   );
 };
 
-export default ProfileVideoANDPatchTitle;
+export default ProfileVideoAndPatchAndPicTitle;

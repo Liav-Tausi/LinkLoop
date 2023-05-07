@@ -37,6 +37,7 @@ export const INITIAL_APP_STATE = {
   signInOpen: false,
   userProfileData: "",
   profilePatch: false,
+  changeProfilePic: false,
   addVideo: false,
   chooseLocation: false,
   searchBar: false,
@@ -53,6 +54,7 @@ export const APP_ACTIONS = {
   SIGN_UP_OPEN: "signUpOpen",
   SIGN_IN_OPEN: "signInOpen",
   PROFILE_PATCH: "profilePatch",
+  CHANGE_PROFILE_PIC: "changeProfilePic",
   ADD_VIDEO: "addVideo",
   CHOOSE_LOCATION: "chooseLocation",
   CONNECTED_USER: "connectedUser",
@@ -115,6 +117,12 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         profilePatch: !states.profilePatch,
+      };
+    }
+    case APP_ACTIONS.CHANGE_PROFILE_PIC: {
+      return {
+        ...states,
+        changeProfilePic: !states.changeProfilePic,
       };
     }
     case APP_ACTIONS.ADD_VIDEO: {

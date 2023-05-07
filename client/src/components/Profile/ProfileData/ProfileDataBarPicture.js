@@ -44,7 +44,7 @@ const ProfileDataBarPicture = (props) => {
                 hoverColor={themeMode.navInputColorHover}
                 func={() =>
                   dispatch({
-                    type: APP_ACTIONS.PROFILE_PATCH,
+                    type: APP_ACTIONS.CHANGE_PROFILE_PIC,
                   })
                 }
               />
