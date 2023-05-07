@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView,
 )
-from ..views.view_get_google_client_id import get_google_client_id
+from ..views.view_google_sign_up_in_ import get_google_client_id
 
 urlpatterns = [
     path(r'token/', TokenObtainPairView.as_view()),
