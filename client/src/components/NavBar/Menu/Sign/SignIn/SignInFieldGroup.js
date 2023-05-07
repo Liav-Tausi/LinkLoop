@@ -20,8 +20,6 @@ import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
 import SignGoogleTemp from "../SignGoogleTemp";
 import { signInUser } from "../../../../../utils/funcs/authFuncs";
-import LinearProgress from "@mui/material/LinearProgress";
-import CircularProgress from "@mui/material/CircularProgress";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
 
@@ -32,6 +30,10 @@ const SignInFieldGroup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleSetLoading = (flag) => {
+    setLoading(flag);
+  }
 
   const [signInData, setSignInData] = useState({
     signUpEmail: "",
@@ -207,7 +209,7 @@ const SignInFieldGroup = () => {
                 }}
               />
             </Box>
-            <SignGoogleTemp text={"Sign in using Google"} />
+            <SignGoogleTemp handleSetLoading={(flag) => handleSetLoading(flag)} />
           </Box>
           <SignSubmit />
         </form>

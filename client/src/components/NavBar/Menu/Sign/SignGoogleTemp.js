@@ -1,50 +1,47 @@
-import { Button, Box } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
+import { GoogleLogin } from "@react-oauth/google";
+import { Box } from "@mui/material";
+import { signUpWithGoogle } from "../../../../utils/funcs/authFuncs";
 import { useContext } from "react";
-import { AppContext, IsSmallScreenContext } from "../../../../App/AppStates/AppReducer";
+import { APP_ACTIONS, AppDispatchContext } from "../../../../App/AppStates/AppReducer";
 
 const SignGoogleTemp = (props) => {
-  const { themeMode } = useContext(AppContext);
-  const isSmallScreen = useContext(IsSmallScreenContext);
+  const dispatch = useContext(AppDispatchContext);
+
+  const responseMessage = async (response) => {
+    props.handleSetLoading(true);
+    const access = await signUpWithGoogle(response.credential);
+    if (!Array.isArray(access)) {
+      props.handleSetLoading(false)
+        dispatch({
+          type: APP_ACTIONS.ACCESS_TOKEN,
+          payload: access,
+        });
+        dispatch({
+          type: APP_ACTIONS.SIGN_IN_OPEN,
+        });
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "Welcome to linkLoop!",
+        });
+    } else {
+       props.handleSetLoading(false);
+    }
+  };
+
+
+
+  const errorMessage = (error) => {
+    console.log(error);
+  };
+
   return (
-    <Button
-      disableRipple={true}
-      sx={{
-        border: `solid 1px ${themeMode.buttonBorder}`,
-        display: "flex",
-        justifyContent: "space-between",
-        backgroundColor: themeMode.signUpField,
-        color: themeMode.signUpFieldText,
-        borderRadius: "40px",
-        "&:hover": {
-          backgroundColor: themeMode.signUpFieldHover,
-          boxShadow: "none",
-        },
-        "&:active": {
-          transform: "scale(0.98)",
-        },
-        boxShadow: "none",
-        px: "10px",
-      }}
-    >
-      <Box
-        style={{
-          paddingLeft: 10,
-          fontSize: isSmallScreen ? "14px" : "16px",
-          textTransform: "none",
-        }}
-      >
-        {props.text}
-      </Box>
-      <GoogleIcon
-        sx={{
-          m: 1,
-          color: themeMode.signUpFieldText,
-          fontSize: "22px",
-        }}
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <GoogleLogin
+        onSuccess={responseMessage}
+        onError={errorMessage}
       />
-    </Button>
+    </Box>
   );
-}
+};
 
 export default SignGoogleTemp;

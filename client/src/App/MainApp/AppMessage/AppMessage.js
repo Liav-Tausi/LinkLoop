@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { Alert } from "@mui/material";
 import { useContext } from "react";
-import {
-  AppContext,
-  AppDispatchContext,
-  APP_ACTIONS,
-  IsSmallScreenContext,
-} from "../../AppStates/AppReducer";
+import { AppContext, AppDispatchContext, APP_ACTIONS } from "../../AppStates/AppReducer";
 import "./AppMessage.css";
 
 const AppMessage = () => {

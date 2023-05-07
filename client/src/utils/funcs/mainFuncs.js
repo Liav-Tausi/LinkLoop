@@ -1,11 +1,11 @@
 import axios from "axios";
-import { URL } from "../config/conf";
+import { URL, APIV1, SEARCH, VIDEOS, MAIN, QUALS, PROFILE, USERS, AUTH} from "../config/conf";
 
 export const searchQuery = async (query) => {
   try {
     if (query) {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/v1/search/query/?q=${query}`
+        `${URL}${APIV1}${SEARCH}query/?q=${query}`
       );
       if (response.status < 300) {
         return response;
@@ -20,10 +20,67 @@ export const searchQuery = async (query) => {
   }
 };
 
+export const getGoogleClientId = async () => {
+  try {
+    const response = await axios.get(`${URL}${APIV1}${AUTH}google_client_id/`);
+   if (response.status < 300) {
+     return response;
+   } else {
+     return false;
+   }
+  } catch {
+    return false
+  }
+}
+
+
+export const postVideo = async (accessToken, title, topic, description, file) => {
+  try {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('topic', topic);
+    formData.append('description', description);
+    formData.append('video', file);
+
+    const response = await axios.post(
+      `${URL}${APIV1}${VIDEOS}${MAIN}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    
+    if (response.status < 300) {
+      return response;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+export const deleteVideo = async (accessToken, videoId) => {
+  const response = await axios.delete(`${URL}${APIV1}${VIDEOS}${MAIN}${videoId}/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (response.status < 300) {
+    return response;
+  } else {
+    return false;
+  }
+};
+
+
 export const getProfileData = async (accessToken, username) => {
   try {
     if (accessToken) {
-      const response = await axios.get(`${URL}/api/v1/profile/main/0/`, {
+      const response = await axios.get(`${URL}${APIV1}${PROFILE}${MAIN}0/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -35,7 +92,7 @@ export const getProfileData = async (accessToken, username) => {
       }
     } else if (username) {
       const response = await axios.get(
-        `${URL}/api/v1/profile/main/?username=${username}`
+        `${URL}${APIV1}${PROFILE}${MAIN}?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -59,7 +116,7 @@ export const patchProfileData = async (
 ) => {
   if (accessToken) {
     const response = await axios.patch(
-      `${URL}/api/v1/profile/main/0/`,
+      `${URL}${APIV1}${PROFILE}${MAIN}0/`,
       {
         first_name:
           elements[0].value.split(" ")[0].charAt(0).toUpperCase() +
@@ -107,7 +164,7 @@ export const patchProfileDataSkill = async (accessToken, skillData) => {
       const skillResponses = await Promise.all(
         skillData.map(async (skill) => {
           return await axios.post(
-            `${URL}/api/v1/quals/skill/`,
+            `${URL}${APIV1}${QUALS}skill/`,
             {
               skill_name: skill.skill_name,
               skill_level: skill.skill_level,
@@ -151,7 +208,7 @@ export const patchProfileDataSkill = async (accessToken, skillData) => {
               }
               if (response.status === 204) {
                 return await axios.post(
-                  `${URL}/api/v1/quals/skill/`,
+                  `${URL}${APIV1}${QUALS}skill/`,
                   {
                     skill_name: skill.skill_name,
                     skill_level: skill.skill_level,
@@ -194,7 +251,7 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
       const educationResponses = await Promise.all(
         educationData.map(async (education) => {
           return await axios.post(
-            `${URL}/api/v1/quals/education/`,
+            `${URL}${APIV1}${QUALS}education/`,
             {
               education_name: education.education_name,
               school_name: education.school_name,
@@ -261,7 +318,7 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
               }
               if (response.status === 204) {
                 return await axios.post(
-                  `${URL}/api/v1/quals/education/`,
+                  `${URL}${APIV1}${QUALS}education/`,
                   {
                     education_name: education.education_name,
                     education_description: education.education_description,
@@ -314,7 +371,7 @@ export const patchProfileDataExperience = async (
       const experienceResponses = await Promise.all(
         experienceData.map(async (experience) => {
           return await axios.post(
-            `${URL}/api/v1/quals/experience/`,
+            `${URL}${APIV1}${QUALS}experience/`,
             {
               experience_name: experience.experience_name,
               experience_description: experience.experience_description,
@@ -381,7 +438,7 @@ export const patchProfileDataExperience = async (
               }
               if (response.status === 204) {
                 return await axios.post(
-                  `${URL}/api/v1/quals/experience/`,
+                  `${URL}${APIV1}${QUALS}experience/`,
                   {
                     experience_name: experience.experience_name,
                     experience_description: experience.experience_description,
@@ -430,7 +487,7 @@ export const getUserQual = async (username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `${URL}/api/v1/quals/main/?username=${username}`
+        `${URL}${APIV1}${QUALS}${MAIN}?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -452,7 +509,7 @@ export const delUserQual = async (accessToken, type, name, by) => {
     }
     if (accessToken) {
       const response = await axios.delete(
-        `${URL}/api/v1/quals/${type}/0/?${type}_${by}=${name}`,
+        `${URL}${APIV1}${QUALS}${type}0/?${type}_${by}=${name}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -476,7 +533,7 @@ export const getUserData = async (accessToken, username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `${URL}/api/v1/users/data/?username=${username}`
+        `${URL}${APIV1}${USERS}data/?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -484,7 +541,7 @@ export const getUserData = async (accessToken, username) => {
         return false;
       }
     } else if (accessToken) {
-      const response = await axios.get(`${URL}/api/v1/users/data/0/`, {
+      const response = await axios.get(`${URL}${APIV1}${USERS}data/0/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -506,7 +563,7 @@ export const getVideosOfUser = async (username) => {
   try {
     if (username) {
       const response = await axios.get(
-        `${URL}/api/v1/videos/main/?username=${username}`
+        `${URL}${APIV1}${VIDEOS}${MAIN}?username=${username}`
       );
       if (response.status < 300) {
         return response;
@@ -524,14 +581,14 @@ export const getVideosOfUser = async (username) => {
 export const getFeedData = async (accessToken) => {
   try {
     if (accessToken) {
-      const response = await axios.get(`${URL}/api/v1/videos/main/`, {
+      const response = await axios.get(`${URL}${APIV1}${VIDEOS}${MAIN}`, {
         Authorization: "Bearer " + accessToken,
       });
       if (response.status < 300) {
         return await response.data.results;
       }
     } else {
-      const response = await axios.get(`${URL}/api/v1/videos/main/`);
+      const response = await axios.get(`${URL}${APIV1}${VIDEOS}${MAIN}`);
       if (response.status < 300) {
         return await response.data.results;
       }
@@ -544,7 +601,7 @@ export const getFeedData = async (accessToken) => {
 export const countLikes = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}/api/v1/videos/${videoId}/likes/`,
+      `${URL}${APIV1}${VIDEOS}${videoId}/likes/`,
     );
     const likeCount = response.data.like_count;
     if (response.status < 300) {
@@ -558,7 +615,7 @@ export const countLikes = async (videoId) => {
 export const countComments = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}/api/v1/videos/${videoId}/comments/`,
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`,
     );
     const commentCount = response.data.comment_count;
     if (response.status < 300) {
@@ -572,7 +629,7 @@ export const countComments = async (videoId) => {
 export const isLiked = async (videoId, accessToken) => {
   try {
     const response = await axios.get(
-      `${URL}/api/v1/videos/${videoId}/likes/0/`,
+      `${URL}${APIV1}${VIDEOS}${videoId}/likes/0/`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -593,7 +650,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
   try {
     if (videoId && !remove) {
       const response = await axios.post(
-        `${URL}/api/v1/videos/${videoId}/likes/`,
+        `${URL}${APIV1}${VIDEOS}${videoId}/likes/`,
         {},
         {
           headers: {
@@ -608,7 +665,7 @@ export const videoLike = async (videoId, accessToken, remove) => {
       }
     } else if (videoId && remove) {
       const response = await axios.delete(
-        `${URL}/api/v1/videos/${videoId}/likes/0/`,
+        `${URL}${APIV1}${VIDEOS}${videoId}/likes/0/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

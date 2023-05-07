@@ -27,18 +27,27 @@ const App = () => {
     accessToken,
     chooseLocation,
     addVideo,
+    changeProfilePic,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
 
+  console.log(changeProfilePic);
+
   useEffect(() => {
-    if (signUpOpen || signInOpen || profilePatch || addVideo) {
+    if (
+      signUpOpen ||
+      signInOpen ||
+      profilePatch ||
+      addVideo ||
+      changeProfilePic
+    ) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [signUpOpen, signInOpen, profilePatch, addVideo]);
+  }, [signUpOpen, signInOpen, profilePatch, addVideo, changeProfilePic]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,8 +122,12 @@ const App = () => {
         dispatch({
           type: APP_ACTIONS.ADD_VIDEO,
         });
-      }
-    }
+      } else if (ref.current.id === "changeProfilePic" && changeProfilePic) {
+        dispatch({
+          type: APP_ACTIONS.CHANGE_PROFILE_PIC,
+        });
+      } 
+    } 
   };
 
   useEffect(() => {
