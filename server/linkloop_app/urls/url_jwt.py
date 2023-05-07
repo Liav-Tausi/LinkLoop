@@ -5,8 +5,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView,
 )
+from ..views.view_get_google_client_id import get_google_client_id
+
 urlpatterns = [
     path(r'token/', TokenObtainPairView.as_view()),
     path(r'token/refresh/', TokenRefreshView.as_view()),
     path(r'token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
+    path(r'google_client_id/', get_google_client_id, name='google_client_id')
 ]
