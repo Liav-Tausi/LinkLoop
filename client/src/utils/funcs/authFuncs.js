@@ -1,5 +1,6 @@
 import axios from "axios";
 import { URL, APIV1, AUTH} from "../config/conf";
+import jwt_decode from "jwt-decode";
 
 export const isLoggedIn = async (accessToken) => {
   const access = accessToken;
@@ -14,6 +15,36 @@ export const isLoggedIn = async (accessToken) => {
     }
   }
 };
+
+
+export const signUpWithGoogle = async (credential) => {
+  try {
+    if (credential) {
+      const response = await axios.post(
+        `${URL}${APIV1}${AUTH}google_client_id/`,
+        {
+            credential: credential,
+        }
+      );
+      if (response.status < 300) {
+          const decodedToken = jwt_decode(credential);
+          const accessTokenResponse = await handleAccessTokenResponse([
+            decodedToken.email,
+            decodedToken.sub + decodedToken.email,
+        ]);
+        if (accessTokenResponse) {
+          localStorage.setItem("refresh", accessTokenResponse.data.refresh);
+        }
+        return accessTokenResponse.data.access;
+      } else {
+        return false;
+      }
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
 
 export const handleRefreshTokenResponse = async (refreshToken) => {
   try {

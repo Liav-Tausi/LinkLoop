@@ -22,7 +22,6 @@ import {
 } from "../../../../../utils/funcs/formValidators";
 import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
-import SignGoogleTemp from "../SignGoogleTemp";
 import { signUpUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
