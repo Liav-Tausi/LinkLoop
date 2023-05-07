@@ -12,16 +12,21 @@ class SignUpUserModelViewSet(mixins.CreateModelMixin, GenericViewSet):
     queryset = User.objects.all()
     serializer_class = SignUpUserSerializer
     permission_classes = [AllowAny]
+    format_kwarg = None
 
     def create(self, request, *args, **kwargs):
-        is_staff = request.data.get('is_staff', False)
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        is_staff = self.request.data.get('is_staff', False)
         if is_staff and not request.user.is_staff:
             return Response({'detail': 'You do not have permission to create a staff user.'},
                             status=status.HTTP_403_FORBIDDEN)
         else:
             self.permission_classes = [AllowAny]
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-        return super().create(request, *args, **kwargs)
 
 
 class UserFilter(django_filters.FilterSet):
