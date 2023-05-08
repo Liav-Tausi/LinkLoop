@@ -41,9 +41,9 @@ class Video(models.Model):
         db_table = "video"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
-    video_id_name = models.CharField(max_length=32, unique=True, editable=False, default='')
-    video_url = models.URLField(verbose_name="video_url", blank=False, null=False)
-    topic = models.CharField(db_column="topic", blank=False, null=False, max_length=128,
+    video_id_name = models.CharField(max_length=36, unique=True, editable=False, default='')
+    video_url = models.URLField(verbose_name="video_url", blank=False, null=False, max_length=128)
+    topic = models.CharField(db_column="topic", blank=False, null=False, max_length=64,
                              validators=[MinLengthValidator(1)])
     title = models.CharField(db_column="title", blank=False, null=False, max_length=64,
                              validators=[MinLengthValidator(1)])
@@ -52,10 +52,6 @@ class Video(models.Model):
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
-    def save(self, *args, **kwargs):
-        if not self.video_id_name:
-            self.video_id_name = str(uuid.uuid4().hex)[:32]
-        super(Video, self).save(*args, **kwargs)
 
 
 class VideoLike(models.Model):

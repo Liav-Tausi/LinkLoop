@@ -1,3 +1,6 @@
+import os
+import uuid
+
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -5,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import django_filters
+
+from ..boto3.upload_file import upload_file_to_s3
 from ..models import Profile, ProfileImpression
 
 from ..serializers.serializer_profile import (
@@ -36,7 +41,6 @@ class ProfileModelViewSet(ModelViewSet):
     allowed_methods = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT']
 
     def create(self, request, *args, **kwargs):
-
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -68,17 +72,31 @@ class ProfileModelViewSet(ModelViewSet):
         partial = kwargs.pop('partial', False)
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id).first()
-        serializer = self.get_serializer(profile, data=request.data, partial=partial)
+        data = request.data.copy()
+        print(data)
+
+        if 'profile_pic' in data:
+            img_unique_id = uuid.uuid1()
+            img_file = data.pop('profile_pic')[0]
+            file, ext = os.path.splitext(img_file.name)
+            if img_file.size > 307200:
+                return Response({'error': 'File size is too large'}, status=status.HTTP_400_BAD_REQUEST)
+            data["profile_picture"] = upload_file_to_s3(
+                filename=img_file.file,
+                bucket_name='linkloop',
+                obj_key=f'profile_pics/{img_unique_id}{ext}')
+
+        serializer = self.get_serializer(profile, data=data, partial=partial)
         if not serializer.is_valid():
             serializer.is_valid(raise_exception=True)
 
         user = get_user_model().objects.get(pk=user_id)
-        first_name, last_name = request.data.get('first_name'), request.data.get('last_name')
-        if not first_name and not last_name:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        user.first_name = first_name
-        user.last_name = last_name
+        if 'profile_pic' in data:
+            first_name, last_name = request.data.get('first_name'), request.data.get('last_name')
+            if not first_name and not last_name:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            user.first_name = first_name
+            user.last_name = last_name
         user.save()
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
