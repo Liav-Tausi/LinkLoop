@@ -14,6 +14,7 @@ const Feed = () => {
   const dispatch = useContext(AppDispatchContext);
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState(null);
+  console.log(video)
 
   useEffect(() => {
     const fetchVideo = async () => {

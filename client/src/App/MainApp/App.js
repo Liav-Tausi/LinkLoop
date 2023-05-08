@@ -33,8 +33,6 @@ const App = () => {
   const ref = useContext(Ref);
   const under900 = useMediaQuery("(max-width:900px)");
 
-  console.log(changeProfilePic);
-
   useEffect(() => {
     if (
       signUpOpen ||

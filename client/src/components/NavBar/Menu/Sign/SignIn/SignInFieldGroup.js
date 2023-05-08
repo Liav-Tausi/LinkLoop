@@ -54,6 +54,7 @@ const SignInFieldGroup = () => {
     setLoading(true);
     setFormSubmit(true);
     if (errors.passwordError || errors.emailError) {
+      setLoading(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -78,8 +79,8 @@ const SignInFieldGroup = () => {
             payload: "Welcome back to linkLoop!",
           });
         } else {
-          setLoading(false);
           setFormSubmit(false);
+          setLoading(false);
           dispatch({
             type: APP_ACTIONS.MESSAGE,
             payload: "Sorry, we couldn't find this account",
@@ -154,7 +155,7 @@ const SignInFieldGroup = () => {
               <EmailRounded sx={{ color: themeMode.textColor, pr: 1 }} />
             </SignFieldTemp>
             {errors.emailError && formSubmit && (
-              <SignErrorTemp text={"Invalid Email"} top={"29.5%"} />
+              <SignErrorTemp text={"Invalid Email"} top={"33.5%"} />
             )}
             <SignFieldTemp
               type={showPassword ? "text" : "password"}
@@ -183,7 +184,7 @@ const SignInFieldGroup = () => {
             {errors.passwordError && formSubmit && (
               <SignErrorTemp
                 text={"must be at least 8 characters"}
-                top={"39.7%"}
+                top={"43%"}
               />
             )}
             <Box

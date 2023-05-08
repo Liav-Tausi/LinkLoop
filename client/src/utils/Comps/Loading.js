@@ -18,7 +18,7 @@ const Loading = () => {
           height: "80vh",
         }}
       >
-        <Box position="relative" display="inline-flex">
+        <Box position="relative" display="inline-flex" sx={{zIndex: 9999}}>
           <CircularProgress
             thickness={2}
             size="6.5rem"

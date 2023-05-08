@@ -36,6 +36,7 @@ const VideoCardData = (props) => {
       setLiked(false);
     }
   }, [accessToken]);
+  
 
   useEffect(() => {
     const getLikedStatus = async () => {
@@ -56,6 +57,7 @@ const VideoCardData = (props) => {
     };
     getComments();
   }, [liked]);
+
 
   const handleLike = async () => {
     if (accessToken) {
@@ -175,6 +177,7 @@ const VideoCardData = (props) => {
                       <img
                         style={{
                           width: "100%",
+                          height: "100%",
                           borderRadius: "50%",
                         }}
                         src={props.userProfile.profile_picture}
