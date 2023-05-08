@@ -25,31 +25,16 @@ class BaseVideoSerializer(serializers.ModelSerializer):
 
 
 class CreateVideoSerializer(serializers.ModelSerializer):
+    video_id_name = serializers.UUIDField()  # add this line
+
     class Meta:
         model = Video
-        fields = '__all__'
-
-    # def validate(self, attrs):
-    #     video_url = attrs.get('video_url')
-    #     try:
-    #         response = requests.head(video_url)
-    #         response.raise_for_status()
-    #
-    #         ext = os.path.splitext(video_url)[1]
-    #         if ext.lower() not in ['.mp4', '.mov', '.avi', '.mkv']:
-    #             raise ValidationError({"video": "Invalid file extension."})
-    #
-    #         video = VideoFileClip(video_url)
-    #         duration = video.duration
-    #         if duration > 30:
-    #             raise ValidationError({"video": "Video must be less than 30 seconds."})
-    #     except (requests.exceptions.RequestException, IOError, OSError, ValueError) as e:
-    #         raise ValidationError({"video": "Invalid video URL."})
-    #
-    #     return attrs
+        fields = ('video_id_name', 'video_url', 'title', 'topic', 'description', 'user')
 
     def create(self, validated_data):
+        print(validated_data)
         video = Video.objects.create(
+            video_id_name=validated_data.get('video_id_name'),
             video_url=validated_data.get('video_url'),
             title=validated_data.get('title'),
             topic=validated_data.get('topic'),
@@ -57,6 +42,8 @@ class CreateVideoSerializer(serializers.ModelSerializer):
             user=validated_data.get('user')
         )
         return video
+
+
 
 
 class LikeVideoSerializer(serializers.ModelSerializer):
