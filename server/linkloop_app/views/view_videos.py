@@ -49,7 +49,6 @@ class VideoCommentFilter(django_filters.FilterSet):
         fields = ['username']
 
 
-
 class VideosModelViewSet(ModelViewSet):
     queryset = Video.objects.all()
     permission_classes = [AllowAny]
@@ -80,6 +79,7 @@ class VideosModelViewSet(ModelViewSet):
             bucket_name='linkloop',
             obj_key=f'videos/{video_unique_id}{ext}')
         data_copy["user"] = request.user.pk
+        data_copy["video_id_name"] = video_unique_id
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
