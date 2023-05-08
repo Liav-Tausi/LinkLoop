@@ -89,7 +89,7 @@ const SearchBar = () => {
       } else if (option.username) {
         navigate(`/profile/${option.username}`);
       } else if (option.idName) {
-        navigate(`/feed/${option.idName}`);
+        navigate(`/${option.idName}`);
       } else {
         dispatch({
           type: APP_ACTIONS.MESSAGE,

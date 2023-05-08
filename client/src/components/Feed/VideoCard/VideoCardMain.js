@@ -11,8 +11,6 @@ const VideoCardMain = (props) => {
   const { themeMode, connectedUser, accessToken } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
-  console.log(window.location.href.split("/")[3]);
-
   return (
     <Paper
       sx={{
