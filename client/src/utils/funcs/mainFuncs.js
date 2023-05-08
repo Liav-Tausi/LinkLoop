@@ -20,6 +20,31 @@ export const searchQuery = async (query) => {
   }
 };
 
+export const changeProfilePic = async (accessToken, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("profile_pic", file);
+
+    const response = await axios.patch(
+      `${URL}${APIV1}${PROFILE}${MAIN}0/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.status < 300) {
+      return response;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
 export const getGoogleClientId = async () => {
   try {
     const response = await axios.get(`${URL}${APIV1}${AUTH}google_client_id/`);
@@ -268,6 +293,7 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
         })
       );
       if (educationResponses.every((response) => response.status < 300)) {
+        console.log('hey')
         return true;
       } else {
         return false;
@@ -475,8 +501,10 @@ export const patchProfileDataExperience = async (
             "experience with this experience description already exists."
         )
       ) {
+        console.log('hey')
         return true;
       } else {
+        console.log("heyq2f");
         return false;
       }
     }
@@ -509,7 +537,7 @@ export const delUserQual = async (accessToken, type, name, by) => {
     }
     if (accessToken) {
       const response = await axios.delete(
-        `${URL}${APIV1}${QUALS}${type}0/?${type}_${by}=${name}`,
+        `${URL}${APIV1}${QUALS}${type}/0/?${type}_${by}=${name}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

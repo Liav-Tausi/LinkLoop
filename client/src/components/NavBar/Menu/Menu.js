@@ -32,6 +32,10 @@ const Menu = () => {
     if (refreshToken) {
       await logOut(refreshToken);
       dispatch({
+        type: APP_ACTIONS.CONNECTED_USER,
+        payload: {},
+      });
+      dispatch({
         type: APP_ACTIONS.ACCESS_TOKEN,
         payload: "",
       });
@@ -39,6 +43,7 @@ const Menu = () => {
         type: APP_ACTIONS.MESSAGE,
         payload: "Logged Out Successfully!",
       });
+
     } else {
       dispatch({
         type: APP_ACTIONS.MESSAGE,

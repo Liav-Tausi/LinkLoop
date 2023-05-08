@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 import { getProfileData, getUserData } from "../../../utils/funcs/mainFuncs";
 
 const ProfilePic = () => {
-  const { accessToken, themeMode, connectedUser } = useContext(AppContext);
+  const { accessToken, themeMode, connectedUser, message } =
+    useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
-
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ProfilePic = () => {
       setProfileData(retVal.data);
     };
     fetchProfileData();
-  }, [accessToken]);
+  }, [accessToken, message]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,7 +41,7 @@ const ProfilePic = () => {
           {accessToken && profileData && profileData.profile_picture ? (
             <Box sx={{ width: 37, height: 37 }}>
               <img
-                style={{ width: "100%", borderRadius: "50%" }}
+                style={{ width: "101%", height: "100%", borderRadius: "50%" }}
                 src={profileData.profile_picture}
                 alt="profile picture"
               />

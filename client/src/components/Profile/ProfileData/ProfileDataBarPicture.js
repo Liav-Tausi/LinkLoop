@@ -14,6 +14,8 @@ const ProfileDataBarPicture = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
 
+  console.log(connectedUser?.username === props.username);
+
   return (
     <Box
       sx={{
@@ -28,28 +30,13 @@ const ProfileDataBarPicture = (props) => {
           <img
             style={{
               position: "relative",
-              width: isSmallScreen ? "7em" : "10em",
+              width: isSmallScreen ? "7.2em" : "10.2em",
+              height: isSmallScreen ? "7em" : "10em",
               borderRadius: "50%",
             }}
             src={props.profileData.profile_picture}
             alt="profile picture"
           />
-          {connectedUser?.username === props.username && (
-            <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
-              <ProfileEditButton
-                sizeX={0.7}
-                sizeY={0.65}
-                scale={"scale(0.9)"}
-                background={themeMode.navInputColor}
-                hoverColor={themeMode.navInputColorHover}
-                func={() =>
-                  dispatch({
-                    type: APP_ACTIONS.CHANGE_PROFILE_PIC,
-                  })
-                }
-              />
-            </Box>
-          )}
         </>
       ) : (
         <Box
@@ -70,6 +57,22 @@ const ProfileDataBarPicture = (props) => {
               height: "110%",
               color: themeMode.anonymousPicture,
             }}
+          />
+        </Box>
+      )}
+      {connectedUser?.username === props.username && (
+        <Box sx={{ position: "absolute", right: 28, bottom: 15 }}>
+          <ProfileEditButton
+            sizeX={0.7}
+            sizeY={0.65}
+            scale={"scale(0.9)"}
+            background={themeMode.navInputColor}
+            hoverColor={themeMode.navInputColorHover}
+            func={() =>
+              dispatch({
+                type: APP_ACTIONS.CHANGE_PROFILE_PIC,
+              })
+            }
           />
         </Box>
       )}
