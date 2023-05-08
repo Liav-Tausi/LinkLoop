@@ -3,10 +3,7 @@ import requests
 from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from moviepy.video.io.VideoFileClip import VideoFileClip
-
 from .serializer_profile import ProfileSerializer
-from .serializer_user import UserSerializer
 from ..models import (
     Video,
     VideoLike,
@@ -54,6 +51,7 @@ class CreateVideoSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         video = Video.objects.create(
             video_url=validated_data.get('video_url'),
+            title=validated_data.get('title'),
             topic=validated_data.get('topic'),
             description=validated_data.get('description'),
             user=validated_data.get('user')

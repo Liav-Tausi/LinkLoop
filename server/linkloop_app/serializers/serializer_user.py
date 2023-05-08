@@ -5,7 +5,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
 
-
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -60,6 +59,3 @@ class SignUpUserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
-
-
-

@@ -1,3 +1,5 @@
+import os.path
+import uuid
 import django_filters
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -5,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from ..boto3.delete_file import delete_file_from_s3
+from ..boto3.upload_file import upload_file_to_s3
 from ..models import (
     Video,
     VideoLike,
@@ -66,6 +70,15 @@ class VideosModelViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
+        video_unique_id = uuid.uuid1()
+        video_file = request.data['video']
+        file, ext = os.path.splitext(video_file.name)
+        if video_file.size > 1650000:
+            return Response({'error': 'File size is too large'}, status=status.HTTP_400_BAD_REQUEST)
+        data_copy["video_url"] = upload_file_to_s3(
+            filename=video_file.file,
+            bucket_name='linkloop',
+            obj_key=f'videos/{video_unique_id}{ext}')
         data_copy["user"] = request.user.pk
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
@@ -88,6 +101,23 @@ class VideosModelViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_class[self.action]
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        video_id = kwargs['pk']
+        user_id = request.user.pk
+        video = Video.objects.filter(id=video_id, user=user_id)
+        video_url = video.values('video_url')[0]["video_url"]
+        videosplit2 = video_url.split("/")[2]
+        bucket_name = videosplit2.split(".")[0]
+        obj_key = "videos/" + video_url.split("/")[4]
+        print(delete_file_from_s3(bucket_name=bucket_name, obj_key=obj_key))
+        if not video.exists():
+            return Response({'detail': 'video does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.perform_destroy(video)
+        return Response({'detail': 'You have deleted this video'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class LikesModelViewSet(ModelViewSet):
