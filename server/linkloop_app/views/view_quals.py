@@ -210,7 +210,6 @@ class ExperienceModelViewSet(ModelViewSet):
             experience = Experience.objects.filter(user=user_id, experience_description=experience_description)
         else:
             experience = Experience.objects.filter(user=user_id, experience_name=experience_name)
-        print(experience)
         if not experience:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
