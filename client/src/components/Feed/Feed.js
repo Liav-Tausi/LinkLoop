@@ -1,46 +1,68 @@
 import { Box, Paper, Skeleton } from "@mui/material";
 import {
-  APP_ACTIONS,
   AppContext,
   AppDispatchContext,
 } from "../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "./VideoCard/VideoCardMain";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getFeedData } from "../../utils/funcs/mainFuncs";
 
 const Feed = () => {
-  const { feedData, themeMode } = useContext(AppContext);
+  const { themeMode, accessToken } = useContext(AppContext);
   const { video: videoId } = useParams();
   const dispatch = useContext(AppDispatchContext);
+  const [pageNum, setPageNum] = useState(1);
   const [videos, setVideos] = useState([]);
   const [video, setVideo] = useState(null);
-  console.log(video)
+  const [nextVideoId, setNextVideoId] = useState(null);
+  const [previousVideoId, setPreviousVideoId] = useState(null);
 
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchVideos = async () => {
       try {
-        const data = await feedData;
-        if (data) {
-          setVideos(data);
-        }
-        const foundVideo = data.find(
-          (element) => element.video_id_name === videoId
-        );
-        if (foundVideo) {
-          setVideo(foundVideo);
-        } else {
-          setVideo(null);
-          dispatch({
-            type: APP_ACTIONS.MESSAGE,
-            payload: "ERROR! No Video Found",
-          });
-        }
+        const data = await getFeedData(accessToken, pageNum);
+        setVideos((prevVideos) => [...prevVideos, ...Object.values(data)]);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchVideo();
-  }, [feedData, videoId]);
+
+    fetchVideos();
+  }, [accessToken, pageNum]);
+
+
+  useEffect(() => {
+    const currentIndex = videos.findIndex(
+      (element) => element.video_id_name === videoId
+    );
+
+    if (currentIndex >= 0 && currentIndex < videos.length - 1) {
+      if (videos[currentIndex - 1]) {
+        setPreviousVideoId(videos[currentIndex - 1].video_id_name);
+      }
+      setNextVideoId(videos[currentIndex + 1].video_id_name);
+    } else if (currentIndex === videos.length - 1 && videos.length % 5 === 0) {
+      setPageNum((prevPageNum) => prevPageNum + 1);
+    } else {
+      setNextVideoId(null);
+    }
+
+    if (currentIndex > 0) {
+      setPreviousVideoId(videos[currentIndex - 1].video_id_name);
+    } else {
+      setPreviousVideoId(null);
+    }
+
+    const foundVideo = videos.find(
+      (element) => element.video_id_name === videoId
+    );
+    if (foundVideo) {
+      setVideo(foundVideo);
+    } else {
+      setVideo(null);
+    }
+  }, [videoId, videos, dispatch]);
 
   return (
     <Box
@@ -60,6 +82,8 @@ const Feed = () => {
           userProfile={video.profile}
           description={video.description}
           date={video.created_time}
+          nextVideo={nextVideoId}
+          previousVideo={previousVideoId}
         />
       ) : (
         <Paper

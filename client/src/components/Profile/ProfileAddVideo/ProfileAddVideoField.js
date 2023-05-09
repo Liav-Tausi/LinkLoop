@@ -82,6 +82,7 @@ const ProfileAddVideoField = () => {
   };
 
   const handleDeleteFile = () => {
+    setLoading(true)
     setFile("")
     setVideoUrl("")
   }
@@ -290,9 +291,9 @@ const ProfileAddVideoField = () => {
                         required
                       />
                       <Box
-                      onClick={handleDeleteFile}
+                        onClick={handleDeleteFile}
                         sx={{
-                          display: "flex",
+                          display: loading ? "none" : "flex",
                           justifyContent: "center",
                           alignItems: "center",
                           borderRadius: "50%",

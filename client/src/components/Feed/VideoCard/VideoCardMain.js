@@ -43,7 +43,7 @@ const VideoCardMain = (props) => {
         ) : (
           <>
             {connectedUser?.username === props.username &&
-              window.location.href.split("/")[3] === "profile" &&(
+              window.location.href.split("/")[3] === "profile" && (
                 <Box
                   onClick={() =>
                     props.handleDeleteFile(accessToken, props.videoId)
@@ -55,7 +55,7 @@ const VideoCardMain = (props) => {
                     left: isSmallScreen ? 12 : 15,
                     zIndex: 1000,
                     p: 0.7,
-                    display: "flex",
+                    display: props.isLoading? "none": "flex",
                     justifyContent: "center",
                     backgroundColor: themeMode.navInputColor,
                     "&:hover": {
@@ -83,6 +83,8 @@ const VideoCardMain = (props) => {
               title={props.title}
               videoNumber={props.videoNumber}
               videoId={props.videoId}
+              nextVideo={props.nextVideo}
+              previousVideo={props.previousVideo}
             />
           </>
         )}

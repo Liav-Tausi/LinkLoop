@@ -23,7 +23,7 @@ const NotFound = () => {
           <img
             src={AppLogo}
             alt="linkloop logo"
-            style={{ width: "100%", height: "100%", transform: isSmallScreen? "scale(1)":"scale(1.5)" }}
+            style={{ width: "100%", height: "100%", transform: isSmallScreen? "scale(1)": "scale(1.5)" }}
           ></img>
         </Link>
         <Box

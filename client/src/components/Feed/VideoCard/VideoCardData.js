@@ -21,6 +21,7 @@ import {
 import SignIn from "../../NavBar/Menu/Sign/SignIn/SignIn";
 import VideoIcons from "./VideoIcons";
 import { Link } from "react-router-dom";
+import VideoUpDownButtons from "./VideoUpDownButtons";
 
 const VideoCardData = (props) => {
   const { themeMode, accessToken, signInOpen } = useContext(AppContext);
@@ -30,6 +31,7 @@ const VideoCardData = (props) => {
   const [amountLikes, setAmountLikes] = useState(0);
   const [amountComments, setAmountComments] = useState(0);
   const [load, setLoad] = useState(false);
+  const urlParts = window.location.href.split("/")[3];
 
   useEffect(() => {
     if (!accessToken) {
@@ -108,6 +110,8 @@ const VideoCardData = (props) => {
             src={props.videoUrl}
             controls
             required
+            autoPlay={urlParts === "profile" ? false : true}
+            loop
           ></video>
         </Box>
         <Box
@@ -147,6 +151,10 @@ const VideoCardData = (props) => {
         >
           {props.date?.split("T")[0]}
         </Box>
+        <VideoUpDownButtons
+          nextVideo={props.nextVideo}
+          previousVideo={props.previousVideo}
+        />
         <Box
           sx={{
             position: "absolute",
@@ -198,16 +206,16 @@ const VideoCardData = (props) => {
               </Box>
               <Box
                 sx={{
-                  mt: 1,
-                  top: 40,
-                  right: 2,
-                  whiteSpace: "nowrap",
                   position: "absolute",
+                  top: "40px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  whiteSpace: "nowrap",
                   color: themeMode.textColor,
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "8px",
-                  textShadow: 0,
+                  boxShadow: "none",
                 }}
               >
                 {`${props.userProfile?.user?.first_name} ${props.userProfile?.user?.last_name}`}

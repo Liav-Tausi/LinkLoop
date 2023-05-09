@@ -5,7 +5,7 @@ import {
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
 
-const VideoIcons = ({ children }) => {
+const VideoIcons = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   return (
@@ -15,7 +15,7 @@ const VideoIcons = ({ children }) => {
         display: "flex",
         justifyContent: "center",
         px: 1,
-        py: 1.14,
+        py: props.arrow? 1: 1.14,
         opacity: isSmallScreen ? 0.96 : 1,
         backgroundColor: themeMode.navInputColor,
         borderRadius: "50%",
@@ -24,7 +24,7 @@ const VideoIcons = ({ children }) => {
         },
       }}
     >
-      {children}
+      {props.children}
     </Box>
   );
 };

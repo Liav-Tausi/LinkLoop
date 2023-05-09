@@ -12,7 +12,7 @@ import ProfilePic from "./ProfilePic/ProfilePic";
 import SearchBarSmallIcon from "./SearchBar/SearchSmallIcon";
 import ToolTip from "../../utils/Comps/ToolTip";
 
-const NavBar = () => {
+const NavBar = (props) => {
   const { themeMode, message, accessToken } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
@@ -49,7 +49,7 @@ const NavBar = () => {
           }}
         >
           <ToolTip label={"LinkLoop"} where={"35%"}>
-            <Logo />
+            <Logo navTo={props.navTo} />
           </ToolTip>
           <SearchBar />
           <Box

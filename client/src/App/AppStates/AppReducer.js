@@ -10,14 +10,10 @@ const awaitIsLoggedIn = async () => {
   return await isLoggedIn("");
 };
 
-const awaitGetFeedData = async () => {
-  return await getFeedData(awaitIsLoggedIn());
-};
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
   connectedUser: null,
-  feedData: awaitGetFeedData(),
   themeMode: localStorage.getItem("preferredTheme")
     ? localStorage.getItem("preferredTheme") === "2"
       ? DARK_THEME
@@ -46,7 +42,6 @@ export const INITIAL_APP_STATE = {
 export const APP_ACTIONS = {
   APP_LOADED: "appLoaded",
   ACCESS_TOKEN: "accessToken",
-  FEED_DATA: "feedData",
   MESSAGE: "message",
   THEME_MODE: "themeMode",
   FORCE_THEME_MODE: "forceThemeMode",
@@ -79,12 +74,6 @@ export const AppReducer = (states, action) => {
       return {
         ...states,
         searchBar: !states.searchBar,
-      };
-    }
-    case APP_ACTIONS.FEED_DATA: {
-      return {
-        ...states,
-        feedData: action.payload,
       };
     }
     case APP_ACTIONS.MESSAGE: {

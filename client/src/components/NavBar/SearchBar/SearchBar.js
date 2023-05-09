@@ -17,12 +17,12 @@ import {
 import SearchBarSmallIcon from "./SearchSmallIcon";
 import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { searchQuery } from "../../../utils/funcs/mainFuncs";
+import { postSearchQuery, searchQuery } from "../../../utils/funcs/mainFuncs";
 import { useNavigate } from "react-router-dom";
 import ToolTip from "../../../utils/Comps/ToolTip";
 
 const SearchBar = () => {
-  const { themeMode, searchBar } = useContext(AppContext);
+  const { themeMode, searchBar, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [searchedData, setSearchedData] = useState([]);
@@ -78,7 +78,7 @@ const SearchBar = () => {
     search();
   }, [searchValue]);
 
-  const handleSubmit = (event, option) => {
+  const handleSubmit = async (event, option) => {
     const foundObject = searchedData.find((obj) => obj.name === option);
     const username = foundObject ? foundObject.username : null;
 
@@ -86,10 +86,13 @@ const SearchBar = () => {
     if (option) {
       if (username) {
         navigate(`/profile/${username}`);
+        await postSearchQuery(accessToken, username);
       } else if (option.username) {
         navigate(`/profile/${option.username}`);
+        await postSearchQuery(accessToken, option.username);
       } else if (option.idName) {
         navigate(`/${option.idName}`);
+        await postSearchQuery(accessToken, option.idName);
       } else {
         dispatch({
           type: APP_ACTIONS.MESSAGE,
@@ -119,6 +122,26 @@ const SearchBar = () => {
           disablePortal
           id={"combo-box-demo"}
           options={searchedData}
+          ListboxProps={{
+            sx: {
+              maxHeight: "320px",
+              "&::-webkit-scrollbar": {
+                borderRadius: "3px",
+                width: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                borderRadius: "3px",
+                background: themeMode.feed,
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: themeMode.signUpFieldHover,
+                borderRadius: "3px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: themeMode.appTheme,
+              },
+            },
+          }}
           getOptionLabel={(option) => option.name || ""}
           renderOption={(props, option) => {
             return (
@@ -252,7 +275,7 @@ const SearchBar = () => {
                       <SearchBarSmallIcon inSearch={true} />
                     </InputAdornment>
                   }
-                />
+                ></InputBase>
               </ToolTip>
             );
           }}

@@ -1,5 +1,15 @@
 import axios from "axios";
-import { URL, APIV1, SEARCH, VIDEOS, MAIN, QUALS, PROFILE, USERS, AUTH} from "../config/conf";
+import {
+  URL,
+  APIV1,
+  SEARCH,
+  VIDEOS,
+  MAIN,
+  QUALS,
+  PROFILE,
+  USERS,
+  AUTH,
+} from "../config/conf";
 
 export const searchQuery = async (query) => {
   try {
@@ -14,6 +24,106 @@ export const searchQuery = async (query) => {
       }
     } else {
       return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
+export const postSearchQuery = async (accessToken, query) => {
+  try {
+    if (accessToken) {
+      const response = await axios.post(
+        `${URL}${APIV1}${SEARCH}search_query/`,
+        {
+          search_query: query,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      const response = await axios.post(
+        `${URL}${APIV1}${SEARCH}search_query/`,
+        {
+          search_query: query,
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    }
+  } catch {
+    return false;
+  }
+};
+
+export const postVideoImpression = async (accessToken, videoId) => {
+  try {
+    if (accessToken) {
+      const response = await axios.post(
+        `${URL}${APIV1}${SEARCH}${videoId}/impressions/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      const response = await axios.post(
+        `${URL}${APIV1}${SEARCH}${videoId}/impressions/`
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    }
+  } catch {
+    return false;
+  }
+};
+
+
+export const postProfileImpression = async (accessToken, username) => {
+  try {
+    if (accessToken) {
+      const response = await axios.post(
+        `${URL}${APIV1}${PROFILE}impression/?username=${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      const response = await axios.post(
+        `${URL}${APIV1}${PROFILE}impression/?username=${username}`
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
     }
   } catch {
     return false;
@@ -48,36 +158,41 @@ export const changeProfilePic = async (accessToken, file) => {
 export const getGoogleClientId = async () => {
   try {
     const response = await axios.get(`${URL}${APIV1}${AUTH}google_client_id/`);
-   if (response.status < 300) {
-     return response;
-   } else {
-     return false;
-   }
+    if (response.status < 300) {
+      return response;
+    } else {
+      return false;
+    }
   } catch {
-    return false
+    return false;
   }
-}
+};
 
-
-export const postVideo = async (accessToken, title, topic, description, file) => {
+export const postVideo = async (
+  accessToken,
+  title,
+  topic,
+  description,
+  file
+) => {
   try {
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('topic', topic);
-    formData.append('description', description);
-    formData.append('video', file);
+    formData.append("title", title);
+    formData.append("topic", topic);
+    formData.append("description", description);
+    formData.append("video", file);
 
     const response = await axios.post(
       `${URL}${APIV1}${VIDEOS}${MAIN}`,
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,
         },
       }
     );
-    
+
     if (response.status < 300) {
       return response;
     } else {
@@ -86,21 +201,23 @@ export const postVideo = async (accessToken, title, topic, description, file) =>
   } catch (error) {
     return false;
   }
-}
+};
 
 export const deleteVideo = async (accessToken, videoId) => {
-  const response = await axios.delete(`${URL}${APIV1}${VIDEOS}${MAIN}${videoId}/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await axios.delete(
+    `${URL}${APIV1}${VIDEOS}${MAIN}${videoId}/`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
   if (response.status < 300) {
     return response;
   } else {
     return false;
   }
 };
-
 
 export const getProfileData = async (accessToken, username) => {
   try {
@@ -293,7 +410,7 @@ export const patchProfileDataEducation = async (accessToken, educationData) => {
         })
       );
       if (educationResponses.every((response) => response.status < 300)) {
-        console.log('hey')
+        console.log("hey");
         return true;
       } else {
         return false;
@@ -501,7 +618,7 @@ export const patchProfileDataExperience = async (
             "experience with this experience description already exists."
         )
       ) {
-        console.log('hey')
+        console.log("hey");
         return true;
       } else {
         console.log("heyq2f");
@@ -606,17 +723,22 @@ export const getVideosOfUser = async (username) => {
   }
 };
 
-export const getFeedData = async (accessToken) => {
+export const getFeedData = async (accessToken, page,) => {
   try {
     if (accessToken) {
-      const response = await axios.get(`${URL}${APIV1}${VIDEOS}${MAIN}`, {
-        Authorization: "Bearer " + accessToken,
-      });
+      const response = await axios.get(
+        `${URL}${APIV1}${VIDEOS}${MAIN}?page=${page}&page_size=5`,
+        {
+          Authorization: "Bearer " + accessToken,
+        }
+      );
       if (response.status < 300) {
         return await response.data.results;
       }
     } else {
-      const response = await axios.get(`${URL}${APIV1}${VIDEOS}${MAIN}`);
+      const response = await axios.get(
+        `${URL}${APIV1}${VIDEOS}${MAIN}?page=${page}&page_size=5`
+      );
       if (response.status < 300) {
         return await response.data.results;
       }
@@ -629,7 +751,7 @@ export const getFeedData = async (accessToken) => {
 export const countLikes = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}${APIV1}${VIDEOS}${videoId}/likes/`,
+      `${URL}${APIV1}${VIDEOS}${videoId}/likes/`
     );
     const likeCount = response.data.like_count;
     if (response.status < 300) {
@@ -643,7 +765,7 @@ export const countLikes = async (videoId) => {
 export const countComments = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`,
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`
     );
     const commentCount = response.data.comment_count;
     if (response.status < 300) {
