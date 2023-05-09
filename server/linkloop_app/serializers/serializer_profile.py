@@ -45,20 +45,8 @@ class ProfileImpressionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        viewer = validated_data.get('viewer')
-        if viewer is None:
-            viewed_user = validated_data.get('viewed')
-            anonymous_views = \
-                ProfileImpression.objects.filter(viewer=None, viewed=viewed_user).aggregate(Sum('anonymous_views'))[
-                    'anonymous_views__sum'] or 0
-            anonymous_views += 1
-            profile_view = ProfileImpression.objects.create(
-                anonymous_views=anonymous_views,
-                viewed=viewed_user
-            )
-        else:
-            profile_view = ProfileImpression.objects.create(
-                viewer=viewer,
-                viewed=validated_data.get('viewed')
-            )
-        return profile_view
+        profile_impression = ProfileImpression.objects.create(
+            viewer=validated_data.get('viewer'),
+            viewed=validated_data.get('viewed')
+        )
+        return profile_impression
