@@ -7,7 +7,6 @@ from django.core.validators import (
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import uuid
 
 
 class Profile(models.Model):
@@ -34,8 +33,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 
-
-
 class Video(models.Model):
     class Meta:
         db_table = "video"
@@ -53,7 +50,6 @@ class Video(models.Model):
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
 
 
-
 class VideoLike(models.Model):
     class Meta:
         db_table = "video_like"
@@ -62,7 +58,6 @@ class VideoLike(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='likes')
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
-
 
 
 class VideoComment(models.Model):
@@ -136,8 +131,8 @@ class ProfileImpression(models.Model):
     class Meta:
         db_table = "profile_impression"
 
-    viewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='viewer', blank=True, null=True)
-    viewed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='viewed_profile')
+    viewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='viewed_impressions', null=True, blank=True)
+    viewed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='impressions')
     viewed_time = models.DateTimeField(db_column="viewed_time", auto_now_add=True)
 
 
@@ -145,7 +140,7 @@ class UserSearch(models.Model):
     class Meta:
         db_table = "user_search"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     search_query = models.CharField(db_column="search_query", blank=False, null=False, max_length=300,
                                     validators=[MinLengthValidator(1)])
     search_time = models.DateTimeField(db_column="search_time", auto_now_add=True)

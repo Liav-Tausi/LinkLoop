@@ -6,4 +6,5 @@ django-filter
 psycopg2
 python-dotenv
 gunicorn
+requests
 boto3

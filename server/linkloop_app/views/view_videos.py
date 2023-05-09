@@ -2,6 +2,7 @@ import os.path
 import uuid
 import django_filters
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -49,10 +50,17 @@ class VideoCommentFilter(django_filters.FilterSet):
         fields = ['username']
 
 
+class VideosPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 20
+
+
 class VideosModelViewSet(ModelViewSet):
     queryset = Video.objects.all()
     permission_classes = [AllowAny]
     filterset_class = VideoFilter
+    pagination_class = VideosPagination
     depth = 3
     serializer_class = {
         "list": BaseVideoSerializer,
@@ -112,7 +120,7 @@ class VideosModelViewSet(ModelViewSet):
         videosplit2 = video_url.split("/")[2]
         bucket_name = videosplit2.split(".")[0]
         obj_key = "videos/" + video_url.split("/")[4]
-        print(delete_file_from_s3(bucket_name=bucket_name, obj_key=obj_key))
+        delete_file_from_s3(bucket_name=bucket_name, obj_key=obj_key)
         if not video.exists():
             return Response({'detail': 'video does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
