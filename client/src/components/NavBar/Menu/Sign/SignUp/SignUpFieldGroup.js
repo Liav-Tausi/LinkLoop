@@ -1,5 +1,5 @@
 import { Box, IconButton } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -25,6 +25,7 @@ import SignErrorTemp from "../SignErrorTemp";
 import { signUpUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
+import SignGoogleTemp from "../SignGoogleTemp";
 
 const SignUpFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -33,6 +34,10 @@ const SignUpFieldGroup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleSetLoading = (flag) => {
+    setLoading(flag);
+  };
 
   const [signUpData, setSignUpData] = useState({
     signUpEmail: "",
@@ -48,10 +53,6 @@ const SignUpFieldGroup = () => {
     passwordConfirmError: false,
     submitError: "",
   });
-
-  useEffect(() => {
-    console.log("SignUpFieldGroup refresh");
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -304,6 +305,9 @@ const SignUpFieldGroup = () => {
                 }}
               />
             </Box>
+            <SignGoogleTemp
+              handleSetLoading={(flag) => handleSetLoading(flag)}
+            />
           </Box>
           <SignSubmit />
         </form>

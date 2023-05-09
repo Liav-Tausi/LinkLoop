@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   AppDispatchContext,
   APP_ACTIONS,
@@ -8,10 +8,6 @@ import SignTemp from "../SignTemp/SignTemp";
 
 const SignUp = () => {
   const dispatch = useContext(AppDispatchContext);
-
-  useEffect(() => {
-    console.log("sign up refresh");
-  }, []);
 
   return (
     <SignTemp

@@ -1,5 +1,5 @@
-import { AppBar, Box, Toolbar, useMediaQuery } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { AppBar, Box, Toolbar } from "@mui/material";
+import { useContext } from "react";
 import Menu from "./Menu/Menu";
 import Logo from "./Logo/Logo";
 import {
@@ -9,16 +9,11 @@ import {
 import AppMessage from "../../App/MainApp/AppMessage/AppMessage";
 import SearchBar from "./SearchBar/SearchBar";
 import ProfilePic from "./ProfilePic/ProfilePic";
-import SearchBarSmallIcon from "./SearchBar/SearchSmallIcon";
 import ToolTip from "../../utils/Comps/ToolTip";
 
 const NavBar = (props) => {
   const { themeMode, message, accessToken } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-
-  useEffect(() => {
-    console.log("nav refresh");
-  }, []);
 
   return (
     <>

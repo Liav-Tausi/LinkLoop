@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   AppContext,
   IsSmallScreenContext,
@@ -7,15 +7,10 @@ import InMenu from "./InMenu/InMenu";
 import OutMenu from "./OutMenu/OutMenu";
 import SignUp from "../Sign/SignUp/SignUp";
 import SignIn from "../Sign/SignIn/SignIn";
-import ToolTip from "../../../../utils/Comps/ToolTip";
 
 const LogButtons = () => {
   const { accessToken, signUpOpen, signInOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
-
-  useEffect(() => {
-    console.log("log buttons refresh");
-  }, []);
 
   return (
     <>

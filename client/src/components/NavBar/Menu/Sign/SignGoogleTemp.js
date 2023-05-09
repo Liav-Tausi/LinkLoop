@@ -28,17 +28,10 @@ const SignGoogleTemp = (props) => {
     }
   };
 
-
-
-  const errorMessage = (error) => {
-    console.log(error);
-  };
-
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <GoogleLogin
         onSuccess={responseMessage}
-        onError={errorMessage}
       />
     </Box>
   );

@@ -5,7 +5,7 @@ import {
   AppDispatchContext,
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import ProfileBarPicture from "./ProfileDataBarPicture";
 import ProfileMainText from "./ProfileMainText";
 import ProfileEditButton from "./ProfileEditButton";
@@ -19,10 +19,6 @@ const ProfileDataBar = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
   const [showVideos, setShowVideos] = useState(false);
-
-  useEffect(() => {
-    console.log("ProfileDataBar refresh");
-  }, []);
 
   return (
     <Box
