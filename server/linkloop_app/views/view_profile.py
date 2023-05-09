@@ -1,8 +1,10 @@
 import os
 import uuid
 
+import jwt
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -73,7 +75,6 @@ class ProfileModelViewSet(ModelViewSet):
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id).first()
         data = request.data.copy()
-        print(data)
 
         if 'profile_pic' in data:
             img_unique_id = uuid.uuid1()
@@ -118,12 +119,22 @@ class ProfileImpressionModelViewSet(ModelViewSet):
     queryset = ProfileImpression.objects.all()
     permission_classes = [AllowAny]
     serializer_class = ProfileImpressionSerializer
+    authentication_classes = [JWTAuthentication]
+    allowed_methods = ['GET', 'POST']
+    filterset_class = ProfileFilter
 
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
-        data_copy["viewer"] = request.user.pk
+        username = request.query_params.get('username')
+        profile = Profile.objects.filter(user__username=username).first()
+        data_copy["viewed"] = profile.pk
+        if data_copy.get('headers'):
+            data_copy["viewer"] = jwt.decode(data_copy['headers']['Authorization'].split(' ')[-1], options={"verify_signature": False})["user_id"]
+        else:
+            data_copy["viewer"] = None
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
