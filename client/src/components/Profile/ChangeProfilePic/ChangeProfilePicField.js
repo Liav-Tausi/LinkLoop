@@ -1,9 +1,12 @@
-         
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Container, Paper } from "@mui/material";
 import Loading from "../../../utils/Comps/Loading";
 import ScrollBar from "../../../utils/Comps/ScrollBar";
 import { useContext, useState } from "react";
-import { APP_ACTIONS, AppContext, AppDispatchContext } from "../../../App/AppStates/AppReducer";
+import {
+  APP_ACTIONS,
+  AppContext,
+  AppDispatchContext,
+} from "../../../App/AppStates/AppReducer";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { changeProfilePic } from "../../../utils/funcs/mainFuncs";
@@ -14,7 +17,7 @@ const ChangeProfilePicField = () => {
   const dispatch = useContext(AppDispatchContext);
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
-  const [imgUrl, setImgUrl] = useState("")
+  const [imgUrl, setImgUrl] = useState("");
   const [fileError, setFileError] = useState(false);
 
   const handleDeleteFile = () => {
@@ -24,7 +27,7 @@ const ChangeProfilePicField = () => {
 
   const handleChange = (event) => {
     const addedFile = event.target.files[0];
-    if ((addedFile.size > 307200)) {
+    if (addedFile.size > 307200) {
       setFileError(true);
       setFile("");
     } else {
@@ -44,10 +47,7 @@ const ChangeProfilePicField = () => {
       });
     } else {
       setLoading(true);
-      const response = await changeProfilePic(
-        accessToken,
-        file
-      );
+      const response = await changeProfilePic(accessToken, file);
       if (response) {
         setLoading(false);
         dispatch({
@@ -55,23 +55,18 @@ const ChangeProfilePicField = () => {
           payload: "Picture Has Been Updated!",
         });
         dispatch({
-          type: APP_ACTIONS.CHANGE_PROFILE_PIC
+          type: APP_ACTIONS.CHANGE_PROFILE_PIC,
         });
       }
     }
   };
 
-
   return (
     <>
       {loading && <Loading />}
-      <ScrollBar maxHeight={"465px"}>
-        <form onSubmit={handleSubmit}>
-          <Stack
-            sx={{
-              gap: 3,
-            }}
-          >
+      <Container style={{ borderRadius: "50px" }}>
+        <ScrollBar maxHeight={"465px"}>
+          <form onSubmit={handleSubmit}>
             {file === "" ? (
               <Button
                 variant="contained"
@@ -122,7 +117,6 @@ const ChangeProfilePicField = () => {
                       (fileError
                         ? themeMode.appTheme
                         : themeMode.signUpFieldHover),
-                    borderRadius: "5px",
                   }}
                 >
                   <img
@@ -137,7 +131,7 @@ const ChangeProfilePicField = () => {
                   <Box
                     onClick={handleDeleteFile}
                     sx={{
-                      display: "flex",
+                      display: loading? "none" : "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: "50%",
@@ -167,21 +161,21 @@ const ChangeProfilePicField = () => {
                 </Box>
               </Box>
             )}
-          </Stack>
-          <Box
-            sx={{
-              position: "absolute",
-              display: "flex",
-              justifyContent: "center",
-              bottom: 22,
-              left: "50%",
-              right: "50%",
-            }}
-          >
-            <SignSubmit />
-          </Box>
-        </form>
-      </ScrollBar>
+            <Box
+              sx={{
+                position: "absolute",
+                display: "flex",
+                justifyContent: "center",
+                bottom: 22,
+                left: "50%",
+                right: "50%",
+              }}
+            >
+              <SignSubmit />
+            </Box>
+          </form>
+        </ScrollBar>
+      </Container>
     </>
   );
 };

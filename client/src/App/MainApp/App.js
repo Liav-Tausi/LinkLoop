@@ -135,6 +135,7 @@ const App = () => {
     };
   }, [closeWhenOutside]);
 
+
   if (!appLoaded) {
     return <AppLoading />;
   }
@@ -142,8 +143,8 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path="Feed/:video" element={<FeedPage />} />
+        <Route path="/" element={<Home />} >
+          <Route path=":video" element={<FeedPage />} />
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>

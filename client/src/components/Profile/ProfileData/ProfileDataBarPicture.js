@@ -14,7 +14,6 @@ const ProfileDataBarPicture = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
 
-  console.log(connectedUser?.username === props.username);
 
   return (
     <Box

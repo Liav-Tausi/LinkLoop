@@ -9,7 +9,7 @@ import { ReactComponent as AppLogoWhite } from "../../../assets/imgs/linkLoopApp
 import { ReactComponent as AppLogoBlack } from "../../../assets/imgs/linkLoopAppLogoBlack.svg";
 import { ReactComponent as AppLogo } from "../../../assets/imgs/AppLogo.svg";
 
-const Logo = () => {
+const Logo = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
@@ -22,7 +22,7 @@ const Logo = () => {
           },
         }}
       >
-        <Link to="/">
+        <Link to={`/${props.navTo}`}>
           {isSmallScreen ? (
             <AppLogo style={{ marginTop: 3, width: "42px", py: "0.12em" }} />
           ) : themeMode.theme === "light" ? (
