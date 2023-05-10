@@ -20,10 +20,6 @@ const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
   const { themeMode, forceThemeMode, menuOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
-  useEffect(() => {
-    console.log("display setting refresh");
-  }, [menuOpen]);
-
   const handleRadioButton = (event) => {
     event.preventDefault();
     dispatch({

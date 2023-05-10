@@ -4,7 +4,7 @@ import {
   VisibilityRounded,
 } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -45,9 +45,6 @@ const SignInFieldGroup = () => {
     passwordError: false,
   });
 
-  useEffect(() => {
-    console.log("signInFieldGroup refresh");
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

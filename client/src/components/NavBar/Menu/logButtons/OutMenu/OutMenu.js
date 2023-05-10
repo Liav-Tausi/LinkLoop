@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   AppDispatchContext,
   APP_ACTIONS,
@@ -8,10 +8,6 @@ import ToolTip from "../../../../../utils/Comps/ToolTip";
 
 const OutMenu = () => {
   const dispatch = useContext(AppDispatchContext);
-
-    useEffect(() => {
-      console.log("OutMenu refresh");
-    }, []);
 
   return (
     <>

@@ -12,10 +12,6 @@ const ProfileVideos = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log("ProfileVideos refresh");
-  }, []);
-
-  useEffect(() => {
     const fetchVideosData = async () => {
       setIsLoading(true)
       const retVal = await getVideosOfUser(props.username);

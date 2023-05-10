@@ -1,5 +1,5 @@
 export const validateEmail = (email) => {
-  const re = /\S+@\S+\.\S+/;
+  const re = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
   return re.test(email);
 };
 

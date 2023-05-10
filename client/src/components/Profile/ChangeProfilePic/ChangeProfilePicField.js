@@ -27,7 +27,7 @@ const ChangeProfilePicField = () => {
 
   const handleChange = (event) => {
     const addedFile = event.target.files[0];
-    if (addedFile.size > 307200) {
+    if (addedFile.size > 5242880) {
       setFileError(true);
       setFile("");
     } else {
@@ -39,14 +39,15 @@ const ChangeProfilePicField = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     if (fileError) {
+      setLoading(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
           "Please correct the errors in the form before submitting again.",
       });
     } else {
-      setLoading(true);
       const response = await changeProfilePic(accessToken, file);
       if (response) {
         setLoading(false);
@@ -56,6 +57,12 @@ const ChangeProfilePicField = () => {
         });
         dispatch({
           type: APP_ACTIONS.CHANGE_PROFILE_PIC,
+        });
+      } else {
+        setLoading(false);
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "ERROR! Picture Has Not Been Added!",
         });
       }
     }

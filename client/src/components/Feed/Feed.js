@@ -24,7 +24,7 @@ const Feed = () => {
         const data = await getFeedData(accessToken, pageNum);
         setVideos((prevVideos) => [...prevVideos, ...Object.values(data)]);
       } catch (error) {
-        console.error(error);
+        return error
       }
     };
 

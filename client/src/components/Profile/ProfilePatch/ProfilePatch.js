@@ -19,7 +19,7 @@ const ProfilePatch = () => {
         boxShadow={10}
       >
         <ProfileVideoAndPatchAndPicTitle
-          text={"Edit Your Personal Info:"}
+          text={"Edit Personal Info:"}
           func={() => dispatch({ type: APP_ACTIONS.PROFILE_PATCH })}
         />
         <ProfilePatchField />

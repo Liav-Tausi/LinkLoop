@@ -1,14 +1,10 @@
 import { Box } from "@mui/material";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { AppContext } from "../../../App/AppStates/AppReducer";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 const ProfileEditButton = (props) => {
   const { themeMode, } = useContext(AppContext);
-
-  useEffect(() => {
-    console.log("ProfileEditButton refresh");
-  }, []);
 
   return (
     <Box

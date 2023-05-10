@@ -1,5 +1,5 @@
 import { Box, IconButton } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   AppContext,
   AppDispatchContext,
@@ -25,6 +25,7 @@ import SignErrorTemp from "../SignErrorTemp";
 import { signUpUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
+import SignGoogleTemp from "../SignGoogleTemp";
 
 const SignUpFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -33,6 +34,10 @@ const SignUpFieldGroup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formSubmit, setFormSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleSetLoading = (flag) => {
+    setLoading(flag);
+  };
 
   const [signUpData, setSignUpData] = useState({
     signUpEmail: "",
@@ -49,10 +54,6 @@ const SignUpFieldGroup = () => {
     submitError: "",
   });
 
-  useEffect(() => {
-    console.log("SignUpFieldGroup refresh");
-  }, []);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -63,6 +64,7 @@ const SignUpFieldGroup = () => {
       errors.passwordConfirmError ||
       errors.emailError
     ) {
+      setLoading(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -87,6 +89,7 @@ const SignUpFieldGroup = () => {
             payload: "Welcome to linkLoop!",
           });
         } else {
+          setLoading(false);
           for (let index = 0; index < access.length; index++) {
             const element = access[index];
             if (element.includes("This field must be unique.")) {
@@ -108,6 +111,7 @@ const SignUpFieldGroup = () => {
           }
         }
       }
+      setLoading(false);
     }
   };
 
@@ -198,7 +202,7 @@ const SignUpFieldGroup = () => {
             {errors.emailError && formSubmit && (
               <SignErrorTemp
                 text={errors.submitError ? errors.submitError : "Invalid Email"}
-                top={"30.6%"}
+                top={"29.8%"}
                 mobileTop={"28.2%"}
               />
             )}
@@ -221,7 +225,7 @@ const SignUpFieldGroup = () => {
                 text={
                   errors.submitError ? errors.submitError : "Invalid Full Name"
                 }
-                top={"40.5%"}
+                top={"39.5%"}
                 mobileTop={"39.2%"}
               />
             )}
@@ -256,7 +260,7 @@ const SignUpFieldGroup = () => {
                     ? errors.submitError
                     : "must be at least 8 characters"
                 }
-                top={"50.2%"}
+                top={"49%"}
                 mobileTop={"50.2%"}
               />
             )}
@@ -277,7 +281,7 @@ const SignUpFieldGroup = () => {
             {errors.passwordConfirmError && formSubmit && (
               <SignErrorTemp
                 text={"passwords must be equal"}
-                top={"60.2%"}
+                top={"58.7%"}
                 mobileTop={"61.2%"}
               />
             )}
@@ -304,6 +308,9 @@ const SignUpFieldGroup = () => {
                 }}
               />
             </Box>
+            <SignGoogleTemp
+              handleSetLoading={(flag) => handleSetLoading(flag)}
+            />
           </Box>
           <SignSubmit />
         </form>

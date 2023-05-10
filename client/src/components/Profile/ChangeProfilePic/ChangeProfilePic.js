@@ -19,7 +19,7 @@ const ChangeProfilePic = () => {
         boxShadow={10}
       >
         <ProfileVideoAndPatchAndPicTitle
-          text={"Change Your Profile Pic: "}
+          text={"Change Profile Pic: "}
           func={() => dispatch({ type: APP_ACTIONS.CHANGE_PROFILE_PIC })}
         />
         <ChangeProfilePicField/>
