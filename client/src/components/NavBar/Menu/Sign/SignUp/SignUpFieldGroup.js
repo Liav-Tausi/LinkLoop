@@ -64,6 +64,7 @@ const SignUpFieldGroup = () => {
       errors.passwordConfirmError ||
       errors.emailError
     ) {
+      setLoading(false);
       dispatch({
         type: APP_ACTIONS.MESSAGE,
         payload:
@@ -201,7 +202,7 @@ const SignUpFieldGroup = () => {
             {errors.emailError && formSubmit && (
               <SignErrorTemp
                 text={errors.submitError ? errors.submitError : "Invalid Email"}
-                top={"30.6%"}
+                top={"29.8%"}
                 mobileTop={"28.2%"}
               />
             )}
@@ -224,7 +225,7 @@ const SignUpFieldGroup = () => {
                 text={
                   errors.submitError ? errors.submitError : "Invalid Full Name"
                 }
-                top={"40.5%"}
+                top={"39.5%"}
                 mobileTop={"39.2%"}
               />
             )}
@@ -259,7 +260,7 @@ const SignUpFieldGroup = () => {
                     ? errors.submitError
                     : "must be at least 8 characters"
                 }
-                top={"50.2%"}
+                top={"49%"}
                 mobileTop={"50.2%"}
               />
             )}
@@ -280,7 +281,7 @@ const SignUpFieldGroup = () => {
             {errors.passwordConfirmError && formSubmit && (
               <SignErrorTemp
                 text={"passwords must be equal"}
-                top={"60.2%"}
+                top={"58.7%"}
                 mobileTop={"61.2%"}
               />
             )}
