@@ -17,6 +17,7 @@ const ProfileData = (props) => {
     const fetchUserData = async () => {
       const retVal = await getProfileData(null, props.username);
       setProfileData(retVal.data.results[0]);
+      console.log(retVal);
     };
     fetchUserData();
   }, [accessToken, props.username, message]);

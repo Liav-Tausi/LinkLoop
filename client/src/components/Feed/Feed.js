@@ -5,7 +5,7 @@ import {
 } from "../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "./VideoCard/VideoCardMain";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getFeedData } from "../../utils/funcs/mainFuncs";
 
 const Feed = () => {
