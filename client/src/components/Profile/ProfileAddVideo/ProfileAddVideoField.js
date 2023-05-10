@@ -82,7 +82,6 @@ const ProfileAddVideoField = () => {
   };
 
   const handleDeleteFile = () => {
-    setLoading(true)
     setFile("")
     setVideoUrl("")
   }
