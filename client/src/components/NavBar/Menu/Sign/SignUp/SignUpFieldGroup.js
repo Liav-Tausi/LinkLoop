@@ -88,6 +88,7 @@ const SignUpFieldGroup = () => {
             payload: "Welcome to linkLoop!",
           });
         } else {
+          setLoading(false);
           for (let index = 0; index < access.length; index++) {
             const element = access[index];
             if (element.includes("This field must be unique.")) {
@@ -109,6 +110,7 @@ const SignUpFieldGroup = () => {
           }
         }
       }
+      setLoading(false);
     }
   };
 

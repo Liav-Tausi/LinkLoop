@@ -41,7 +41,7 @@ const ProfileAddVideoField = () => {
 
   const handleChange = (event) => {
     const addedFile = event.target.files[0];
-    if (addedFile.size > 1650000) {
+    if (addedFile.size > 26214400) {
       setErrors((error) => ({
         ...error,
         fileError: true,
