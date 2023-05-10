@@ -80,7 +80,7 @@ class VideosModelViewSet(ModelViewSet):
         video_unique_id = uuid.uuid1()
         video_file = request.data['video']
         file, ext = os.path.splitext(video_file.name)
-        if video_file.size > 1650000:
+        if video_file.size > 26214400:
             return Response({'error': 'File size is too large'}, status=status.HTTP_400_BAD_REQUEST)
         data_copy["video_url"] = upload_file_to_s3(
             filename=video_file.file,

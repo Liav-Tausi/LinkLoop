@@ -75,12 +75,11 @@ class ProfileModelViewSet(ModelViewSet):
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id).first()
         data = request.data.copy()
-
         if 'profile_pic' in data:
             img_unique_id = uuid.uuid1()
             img_file = data.pop('profile_pic')[0]
             file, ext = os.path.splitext(img_file.name)
-            if img_file.size > 307200:
+            if img_file.size > 5242880:
                 return Response({'error': 'File size is too large'}, status=status.HTTP_400_BAD_REQUEST)
             data["profile_picture"] = upload_file_to_s3(
                 filename=img_file.file,
