@@ -75,7 +75,6 @@ class ProfileModelViewSet(ModelViewSet):
         user_id = request.user.pk
         profile = Profile.objects.filter(user=user_id).first()
         data = request.data.copy()
-
         if 'profile_pic' in data:
             img_unique_id = uuid.uuid1()
             img_file = data.pop('profile_pic')[0]
