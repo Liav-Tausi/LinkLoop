@@ -1,5 +1,3 @@
-import os
-import requests
 from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -25,7 +23,7 @@ class BaseVideoSerializer(serializers.ModelSerializer):
 
 
 class CreateVideoSerializer(serializers.ModelSerializer):
-    video_id_name = serializers.UUIDField()  # add this line
+    video_id_name = serializers.UUIDField()
 
     class Meta:
         model = Video
@@ -90,32 +88,16 @@ class CommentSerializer(serializers.ModelSerializer):
         return comment
 
 
-class ImpressionSerializer(serializers.ModelSerializer):
+class VideoImpressionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VideoImpression
         fields = '__all__'
 
-    def validate(self, attrs):
-        video_ids = Video.objects.all()
-        if attrs.get('video') not in video_ids:
-            raise ValidationError({"video": "No video found."})
-        return attrs
-
     def create(self, validated_data):
-        viewer = validated_data.get('viewer')
-        if viewer is None:
-            anonymous_views = \
-                ProfileImpression.objects.filter(viewer=None).aggregate(Sum('anonymous_views'))[
-                    'anonymous_views__sum'] or 0
-            anonymous_views += 1
-            impression = VideoImpression.objects.create(
-                anonymous_views=anonymous_views,
-                video=validated_data.get('video'),
-            )
-        else:
-            impression = VideoImpression.objects.create(
-                viewer=viewer,
-                video=validated_data.get('video'),
-            )
-        return impression
+        print(validated_data)
+        video_impression = VideoImpression.objects.create(
+            viewer=validated_data.get('viewer'),
+            video=validated_data.get('video')
+        )
+        return video_impression
