@@ -1,6 +1,5 @@
 import axios from "axios";
-import { URL, APIV1, AUTH} from "../config/conf";
-import jwt_decode from "jwt-decode";
+import { URL, APIV1, AUTH } from "../config/conf";
 
 export const isLoggedIn = async (accessToken) => {
   const access = accessToken;
@@ -16,44 +15,27 @@ export const isLoggedIn = async (accessToken) => {
   }
 };
 
-
-export const signUpWithGoogle = async (credential) => {
+export const signUpInWithGoogle = async (credential) => {
   try {
-    const decodedToken = jwt_decode(credential);
-    const accessTokenResponse = await handleAccessTokenResponse([
-      decodedToken.email,
-      decodedToken.sub + decodedToken.email,
-    ]);
-    if (accessTokenResponse) {
-      localStorage.setItem("refresh", accessTokenResponse.data.refresh);
-      return accessTokenResponse.data.access;
-    } else {
-      const response = await axios.post(
-        `${URL}${APIV1}${AUTH}google_client_id/`,
-        {
-            credential: credential,
-        }
-      );
-      if (response.status < 300) {
-          const decodedToken = jwt_decode(credential);
-          const accessTokenResponse = await handleAccessTokenResponse([
-            decodedToken.email,
-            decodedToken.sub + decodedToken.email,
-        ]);
-        if (accessTokenResponse) {
-          localStorage.setItem("refresh", accessTokenResponse.data.refresh);
-        }
-        return accessTokenResponse.data.access;
-      } else {
-        return false;
+    const response = await axios.post(
+      `${URL}${APIV1}${AUTH}google_client_id/`,
+      {},
+      {
+        headers: {
+          Authorization: credential,
+        },
       }
+    );
+    if (response.status < 300) {
+      localStorage.setItem("refresh", response.data.refresh);
+      return response.data
+    } else {
+      return false
     }
   } catch (error) {
-    console.log(error)
     return false;
   }
 };
-
 
 export const handleRefreshTokenResponse = async (refreshToken) => {
   try {
@@ -88,8 +70,6 @@ export const handleAccessTokenResponse = async (user) => {
     return false;
   }
 };
-
-
 
 export const signUpUser = async (user) => {
   try {

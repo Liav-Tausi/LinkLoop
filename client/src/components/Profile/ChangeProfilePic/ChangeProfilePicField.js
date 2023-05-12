@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Container, Paper } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import Loading from "../../../utils/Comps/Loading";
 import ScrollBar from "../../../utils/Comps/ScrollBar";
 import { useContext, useState } from "react";
@@ -127,6 +127,7 @@ const ChangeProfilePicField = () => {
                   }}
                 >
                   <img
+                  alt="profile pic"
                     src={imgUrl}
                     style={{
                       width: "100%",
