@@ -46,6 +46,8 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 25485760
+
 
 # Application definition
 
