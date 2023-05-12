@@ -8,4 +8,5 @@ python-dotenv
 gunicorn
 requests
 boto3
+zstandard
 google-auth
