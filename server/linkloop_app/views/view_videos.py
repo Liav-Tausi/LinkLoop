@@ -1,7 +1,11 @@
+import io
 import os.path
 import uuid
 import django_filters
+import jwt
+import zstandard as zstd
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -22,7 +26,7 @@ from ..serializers.serializer_videos import (
     CreateVideoSerializer,
     LikeVideoSerializer,
     CommentSerializer,
-    ImpressionSerializer
+    VideoImpressionSerializer
 )
 
 
@@ -48,6 +52,14 @@ class VideoCommentFilter(django_filters.FilterSet):
     class Meta:
         model = VideoComment
         fields = ['username']
+
+
+class VideoImpressionFilter(django_filters.FilterSet):
+    video_id_name = django_filters.CharFilter(field_name='video__video_id_name', lookup_expr='iexact')
+
+    class Meta:
+        model = VideoImpression
+        fields = ['video_id_name']
 
 
 class VideosPagination(PageNumberPagination):
@@ -76,7 +88,7 @@ class VideosModelViewSet(ModelViewSet):
             return self.queryset
 
     def create(self, request, *args, **kwargs):
-        data_copy = request.data.copy()
+        data_copy = request.data
         video_unique_id = uuid.uuid1()
         video_file = request.data['video']
         file, ext = os.path.splitext(video_file.name)
@@ -212,27 +224,39 @@ class CommentsModelViewSet(ModelViewSet):
             return Response({'comment_count': comment_count})
 
 
-class ImpressionModelViewSet(ModelViewSet):
+class VideoImpressionModelViewSet(ModelViewSet):
     queryset = VideoImpression.objects.all()
     permission_classes = [AllowAny]
-    serializer_class = ImpressionSerializer
+    serializer_class = VideoImpressionSerializer
+    authentication_classes = [JWTAuthentication]
+    allowed_methods = ['GET', 'POST']
+    filterset_class = VideoImpressionFilter
+
+    def list(self, request, *args, **kwargs):
+        video_id_name = request.query_params.get('video_id_name')
+        video = Video.objects.filter(video_id_name=video_id_name).first()
+        if video is None:
+            return Response({'detail': 'Video not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        impression_count = VideoImpression.objects.filter(video=video).count()
+        return Response({'impression_count': impression_count}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        video_id = kwargs['video_pk']
         data_copy = request.data.copy()
-        data_copy["video"] = video_id
-        data_copy["viewer"] = request.user.pk
+        video_id_name = request.query_params.get('video_id_name')
+        video = Video.objects.filter(video_id_name=video_id_name).first()
+        data_copy["video"] = video.pk
+        if data_copy.get('headers'):
+            data_copy["viewer"] = \
+                jwt.decode(data_copy['headers']['Authorization'].split(' ')[-1], options={"verify_signature": False})[
+                    "user_id"]
+        else:
+            data_copy["viewer"] = None
+        user_id = data_copy.get("viewer")
+        if user_id is not None and VideoImpression.objects.filter(video=video, viewer=user_id).exists():
+            return Response({'detail': 'User already has an impression for this video'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def list(self, request, *args, **kwargs):
-        video_pk = kwargs.get('video_pk')
-        impression = VideoImpression.objects.filter(video=video_pk)
-        if impression:
-            serializer = self.get_serializer(impression, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
