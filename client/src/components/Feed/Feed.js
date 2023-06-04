@@ -1,16 +1,22 @@
 import { Box, Paper, Skeleton } from "@mui/material";
 import {
+  APP_ACTIONS,
   AppContext,
   AppDispatchContext,
+  IsSmallScreenContext,
 } from "../../App/AppStates/AppReducer";
 import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "./VideoCard/VideoCardMain";
 import { useParams } from "react-router-dom";
-import { getFeedData } from "../../utils/funcs/mainFuncs";
+import {
+  getFeedData,
+} from "../../utils/funcs/mainFuncs";
+import VideoShare from "./VideoCard/VideoShare/VideoShare";
 
 const Feed = () => {
-  const { themeMode, accessToken } = useContext(AppContext);
+  const { themeMode, accessToken, shareVideo } = useContext(AppContext);
   const { video: videoId } = useParams();
+  const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
   const [pageNum, setPageNum] = useState(1);
   const [videos, setVideos] = useState([]);
@@ -24,19 +30,20 @@ const Feed = () => {
         const data = await getFeedData(accessToken, pageNum);
         setVideos((prevVideos) => [...prevVideos, ...Object.values(data)]);
       } catch (error) {
-        return error
+        dispatch({
+          type: APP_ACTIONS.MESSAGE,
+          payload: "ERROR! Getting Videos",
+        });
       }
     };
 
     fetchVideos();
   }, [accessToken, pageNum]);
 
-
   useEffect(() => {
     const currentIndex = videos.findIndex(
       (element) => element.video_id_name === videoId
     );
-
     if (currentIndex >= 0 && currentIndex < videos.length - 1) {
       if (videos[currentIndex - 1]) {
         setPreviousVideoId(videos[currentIndex - 1].video_id_name);
@@ -65,54 +72,52 @@ const Feed = () => {
   }, [videoId, videos, dispatch]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 3,
-      }}
-    >
-      {video ? (
-        <VideoCardMain
-          key={video.id}
-          videoId={video.id}
-          videoNumber={video.video_url.split("/").pop()}
-          video_url={video.video_url}
-          title={video.title}
-          userProfile={video.profile}
-          description={video.description}
-          date={video.created_time}
-          nextVideo={nextVideoId}
-          previousVideo={previousVideoId}
-        />
-      ) : (
-        <Paper
-          sx={{
-            backgroundColor: themeMode.feed,
-            boxShadow: 5,
-            p: 2,
-          }}
-        >
-          <>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={100} height={30} animation="wave" />
-            </Box>
-            <Skeleton
-              variant="rectangular"
-              width="350px"
-              height="500px"
-              animation="wave"
-            />
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={100} height={38} animation="wave" />
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Skeleton width={250} height={35} animation="wave" />
-            </Box>
-          </>
-        </Paper>
-      )}
-    </Box>
+    <>
+      {shareVideo && <VideoShare title={video?.title} />}
+      <Box>
+        {video ? (
+          <VideoCardMain
+            key={video.id}
+            videoId={video.id}
+            video_id_name={video.video_id_name}
+            videoNumber={video.video_url.split("/").pop()}
+            video_url={video.video_url}
+            title={video.title}
+            userProfile={video.profile}
+            description={video.description}
+            date={video.created_time}
+            nextVideo={nextVideoId}
+            previousVideo={previousVideoId}
+          />
+        ) : (
+          <Paper
+            sx={{
+              backgroundColor: themeMode.feed,
+              boxShadow: 5,
+              p: 2,
+            }}
+          >
+            <>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Skeleton width={100} height={30} animation="wave" />
+              </Box>
+              <Skeleton
+                variant="rectangular"
+                width= {isSmallScreen ? "365px" : "340px"}
+                height={isSmallScreen ? "90vh" : " 610px"}
+                animation="wave"
+              />
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Skeleton width={100} height={38} animation="wave" />
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Skeleton width={250} height={35} animation="wave" />
+              </Box>
+            </>
+          </Paper>
+        )}
+      </Box>
+    </>
   );
 };
 

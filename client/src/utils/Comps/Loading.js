@@ -5,7 +5,6 @@ import { useContext } from "react";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import AppLogo from "../../assets/imgs/AppLogo.svg";
 
-
 const Loading = () => {
   const { themeMode } = useContext(AppContext);
 

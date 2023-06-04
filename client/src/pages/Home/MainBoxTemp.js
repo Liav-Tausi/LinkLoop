@@ -7,8 +7,8 @@ import {
 import AppLogo from "../../assets/imgs/AppLogo.svg";
 
 const MainBoxTemp = (props) => {
+  const isSmallScreen = useContext(IsSmallScreenContext);
   const { themeMode } = useContext(AppContext);
-  
   return (
     <Box
       sx={{

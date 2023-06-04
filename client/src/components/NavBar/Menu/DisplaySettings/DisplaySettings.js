@@ -15,7 +15,6 @@ import LIGHT_THEME from "../../../../assets/themes/LightTheme";
 import DisplayOptions from "./DisplayOptions";
 import { detectColorScheme } from "../../../../utils/funcs/confFuncs";
 
-
 const DisplaySettings = ({ handleMenuDisplaySettingsChange }) => {
   const dispatch = useContext(AppDispatchContext);
   const { themeMode, forceThemeMode, menuOpen } = useContext(AppContext);

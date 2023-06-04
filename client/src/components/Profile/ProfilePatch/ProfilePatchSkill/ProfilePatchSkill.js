@@ -4,7 +4,6 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-
 const ProfilePatchSkill = (props) => {
   const { themeMode } = useContext(AppContext);
 

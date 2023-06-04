@@ -14,8 +14,6 @@ import ProfileInfo from "../ProfileInfo/ProfileInfo";
 import ProfileVideos from "../ProfileVideos/ProfileVideos";
 import AddVideo from "./AddVideo";
 
-
-
 const ProfileDataBar = (props) => {
   const { themeMode, connectedUser } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
@@ -55,7 +53,7 @@ const ProfileDataBar = (props) => {
               username={props.username}
               profileData={props.profileData}
             />
-            <ProfileMainText profileData={props.profileData} />
+            <ProfileMainText profileData={props.profileData} profileViews={props.profileViews}/>
           </Box>
           {connectedUser?.username === props.username && (
             <Box

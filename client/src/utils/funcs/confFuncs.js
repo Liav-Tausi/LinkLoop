@@ -1,4 +1,3 @@
-
 export const detectColorScheme = () => {
   const isDarkMode =
     window.matchMedia &&

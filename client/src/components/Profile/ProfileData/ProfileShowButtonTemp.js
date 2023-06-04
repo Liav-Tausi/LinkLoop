@@ -9,7 +9,6 @@ const ProfileShowButtonTemp = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
-  
   return (
     <Button
       disabled={props.disabled}

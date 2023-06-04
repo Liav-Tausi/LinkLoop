@@ -3,9 +3,7 @@ import { useContext } from "react";
 import { AppContext } from "../../../App/AppStates/AppReducer";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
-
 const SearchBarSmallIcon = (props) => {
-  
   const { themeMode, accessToken } = useContext(AppContext);
   return (
     <Box

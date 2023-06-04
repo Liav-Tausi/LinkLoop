@@ -4,10 +4,8 @@ import { useContext } from "react";
 import { AppContext } from "../../../../../App/AppStates/AppReducer";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-
 const InMenuTemp = (props) => {
   const { themeMode } = useContext(AppContext);
-  
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Button

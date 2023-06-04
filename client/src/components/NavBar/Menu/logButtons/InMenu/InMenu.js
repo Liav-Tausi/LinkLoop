@@ -8,7 +8,6 @@ import {
 } from "../../../../../App/AppStates/AppReducer";
 import InMenuTemp from "./InMenuTemp";
 
-
 const InMenu = () => {
   const { themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);

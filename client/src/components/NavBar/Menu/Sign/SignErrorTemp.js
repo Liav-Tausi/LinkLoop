@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
 
-
 const SignErrorTemp = (props) => {
   const { themeMode } = useContext(AppContext);
   return (

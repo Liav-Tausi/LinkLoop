@@ -2,12 +2,12 @@ import { InputAdornment, InputBase } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
 
-
 const SignFieldTemp = (props) => {
   const { themeMode } = useContext(AppContext);
 
   return (
     <InputBase
+      readOnly={props.readOnly ? props.readOnly : false}
       fullWidth={true}
       required={true}
       type={props.type}
@@ -63,6 +63,7 @@ const SignFieldTemp = (props) => {
         },
       }}
       value={props.sign}
+      onClick={props.handleCopy}
       onChange={props.handleChange}
       inputProps={{ style: { color: themeMode.signUpFieldText } }}
       endAdornment={

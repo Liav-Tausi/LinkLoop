@@ -22,7 +22,6 @@ const ProfileInfo = () => {
     skill: [],
   });
 
-  
   useEffect(() => {
     setLoading(true);
     const getAllProfileData = async () => {

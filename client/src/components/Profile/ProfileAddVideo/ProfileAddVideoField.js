@@ -18,11 +18,9 @@ import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { postVideo } from "../../../utils/funcs/mainFuncs";
 
-
-
 const ProfileAddVideoField = () => {
-  const { themeMode, accessToken} = useContext(AppContext);
-  const dispatch = useContext(AppDispatchContext)
+  const { themeMode, accessToken } = useContext(AppContext);
+  const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [videoUrl, setVideoUrl] = useState("");
   const [file, setFile] = useState("");
@@ -48,6 +46,10 @@ const ProfileAddVideoField = () => {
         ...error,
         fileError: true,
       }));
+      dispatch({
+        type: APP_ACTIONS.MESSAGE,
+        payload: "ERROR! File exceeds size limit.",
+      });
       setFile("");
     } else {
       setErrors((error) => ({
@@ -84,13 +86,14 @@ const ProfileAddVideoField = () => {
   };
 
   const handleDeleteFile = () => {
-    setFile("")
-    setVideoUrl("")
-  }
+    setFile("");
+    setVideoUrl("");
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    const title = event.target[0].value
+    setLoading(true);
+    event.preventDefault();
+    const title = event.target[0].value;
     const topic = event.target[1].value;
     const description = event.target[2].value;
     if (
@@ -105,7 +108,6 @@ const ProfileAddVideoField = () => {
           "Please correct the errors in the form before submitting again.",
       });
     } else {
-      setLoading(true);
       const response = await postVideo(
         accessToken,
         title,
@@ -113,18 +115,29 @@ const ProfileAddVideoField = () => {
         description,
         file
       );
+      console.log(response);
       if (response) {
-        setLoading(false)
+        setLoading(false);
         dispatch({
           type: APP_ACTIONS.MESSAGE,
-          payload: "Video Has Been Added!"
-        })
+          payload: "Video Has Been Added!",
+        });
         dispatch({
-          type: APP_ACTIONS.ADD_VIDEO
+          type: APP_ACTIONS.ADD_VIDEO,
         });
       }
+      setLoading(false);
     }
   };
+
+  const handleSubmitLinkLoopProd = (event) => {
+    event.preventDefault();
+    alert(
+      "Sorry adding a video to linkLoop is not allowed anymore for cloud space reasons. "
+    );
+  };
+
+
   return (
     <>
       {loading && <Loading />}
@@ -139,7 +152,7 @@ const ProfileAddVideoField = () => {
             mb: 3,
           }}
         >
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitLinkLoopProd}>
             <Stack
               sx={{
                 gap: 3,

@@ -1,11 +1,14 @@
-import { Box } from "@mui/material";
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 import {
   APP_ACTIONS,
   AppContext,
   AppDispatchContext,
-} from "../../../App/AppStates/AppReducer";
-import { useContext, useEffect, useState } from "react";
-import SignSubmit from "../../NavBar/Menu/Sign/SignSubmit";
+} from '../../../App/AppStates/AppReducer';
+import SignSubmit from '../../NavBar/Menu/Sign/SignSubmit';
 import {
   validateAbout,
   validateEndDate,
@@ -15,23 +18,20 @@ import {
   validateQualDescription,
   validateQualName,
   validateStartDate,
-} from "../../../utils/funcs/formValidators";
+} from '../../../utils/funcs/formValidators';
 import {
   delUserQual,
   getProfileData,
   getUserQual,
   patchProfileData,
-} from "../../../utils/funcs/mainFuncs";
-import ProfilePatchMultiline from "./ProfilePatchMultiline";
-import ProfilePatchExperience from "./ProfilePatchExperience/ProfilePatchExperience";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ProfilePatchEducation from "./ProfilePatchEducation/ProfilePatchEducation";
-import ProfilePatchSkill from "./ProfilePatchSkill/ProfilePatchSkill";
-import ProfilePatchMainUserData from "./ProfilePatchMainUserData/ProfilePatchMainUserData";
-import Loading from "../../../utils/Comps/Loading";
-import { useParams } from "react-router-dom";
-import ScrollBar from "../../../utils/Comps/ScrollBar";
-
+} from '../../../utils/funcs/mainFuncs';
+import ProfilePatchMultiline from './ProfilePatchMultiline';
+import ProfilePatchExperience from './ProfilePatchExperience/ProfilePatchExperience';
+import ProfilePatchEducation from './ProfilePatchEducation/ProfilePatchEducation';
+import ProfilePatchSkill from './ProfilePatchSkill/ProfilePatchSkill';
+import ProfilePatchMainUserData from './ProfilePatchMainUserData/ProfilePatchMainUserData';
+import Loading from '../../../utils/Comps/Loading';
+import ScrollBar from '../../../utils/Comps/ScrollBar';
 
 const ProfilePatchField = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -523,7 +523,7 @@ const ProfilePatchField = () => {
             <ProfilePatchMultiline
               handleAboutChange={handleAboutChange}
               profileData={patchData?.about}
-              errors={errors.about}
+              errors={errors?.aboutError}
               patchData={patchData?.about}
               text={"About"}
             />

@@ -5,7 +5,6 @@ import {
   IsSmallScreenContext,
 } from "../../../../App/AppStates/AppReducer";
 
-
 const DisplayOptions = (props) => {
   const { themeMode, forceThemeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);

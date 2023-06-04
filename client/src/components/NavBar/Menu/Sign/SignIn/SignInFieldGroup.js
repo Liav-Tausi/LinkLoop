@@ -18,11 +18,10 @@ import {
 } from "../../../../../utils/funcs/formValidators";
 import SignFieldTemp from "../SignFieldTemp";
 import SignErrorTemp from "../SignErrorTemp";
-import SignGoogleTemp from "../SignGoogleTemp";
 import { signInUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
-
+import SignGoogleTempSSL from "../SignGoogleTempSSL";
 
 const SignInFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -208,7 +207,9 @@ const SignInFieldGroup = () => {
                 }}
               />
             </Box>
-            <SignGoogleTemp handleSetLoading={(flag) => handleSetLoading(flag)} />
+            <SignGoogleTempSSL
+              handleSetLoading={(flag) => handleSetLoading(flag)}
+            />
           </Box>
           <SignSubmit />
         </form>

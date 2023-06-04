@@ -78,7 +78,6 @@ const SearchBar = () => {
     search();
   }, [searchValue]);
 
-  
   const handleSubmit = async (event, option) => {
     const foundObject = searchedData.find((obj) => obj.name === option);
     const username = foundObject ? foundObject.username : null;
@@ -102,7 +101,6 @@ const SearchBar = () => {
       }
     }
   };
-
 
   return (
     <Box

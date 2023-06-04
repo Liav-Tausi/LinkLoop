@@ -8,7 +8,6 @@ import OutMenu from "./OutMenu/OutMenu";
 import SignUp from "../Sign/SignUp/SignUp";
 import SignIn from "../Sign/SignIn/SignIn";
 
-
 const LogButtons = () => {
   const { accessToken, signUpOpen, signInOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);

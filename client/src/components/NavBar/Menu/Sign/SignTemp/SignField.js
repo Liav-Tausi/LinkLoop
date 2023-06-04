@@ -2,10 +2,8 @@ import { Box } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../../../../App/AppStates/AppReducer";
 
-
 const SignField = (props) => {
   const { themeMode } = useContext(AppContext);
-  
   return (
     <Box
       sx={{

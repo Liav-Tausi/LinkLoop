@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-
 const BlurBack = (props) => {
   const {signInOpen} = useContext(AppContext)
 

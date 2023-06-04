@@ -28,6 +28,8 @@ const App = () => {
     chooseLocation,
     addVideo,
     changeProfilePic,
+    shareVideo,
+    notImplemented,
   } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const ref = useContext(Ref);
@@ -39,13 +41,23 @@ const App = () => {
       signInOpen ||
       profilePatch ||
       addVideo ||
-      changeProfilePic
+      changeProfilePic ||
+      shareVideo ||
+      notImplemented
     ) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [signUpOpen, signInOpen, profilePatch, addVideo, changeProfilePic]);
+  }, [
+    signUpOpen,
+    signInOpen,
+    profilePatch,
+    addVideo,
+    changeProfilePic,
+    shareVideo,
+    notImplemented,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +92,6 @@ const App = () => {
 
   const closeWhenOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
-      console.log(ref.current.id);
       if (ref.current.id === "signUp" && signUpOpen) {
         dispatch({
           type: APP_ACTIONS.SIGN_UP_OPEN,
@@ -112,7 +123,6 @@ const App = () => {
         ref.current.id !== "search-input-container" &&
         under900
       ) {
-        console.log(ref.current.id);
         dispatch({
           type: APP_ACTIONS.SEARCH_BAR,
         });
@@ -124,8 +134,16 @@ const App = () => {
         dispatch({
           type: APP_ACTIONS.CHANGE_PROFILE_PIC,
         });
-      } 
-    } 
+      } else if (ref.current.id === "shareVideo" && shareVideo) {
+        dispatch({
+          type: APP_ACTIONS.SHARE_VIDEO,
+        });
+      } else if (ref.current.id === "notImplemented" && notImplemented) {
+        dispatch({
+          type: APP_ACTIONS.NOT_IMPLEMENTED,
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -135,7 +153,6 @@ const App = () => {
     };
   }, [closeWhenOutside]);
 
-
   if (!appLoaded) {
     return <AppLoading />;
   }
@@ -143,8 +160,10 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} >
-          <Route path=":video" element={<FeedPage />} />
+        <Route path="/" element={<Home />}>
+          <Route path=":video" element={<FeedPage />}>
+            <Route path="comments" element={<CommentPage />} />
+          </Route>
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>

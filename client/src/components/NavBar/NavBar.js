@@ -1,5 +1,5 @@
 import { AppBar, Box, Toolbar } from "@mui/material";
-import { useContext } from "react";
+import { useContext} from "react";
 import Menu from "./Menu/Menu";
 import Logo from "./Logo/Logo";
 import {
@@ -10,7 +10,6 @@ import AppMessage from "../../App/MainApp/AppMessage/AppMessage";
 import SearchBar from "./SearchBar/SearchBar";
 import ProfilePic from "./ProfilePic/ProfilePic";
 import ToolTip from "../../utils/Comps/ToolTip";
-
 
 const NavBar = (props) => {
   const { themeMode, message, accessToken } = useContext(AppContext);

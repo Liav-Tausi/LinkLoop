@@ -6,7 +6,6 @@ import {
 import SignUpFieldGroup from "./SignUpFieldGroup";
 import SignTemp from "../SignTemp/SignTemp";
 
-
 const SignUp = () => {
   const dispatch = useContext(AppDispatchContext);
 

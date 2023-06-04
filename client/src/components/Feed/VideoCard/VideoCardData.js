@@ -22,9 +22,11 @@ import SignIn from "../../NavBar/Menu/Sign/SignIn/SignIn";
 import VideoIcons from "./VideoIcons";
 import { Link } from "react-router-dom";
 import VideoUpDownButtons from "./VideoUpDownButtons";
+import NotImplemented from "../../../utils/Comps/NotImplemented";
 
 const VideoCardData = (props) => {
-  const { themeMode, accessToken, signInOpen } = useContext(AppContext);
+  const { themeMode, accessToken, signInOpen, notImplemented } =
+    useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
   const [liked, setLiked] = useState(false);
@@ -38,7 +40,6 @@ const VideoCardData = (props) => {
       setLiked(false);
     }
   }, [accessToken]);
-  
 
   useEffect(() => {
     const getLikedStatus = async () => {
@@ -60,7 +61,6 @@ const VideoCardData = (props) => {
     getComments();
   }, [liked]);
 
-
   const handleLike = async () => {
     if (accessToken) {
       if (!liked) {
@@ -81,9 +81,9 @@ const VideoCardData = (props) => {
     }
   };
 
-
   return (
     <>
+      {notImplemented && <NotImplemented />}
       {signInOpen && <SignIn />}
       <Box
         sx={{
@@ -95,8 +95,8 @@ const VideoCardData = (props) => {
         <Box
           sx={{
             position: "relative",
-            width: "335px",
-            height: "595px",
+            width: isSmallScreen ? "365px" : "340px",
+            height: isSmallScreen ? "90vh" : " 610px"
           }}
         >
           <video
@@ -104,7 +104,7 @@ const VideoCardData = (props) => {
               height: "100%",
               width: "100%",
               cursor: "pointer",
-              borderRadius: isSmallScreen ? "7px" : "12px",
+              borderRadius: isSmallScreen ? "8px" : "12px",
             }}
             onLoad={() => setLoad(true)}
             src={props.videoUrl}
@@ -119,19 +119,53 @@ const VideoCardData = (props) => {
             position: "absolute",
             bottom: 65,
             left: "auto",
-            right: 5,
+            right: 0,
             px: 2,
             py: 0.5,
             backgroundColor: "transparent",
             fontWeight: "thin",
             color: "white",
-            textShadow: "0px 1px 11px #000",
             textAlign: "right",
           }}
         >
           <Grid container direction="column" sx={{ gap: 1.3 }}>
-            <Box sx={{ fontSize: 17, textAlign: "right" }}>{props.title}</Box>
-            <Box sx={{ fontSize: 14, textAlign: "right" }}>
+            <Box
+              sx={{
+                textAlign: "right",
+                fontSize: "12px",
+                color: themeMode.textColor,
+                textShadow:
+                  themeMode.theme == "dark"
+                    ? "1px 2px 5px rgba(0, 0, 0, 1)"
+                    : "1px 2px 4px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              {props.videoViews} views
+            </Box>
+            <Box
+              sx={{
+                fontSize: 17,
+                textAlign: "right",
+                color: themeMode.textColor,
+                textShadow:
+                  themeMode.theme == "dark"
+                    ? "1px 2px 5px rgba(0, 0, 0, 1)"
+                    : "1px 2px 4px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              {props.title}
+            </Box>
+            <Box
+              sx={{
+                fontSize: 14,
+                textAlign: "right",
+                color: themeMode.textColor,
+                textShadow:
+                  themeMode.theme == "dark"
+                    ? "1px 2px 5px rgba(0, 0, 0, 1)"
+                    : "1px 2px 4px rgba(0, 0, 0, 0.4)",
+              }}
+            >
               {props.description}
             </Box>
           </Grid>
@@ -145,8 +179,11 @@ const VideoCardData = (props) => {
             py: 1,
             backgroundColor: "transparent",
             fontWeight: "thin",
-            color: "white",
-            textShadow: "0px 1px 11px #000",
+            color: themeMode.textColor,
+            textShadow:
+              themeMode.theme == "dark"
+                ? "1px 2px 5px rgba(0, 0, 0, 1)"
+                : "1px 2px 5px rgba(0, 0, 0, 0.4)",
           }}
         >
           {props.date?.split("T")[0]}
@@ -160,7 +197,6 @@ const VideoCardData = (props) => {
             position: "absolute",
             bottom: isSmallScreen ? 85 : 50,
             left: isSmallScreen ? 5 : -65,
-            textShadow: "0px 1px 11px #000",
           }}
         >
           <Stack gap={5} color="white">
@@ -181,12 +217,13 @@ const VideoCardData = (props) => {
               >
                 <Link to={`/profile/${props.userProfile?.user?.username}`}>
                   {props.userProfile?.profile_picture ? (
-                    <Box sx={{ width: 43, height: 40 }}>
+                    <Box sx={{ width: 40, height: 40 }}>
                       <img
                         style={{
                           width: "100%",
                           height: "100%",
                           borderRadius: "50%",
+                          objectFit: "cover",
                         }}
                         src={props.userProfile.profile_picture}
                         alt="profile picture"
@@ -215,7 +252,6 @@ const VideoCardData = (props) => {
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "8px",
-                  boxShadow: "none",
                 }}
               >
                 {`${props.userProfile?.user?.first_name} ${props.userProfile?.user?.last_name}`}
@@ -256,6 +292,9 @@ const VideoCardData = (props) => {
             <Box>
               <VideoIcons>
                 <ChatBubbleRoundedIcon
+                  onClick={() =>
+                    dispatch({ type: APP_ACTIONS.NOT_IMPLEMENTED })
+                  }
                   sx={{
                     position: "relative",
                     color: themeMode.textColor,
@@ -284,25 +323,33 @@ const VideoCardData = (props) => {
                 {amountComments}
               </Box>
             </Box>
-            <VideoIcons>
-              <ReplyOutlinedIcon
-                sx={{
-                  pb: 0.2,
-                  px: 0.1,
-                  color: themeMode.textColor,
-                  transform: "scale(1.4)",
-                  "&:hover": {
-                    transform: "scale(1.35)",
-                    cursor: "pointer",
-                  },
-                  "&:active": {
-                    transform: "scale(1.25)",
-                  },
-                }}
-              />
-            </VideoIcons>
+            <Box>
+              <VideoIcons>
+                <ReplyOutlinedIcon
+                  onClick={() => {
+                    dispatch({
+                      type: APP_ACTIONS.SHARE_VIDEO,
+                    });
+                  }}
+                  sx={{
+                    pb: 0.2,
+                    px: 0.12,
+                    color: themeMode.textColor,
+                    transform: "scale(1.4)",
+                    "&:hover": {
+                      transform: "scale(1.35)",
+                      cursor: "pointer",
+                    },
+                    "&:active": {
+                      transform: "scale(1.25)",
+                    },
+                  }}
+                />
+              </VideoIcons>
+            </Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <ArrowBackIosRoundedIcon
+                onClick={() => dispatch({ type: APP_ACTIONS.NOT_IMPLEMENTED })}
                 sx={{
                   marginTop: 2,
                   color: themeMode.appTheme,

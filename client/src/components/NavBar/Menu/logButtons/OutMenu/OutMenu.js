@@ -6,7 +6,6 @@ import {
 import OutMenuTemp from "./OutMenuTemp";
 import ToolTip from "../../../../../utils/Comps/ToolTip";
 
-
 const OutMenu = () => {
   const dispatch = useContext(AppDispatchContext);
 

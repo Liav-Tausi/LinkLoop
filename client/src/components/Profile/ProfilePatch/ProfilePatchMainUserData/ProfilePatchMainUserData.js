@@ -4,9 +4,10 @@ import { Box, Stack } from "@mui/material";
 import ProfilePatchLocation from "../ProfilePatchLocation";
 import SignFieldTemp from "../../../NavBar/Menu/Sign/SignFieldTemp";
 
+
+
 const ProfilePatchMainUserData = (props) => {
     const { themeMode } = useContext(AppContext);
-    
   return (
       <Box
         sx={{

@@ -11,7 +11,6 @@ const ProfilePatchExperience = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
-  
   return (
     <Box
       sx={{

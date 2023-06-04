@@ -1,15 +1,13 @@
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery }  from "@mui/material";
 import { createContext, useReducer, useRef } from "react";
 import DARK_THEME from "../../assets/themes/DarkTheme";
 import LIGHT_THEME from "../../assets/themes/LightTheme";
 import { isLoggedIn } from "../../utils/funcs/authFuncs";
-import { getFeedData } from "../../utils/funcs/mainFuncs";
 import { detectColorScheme } from "../../utils/funcs/confFuncs";
 
 const awaitIsLoggedIn = async () => {
   return await isLoggedIn("");
 };
-
 
 export const INITIAL_APP_STATE = {
   accessToken: awaitIsLoggedIn(),
@@ -27,6 +25,7 @@ export const INITIAL_APP_STATE = {
       ? 2
       : 1
     : 3,
+  notImplemented: false,
   appLoaded: false,
   menuOpen: false,
   signUpOpen: false,
@@ -35,6 +34,7 @@ export const INITIAL_APP_STATE = {
   profilePatch: false,
   changeProfilePic: false,
   addVideo: false,
+  shareVideo: false,
   chooseLocation: false,
   searchBar: false,
 };
@@ -49,8 +49,10 @@ export const APP_ACTIONS = {
   SIGN_UP_OPEN: "signUpOpen",
   SIGN_IN_OPEN: "signInOpen",
   PROFILE_PATCH: "profilePatch",
+  NOT_IMPLEMENTED: "notImplemented",
   CHANGE_PROFILE_PIC: "changeProfilePic",
   ADD_VIDEO: "addVideo",
+  SHARE_VIDEO: "shareVideo",
   CHOOSE_LOCATION: "chooseLocation",
   CONNECTED_USER: "connectedUser",
   SEARCH_BAR: "searchBar",
@@ -114,10 +116,22 @@ export const AppReducer = (states, action) => {
         changeProfilePic: !states.changeProfilePic,
       };
     }
+    case APP_ACTIONS.NOT_IMPLEMENTED: {
+      return {
+        ...states,
+        notImplemented: !states.notImplemented,
+      };
+    }
     case APP_ACTIONS.ADD_VIDEO: {
       return {
         ...states,
         addVideo: !states.addVideo,
+      };
+    }
+    case APP_ACTIONS.SHARE_VIDEO: {
+      return {
+        ...states,
+        shareVideo: !states.shareVideo,
       };
     }
     case APP_ACTIONS.CHOOSE_LOCATION: {

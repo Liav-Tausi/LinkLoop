@@ -15,7 +15,6 @@ const ProfileDataBarPicture = (props) => {
   const dispatch = useContext(AppDispatchContext);
 
 
-  
   return (
     <Box
       sx={{
@@ -33,6 +32,7 @@ const ProfileDataBarPicture = (props) => {
               width: isSmallScreen ? "7.2em" : "10.2em",
               height: isSmallScreen ? "7em" : "10em",
               borderRadius: "50%",
+              objectFit: "cover",
             }}
             src={props.profileData.profile_picture}
             alt="profile picture"

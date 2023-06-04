@@ -1,6 +1,6 @@
 import { Box, Container } from "@mui/material";
 import { Link } from "react-router-dom";
-import AppLogo from "../../assets/imgs/AppLogo.svg"
+import AppLogo from "../../assets/imgs/AppLogo.svg";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
@@ -8,7 +8,6 @@ import { useContext } from "react";
 const ProfileVideoAndPatchAndPicTitle = (props) => {
   const { themeMode } = useContext(AppContext);
 
-  
   return (
     <Container
       sx={{
@@ -17,6 +16,7 @@ const ProfileVideoAndPatchAndPicTitle = (props) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        boxShadow: 0,
       }}
     >
       <Box

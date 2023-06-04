@@ -5,7 +5,6 @@ import { useContext } from "react";
 import ProfileVideoAndPatchAndPicTitle from "../ProfileVideoAndPatchAndPicTitle";
 import ProfileAddVideoField from "./ProfileAddVideoField";
 
-
 const ProfileAddVideo = () => {
   const dispatch = useContext(AppDispatchContext);
 

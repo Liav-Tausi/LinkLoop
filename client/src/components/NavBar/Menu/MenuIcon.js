@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import { useContext  } from "react";
 import { AppContext, AppDispatchContext, APP_ACTIONS } from "../../../App/AppStates/AppReducer";
 
-
 const MenuIcon = () => {
     const { themeMode, accessToken} = useContext(AppContext);
     const dispatch = useContext(AppDispatchContext);

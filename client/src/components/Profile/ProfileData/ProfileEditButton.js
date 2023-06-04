@@ -6,7 +6,6 @@ import { useContext } from "react";
 const ProfileEditButton = (props) => {
   const { themeMode, } = useContext(AppContext);
 
-  
   return (
     <Box
       onClick={props.func}
@@ -27,7 +26,7 @@ const ProfileEditButton = (props) => {
       }}
     >
       <EditRoundedIcon
-        sx={{ color: themeMode.textColor, transform: props.scale}}
+        sx={{ color: themeMode.textColor, transform: props.scale }}
       />
     </Box>
   );

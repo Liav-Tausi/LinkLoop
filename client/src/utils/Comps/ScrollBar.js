@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../App/AppStates/AppReducer";
 
-
 const ScrollBar = (props) => {
   const { themeMode } = useContext(AppContext);
   return (

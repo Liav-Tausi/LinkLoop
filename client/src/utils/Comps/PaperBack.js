@@ -2,7 +2,6 @@ import { Paper } from "@mui/material";
 import { AppContext, Ref } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
-
 const PaperBack = (props) => {
   const { themeMode, signUpOpen } = useContext(AppContext);
   const ref = useContext(Ref);
@@ -28,7 +27,7 @@ const PaperBack = (props) => {
           width: props.smallWidth,
         },
         "@media (max-width: 428px)": {
-          height: 650,
+          height: props.verySmallHeight ? props.verySmallHeight : 650,
           width: props.verySmallWidth,
         },
         boxShadow: signUpOpen

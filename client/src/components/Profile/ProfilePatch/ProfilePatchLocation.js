@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from "react";
 
 const ProfilePatchLocation = (props) => {
   const { themeMode } = useContext(AppContext);
+  const isSmallScreen = useContext(IsSmallScreenContext);
   const dispatch = useContext(AppDispatchContext);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
