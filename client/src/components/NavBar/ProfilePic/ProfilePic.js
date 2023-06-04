@@ -9,7 +9,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { getProfileData, getUserData } from "../../../utils/funcs/mainFuncs";
 
+
 const ProfilePic = () => {
+  
   const { accessToken, themeMode, connectedUser, message } =
     useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);

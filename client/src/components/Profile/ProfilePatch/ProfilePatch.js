@@ -7,6 +7,7 @@ import ProfileVideoAndPatchAndPicTitle from "../ProfileVideoAndPatchAndPicTitle"
 
 const ProfilePatch = () => {
   const dispatch = useContext(AppDispatchContext)
+  
   return (
     <BlurBack>
       <PaperBack

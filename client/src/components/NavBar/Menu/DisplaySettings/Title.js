@@ -10,6 +10,7 @@ const Title = ({ handleMenuDisplaySettingsChange }) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
+  
   return (
     <Box
       sx={{

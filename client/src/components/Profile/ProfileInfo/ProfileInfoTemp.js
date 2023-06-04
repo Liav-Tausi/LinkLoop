@@ -19,6 +19,7 @@ const ProfileInfoTemp = (props) => {
     about,
   } = props.data;
 
+  
   return (
     <Box
       alignItems="center"

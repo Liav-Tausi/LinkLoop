@@ -6,6 +6,7 @@ import {
 } from "../../App/AppStates/AppReducer";
 import MainBoxTemp from "./MainBoxTemp";
 
+
 const Main = () => {
   const isSmallScreen = useContext(IsSmallScreenContext);
   const { themeMode } = useContext(AppContext);

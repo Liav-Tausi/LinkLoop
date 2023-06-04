@@ -15,6 +15,7 @@ const ProfileDataBarPicture = (props) => {
   const dispatch = useContext(AppDispatchContext);
 
 
+  
   return (
     <Box
       sx={{

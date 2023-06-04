@@ -2,8 +2,10 @@ import { Box, Button } from "@mui/material";
 import { useContext } from "react";
 import { AppContext } from "../../../../../App/AppStates/AppReducer";
 
+
 const OutMenuTemp = (props) => {
   const { themeMode } = useContext(AppContext);
+  
   return (
     <Button
       onClick={props.func}

@@ -13,6 +13,8 @@ const Logo = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
+
+  
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Box

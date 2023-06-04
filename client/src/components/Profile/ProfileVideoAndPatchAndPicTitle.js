@@ -8,6 +8,7 @@ import { useContext } from "react";
 const ProfileVideoAndPatchAndPicTitle = (props) => {
   const { themeMode } = useContext(AppContext);
 
+  
   return (
     <Container
       sx={{

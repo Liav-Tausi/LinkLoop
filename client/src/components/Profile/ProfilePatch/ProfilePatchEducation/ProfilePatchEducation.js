@@ -7,6 +7,7 @@ import {
 } from "../../../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
+
 const ProfilePatchEducation = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);

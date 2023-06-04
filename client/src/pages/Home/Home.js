@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import { getFeedData } from "../../utils/funcs/mainFuncs";
 
+
 const Home = () => {
   const { accessToken } = useContext(AppContext);
   const navigate = useNavigate();

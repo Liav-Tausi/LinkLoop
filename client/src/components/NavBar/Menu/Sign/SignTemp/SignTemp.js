@@ -9,7 +9,7 @@ import BlurBack from "../../../../../utils/Comps/BlurBack";
 import PaperBack from "../../../../../utils/Comps/PaperBack";
 
 const SignTemp = (props) => {
-  const { themeMode, signUpOpen } = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (

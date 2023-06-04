@@ -11,6 +11,7 @@ import {
   AUTH,
 } from "../config/conf";
 
+
 export const searchQuery = async (query) => {
   try {
     if (query) {

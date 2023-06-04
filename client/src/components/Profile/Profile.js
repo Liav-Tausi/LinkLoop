@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../../App/AppStates/AppReducer";
 import { postProfileImpression } from "../../utils/funcs/mainFuncs";
 
+
 const Profile = () => {
     const { connectedUser, accessToken } = useContext(AppContext);
     const { username } = useParams();

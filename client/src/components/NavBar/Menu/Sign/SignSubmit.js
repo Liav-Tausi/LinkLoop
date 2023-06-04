@@ -2,8 +2,10 @@ import { Box, Button } from "@mui/material"
 import { useContext } from "react";
 import { AppContext } from "../../../../App/AppStates/AppReducer";
 
+
 const SignSubmit = () => {
-    const { themeMode } = useContext(AppContext);
+  const { themeMode } = useContext(AppContext);
+  
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Button

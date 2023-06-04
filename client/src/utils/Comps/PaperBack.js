@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import { AppContext, Ref } from "../../App/AppStates/AppReducer";
 import { useContext } from "react";
 
+
 const PaperBack = (props) => {
   const { themeMode, signUpOpen } = useContext(AppContext);
   const ref = useContext(Ref);

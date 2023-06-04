@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar/SearchBar";
 import ProfilePic from "./ProfilePic/ProfilePic";
 import ToolTip from "../../utils/Comps/ToolTip";
 
+
 const NavBar = (props) => {
   const { themeMode, message, accessToken } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);

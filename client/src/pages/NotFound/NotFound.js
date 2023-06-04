@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   const {themeMode} = useContext(AppContext)
   const isSmallScreen = useContext(IsSmallScreenContext);
+  
   return (
     <Container sx={{ mt: 10 }}>
       <Box

@@ -10,10 +10,6 @@ const ProfileMainText = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
 
 
-
-
-  
-
   return (
     <Box sx={{ display: "flex", mt: isSmallScreen ? 2 : 5.5 }}>
       {props.profileData?.user ? (

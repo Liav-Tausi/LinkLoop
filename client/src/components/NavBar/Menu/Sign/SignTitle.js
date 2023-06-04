@@ -7,6 +7,7 @@ import {
 } from "../../../../App/AppStates/AppReducer";
 import AppLogo from "../../../../assets/imgs/AppLogo.svg";
 
+
 const SignTitle = () => {
   const { themeMode, signUpOpen } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
