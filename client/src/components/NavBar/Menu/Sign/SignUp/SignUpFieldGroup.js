@@ -25,7 +25,8 @@ import SignErrorTemp from "../SignErrorTemp";
 import { signUpUser } from "../../../../../utils/funcs/authFuncs";
 import SignField from "../SignTemp/SignField";
 import Loading from "../../../../../utils/Comps/Loading";
-import SignGoogleTemp from "../SignGoogleTemp";
+import SignGoogleTempSSL from "../SignGoogleTempSSL";
+
 
 const SignUpFieldGroup = () => {
   const { themeMode, accessToken } = useContext(AppContext);
@@ -308,7 +309,7 @@ const SignUpFieldGroup = () => {
                 }}
               />
             </Box>
-            <SignGoogleTemp
+            <SignGoogleTempSSL
               handleSetLoading={(flag) => handleSetLoading(flag)}
             />
           </Box>

@@ -27,7 +27,7 @@ const PaperBack = (props) => {
           width: props.smallWidth,
         },
         "@media (max-width: 428px)": {
-          height: 650,
+          height: props.verySmallHeight ? props.verySmallHeight : 650,
           width: props.verySmallWidth,
         },
         boxShadow: signUpOpen

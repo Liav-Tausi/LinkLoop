@@ -9,15 +9,13 @@ const ProfileMainText = (props) => {
   const { themeMode } = useContext(AppContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
-
   return (
     <Box sx={{ display: "flex", mt: isSmallScreen ? 2 : 5.5 }}>
       {props.profileData?.user ? (
         <Stack>
           <Box
             sx={{
-              whiteSpace: "nowrap",
-              fontSize: "23px",
+              fontSize: "22px",
               mb: 1.5,
               color: themeMode.textColor,
             }}
@@ -29,9 +27,17 @@ const ProfileMainText = (props) => {
             sx={{
               whiteSpace: "nowrap",
               fontSize: "12px",
+              mb: 1,
               color: themeMode.secTextColor,
             }}
           >{`${props.profileData.location}`}</Box>
+          <Box
+            sx={{
+              whiteSpace: "nowrap",
+              fontSize: "12px",
+              color: themeMode.secTextColor,
+            }}
+          >{`profile views: ${props.profileViews}`}</Box>
         </Stack>
       ) : props.profileData ? (
         <Stack>
@@ -69,18 +75,6 @@ const ProfileMainText = (props) => {
           </Box>
         </Stack>
       )}
-      <Box
-        sx={{
-          py: 2,
-          mx: isSmallScreen ? 1 : 7,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-          color: themeMode.textColor,
-          gap: 2,
-        }}
-      ></Box>
     </Box>
   );
 };

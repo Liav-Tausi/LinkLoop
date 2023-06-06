@@ -57,6 +57,10 @@ export const validateAbout = (about) => {
   return about.length >= 3 && about.length <= 500 && !/^\s+$/.test(about);
 };
 
+export const validateComment = (comment) => {
+  return comment.length <= 500 && !/^\s+$/.test(comment);
+};
+
 export const validateFullName = (fullName) => {
   const re = /^[A-Za-z]+\s[A-Za-z]+$/;
   return re.test(fullName);

@@ -53,7 +53,7 @@ const ProfileDataBar = (props) => {
               username={props.username}
               profileData={props.profileData}
             />
-            <ProfileMainText profileData={props.profileData} />
+            <ProfileMainText profileData={props.profileData} profileViews={props.profileViews}/>
           </Box>
           {connectedUser?.username === props.username && (
             <Box

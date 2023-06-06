@@ -10,6 +10,23 @@ import {
   USERS,
   AUTH,
 } from "../config/conf";
+import Compressor from "compressorjs";
+
+const compressFile = (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.7,
+      maxWidth: 800,
+      maxHeight: 600,
+      success: (compressedFile) => {
+        resolve(compressedFile);
+      },
+      error: (error) => {
+        reject(error);
+      },
+    });
+  });
+};
 
 export const searchQuery = async (query) => {
   try {
@@ -67,38 +84,6 @@ export const postSearchQuery = async (accessToken, query) => {
   }
 };
 
-export const postVideoImpression = async (accessToken, videoId) => {
-  try {
-    if (accessToken) {
-      const response = await axios.post(
-        `${URL}${APIV1}${SEARCH}${videoId}/impressions/`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      if (response.status < 300) {
-        return response;
-      } else {
-        return false;
-      }
-    } else {
-      const response = await axios.post(
-        `${URL}${APIV1}${SEARCH}${videoId}/impressions/`
-      );
-      if (response.status < 300) {
-        return response;
-      } else {
-        return false;
-      }
-    }
-  } catch {
-    return false;
-  }
-};
-
-
 export const postProfileImpression = async (accessToken, username) => {
   try {
     if (accessToken) {
@@ -130,10 +115,64 @@ export const postProfileImpression = async (accessToken, username) => {
   }
 };
 
+export const postVideoImpression = async (accessToken, videoIdName) => {
+  try {
+    if (accessToken) {
+      const response = await axios.post(
+        `${URL}${APIV1}${VIDEOS}impression/?video_id_name=${videoIdName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    } else {
+      const response = await axios.post(
+        `${URL}${APIV1}${VIDEOS}impression/?video_id_name=${videoIdName}`
+      );
+      if (response.status < 300) {
+        return response;
+      } else {
+        return false;
+      }
+    }
+  } catch {
+    return false;
+  }
+};
+
+export const getImpressions = async (query, type) => {
+  try {
+    let response;
+    if (type === "video_id_name") {
+      response = await axios.get(
+        `${URL}${APIV1}${VIDEOS}impression/?${type}=${query}`
+      );
+    } else {
+      response = await axios.get(
+        `${URL}${APIV1}${PROFILE}impression/?${type}=${query}`
+      );
+    }
+    if (response.status < 300) {
+      return response;
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 export const changeProfilePic = async (accessToken, file) => {
   try {
     const formData = new FormData();
-    formData.append("profile_pic", file);
+    const compressedFile = await compressFile(file);
+    formData.append("profile_pic", compressedFile);
 
     const response = await axios.patch(
       `${URL}${APIV1}${PROFILE}${MAIN}0/`,
@@ -145,12 +184,14 @@ export const changeProfilePic = async (accessToken, file) => {
         },
       }
     );
+
     if (response.status < 300) {
       return response;
     } else {
       return false;
     }
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -723,7 +764,7 @@ export const getVideosOfUser = async (username) => {
   }
 };
 
-export const getFeedData = async (accessToken, page,) => {
+export const getFeedData = async (accessToken, page) => {
   try {
     if (accessToken) {
       const response = await axios.get(
@@ -748,7 +789,7 @@ export const getFeedData = async (accessToken, page,) => {
   }
 };
 
-export const countLikes = async (videoId) => {
+export const getLikes = async (videoId) => {
   try {
     const response = await axios.get(
       `${URL}${APIV1}${VIDEOS}${videoId}/likes/`
@@ -762,14 +803,57 @@ export const countLikes = async (videoId) => {
   }
 };
 
-export const countComments = async (videoId) => {
+export const getComments = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`
+      `${URL}${APIV1}${VIDEOS}${Number(videoId)}/comments/`
     );
-    const commentCount = response.data.comment_count;
     if (response.status < 300) {
-      return commentCount;
+      return response.data;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const createComments = async (accessToken, videoId, comment) => {
+  try {
+    const response = await axios.post(
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`,
+      {
+        comment_text: comment,
+        video: videoId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.status < 300) {
+      return response;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const handleDeleteComment = async (accessToken, videoId, id) => {
+  console.log(accessToken);
+  try {
+    const response = await axios.delete(
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/0/`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          id: id,
+        },
+      }
+    );
+    if (response.status < 300) {
+      return response;
     }
   } catch (error) {
     return false;

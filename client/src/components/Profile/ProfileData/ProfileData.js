@@ -24,12 +24,16 @@ const ProfileData = (props) => {
   return (
     <>
       {profilePatch && <ProfilePatch />}
-      {changeProfilePic && <ChangeProfilePic/>}
+      {changeProfilePic && <ChangeProfilePic />}
       {addVideo && <ProfileAddVideo />}
       <Box
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <ProfileDataBar username={props.username} profileData={profileData} />
+        <ProfileDataBar
+          username={props.username}
+          profileData={profileData}
+          profileViews={props.profileViews}
+        />
       </Box>
     </>
   );

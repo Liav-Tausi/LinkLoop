@@ -68,12 +68,18 @@ const ChangeProfilePicField = () => {
     }
   };
 
+
+  const handleSubmitLinkLoopProd = async (event) => {
+   event.preventDefault();
+   alert("Sorry adding a profile pic to linkLoop is not allowed anymore for cloud space reasons.")
+  };
+
   return (
     <>
       {loading && <Loading />}
       <Container style={{ borderRadius: "50px" }}>
         <ScrollBar maxHeight={"465px"}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitLinkLoopProd}>
             {file === "" ? (
               <Button
                 variant="contained"
@@ -127,7 +133,7 @@ const ChangeProfilePicField = () => {
                   }}
                 >
                   <img
-                  alt="profile pic"
+                    alt="profile pic"
                     src={imgUrl}
                     style={{
                       width: "100%",
@@ -139,7 +145,7 @@ const ChangeProfilePicField = () => {
                   <Box
                     onClick={handleDeleteFile}
                     sx={{
-                      display: loading? "none" : "flex",
+                      display: loading ? "none" : "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: "50%",
