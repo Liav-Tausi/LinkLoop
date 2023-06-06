@@ -21,10 +21,14 @@ const SignFieldTemp = (props) => {
         border: `solid 1px ${
           props.sign && props.error
             ? themeMode.appTheme
+            : props.comments
+            ? themeMode.signUpBubbles
             : themeMode.buttonBorder
         }`,
-        backgroundColor: themeMode.signUpField,
-        borderRadius: "25px",
+        backgroundColor: props.comments
+          ? themeMode.signUpBubbles
+          : themeMode.signUpField,
+        borderRadius: props.comments ? "10px" : "25px",
         p: props.padding,
         pl: props.paddingL,
         "& input::placeholder": {
@@ -32,11 +36,13 @@ const SignFieldTemp = (props) => {
           opacity: 1,
         },
         "&:hover": {
-          backgroundColor: themeMode.signUpFieldHover,
+          backgroundColor: props.comments
+            ? themeMode.navInputColor
+            : themeMode.signUpFieldHover,
         },
         "& input[type='date']::-webkit-calendar-picker-indicator": {
-          width: 22,
-          height: 21,
+          width: 23,
+          height: 22,
           cursor: "pointer",
         },
         ".MuiInputBase-inputMultiline": {

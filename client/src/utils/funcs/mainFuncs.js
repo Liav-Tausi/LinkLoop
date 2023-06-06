@@ -28,7 +28,6 @@ const compressFile = (file) => {
   });
 };
 
-
 export const searchQuery = async (query) => {
   try {
     if (query) {
@@ -85,7 +84,6 @@ export const postSearchQuery = async (accessToken, query) => {
   }
 };
 
-
 export const postProfileImpression = async (accessToken, username) => {
   try {
     if (accessToken) {
@@ -116,7 +114,6 @@ export const postProfileImpression = async (accessToken, username) => {
     return false;
   }
 };
-
 
 export const postVideoImpression = async (accessToken, videoIdName) => {
   try {
@@ -151,7 +148,7 @@ export const postVideoImpression = async (accessToken, videoIdName) => {
 
 export const getImpressions = async (query, type) => {
   try {
-    let response 
+    let response;
     if (type === "video_id_name") {
       response = await axios.get(
         `${URL}${APIV1}${VIDEOS}impression/?${type}=${query}`
@@ -170,7 +167,6 @@ export const getImpressions = async (query, type) => {
     return false;
   }
 };
-
 
 export const changeProfilePic = async (accessToken, file) => {
   try {
@@ -793,7 +789,7 @@ export const getFeedData = async (accessToken, page) => {
   }
 };
 
-export const countLikes = async (videoId) => {
+export const getLikes = async (videoId) => {
   try {
     const response = await axios.get(
       `${URL}${APIV1}${VIDEOS}${videoId}/likes/`
@@ -807,14 +803,57 @@ export const countLikes = async (videoId) => {
   }
 };
 
-export const countComments = async (videoId) => {
+export const getComments = async (videoId) => {
   try {
     const response = await axios.get(
-      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`
+      `${URL}${APIV1}${VIDEOS}${Number(videoId)}/comments/`
     );
-    const commentCount = response.data.comment_count;
     if (response.status < 300) {
-      return commentCount;
+      return response.data;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const createComments = async (accessToken, videoId, comment) => {
+  try {
+    const response = await axios.post(
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/`,
+      {
+        comment_text: comment,
+        video: videoId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.status < 300) {
+      return response;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+export const handleDeleteComment = async (accessToken, videoId, id) => {
+  console.log(accessToken);
+  try {
+    const response = await axios.delete(
+      `${URL}${APIV1}${VIDEOS}${videoId}/comments/0/`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          id: id,
+        },
+      }
+    );
+    if (response.status < 300) {
+      return response;
     }
   } catch (error) {
     return false;

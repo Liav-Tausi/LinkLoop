@@ -18,12 +18,12 @@ const VideoUpDownButtons = (props) => {
   const isSmallScreen = useContext(IsSmallScreenContext);
 
   return (
-    <>
+    <Box sx={{ flex: 1 }}>
       <Box
         sx={{
           position: "absolute",
           bottom: isSmallScreen ? 165 : 50,
-          right: isSmallScreen ? 5 : -65,
+          right: isSmallScreen ? 5 : props.comments ? -455 : -65,
           textShadow: "0px 1px 11px #000",
         }}
       >
@@ -63,7 +63,7 @@ const VideoUpDownButtons = (props) => {
         sx={{
           position: "absolute",
           top: isSmallScreen ? 145 : 50,
-          right: isSmallScreen ? 5 : -65,
+          right: isSmallScreen ? 5 : props.comments ? -455 : -65,
           textShadow: "0px 1px 11px #000",
         }}
       >
@@ -99,7 +99,7 @@ const VideoUpDownButtons = (props) => {
           </Box>
         </Stack>
       </Box>
-    </>
+    </Box>
   );
 };
 

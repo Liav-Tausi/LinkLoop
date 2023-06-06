@@ -15,6 +15,7 @@ import AppLoading from "./AppLoading";
 import "./App.css";
 import { isLoggedIn } from "../../utils/funcs/authFuncs";
 import ProfilePage from "../../pages/ProfilePage/ProfilePage";
+import CommentsPage from "../../pages/CommentsPage/CommentsPage";
 
 const App = () => {
   const {
@@ -161,8 +162,9 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Home />}>
-          <Route path=":video" element={<FeedPage />}>
-            <Route path="comments" element={<CommentPage />} />
+          <Route path=":video">
+            <Route index element={<FeedPage />} />
+            <Route path="comments" element={<CommentsPage />} />
           </Route>
           <Route path="profile/:username" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />

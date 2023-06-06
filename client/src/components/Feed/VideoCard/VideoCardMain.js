@@ -4,12 +4,12 @@ import {
   IsSmallScreenContext,
 } from "../../../App/AppStates/AppReducer";
 import { useContext, useState, useEffect } from "react";
-import VideoCardData from "./VideoCardData";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   getImpressions,
   postVideoImpression,
 } from "../../../utils/funcs/mainFuncs";
+import VideoCardData from "./VideoCardData/VideoCardData";
 
 const VideoCardMain = (props) => {
   const { themeMode, connectedUser, accessToken } = useContext(AppContext);
@@ -33,6 +33,7 @@ const VideoCardMain = (props) => {
     }
   }, [lastPart, props.video_id_name]);
 
+
   return (
     <Paper
       sx={{
@@ -42,7 +43,7 @@ const VideoCardMain = (props) => {
         p: 1,
       }}
     >
-      <Grid>
+      <Grid justifyContent="center">
         {props.isLoading ? (
           <>
             <Box sx={{ display: "flex", justifyContent: "end" }}>
@@ -97,6 +98,7 @@ const VideoCardMain = (props) => {
                 </Box>
               )}
             <VideoCardData
+              comments={props.comments}
               videoUrl={props.video_url}
               videoViews={videoViews}
               date={props.date}
@@ -105,6 +107,10 @@ const VideoCardMain = (props) => {
               title={props.title}
               videoNumber={props.videoNumber}
               videoId={props.videoId}
+              handleLike={props.handleLike}
+              amountLikes={props.amountLikes}
+              amountComments={props.amountComments}
+              liked={props.liked}
               nextVideo={props.nextVideo}
               previousVideo={props.previousVideo}
             />

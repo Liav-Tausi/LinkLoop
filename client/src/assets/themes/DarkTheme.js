@@ -20,6 +20,7 @@ const DARK_THEME = {
   searchBar: "#18191a",
   searchBarHover: "#1C1D1E",
   searchBarBorder: "#3a3b3c",
+  commentsBorder: "#4a4b4c",
   appTheme: "#DF2B5B",
   appThemeHover: "#1BE2C1",
   buttonBorder: "grey",

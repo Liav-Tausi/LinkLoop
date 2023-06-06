@@ -20,6 +20,7 @@ const LIGHT_THEME = {
   searchBar: "#f7f7f7",
   searchBarHover: "#eeeff1",
   searchBarBorder: "#d7d7d7",
+  commentsBorder: "#d7d7d7",
   appTheme: "#DF2B5B",
   appThemeHover: "#1BE2C1",
   buttonBorder: "#F3F3F3",
