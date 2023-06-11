@@ -8,7 +8,12 @@ import {
 import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "./VideoCard/VideoCardMain";
 import { useParams } from "react-router-dom";
-import { getComments, getFeedData, getLikes, isLiked } from "../../utils/funcs/mainFuncs";
+import {
+  getComments,
+  getFeedData,
+  getLikes,
+  isLiked,
+} from "../../utils/funcs/mainFuncs";
 import VideoShare from "./VideoCard/VideoShare/VideoShare";
 import { validateComment } from "../../utils/funcs/formValidators";
 import CommentsOnPhone from "./Comments/CommentsOnPhone";
@@ -30,16 +35,16 @@ const Feed = (props) => {
   const [commentError, setCommentError] = useState(false);
   const [amountLikes, setAmountLikes] = useState(0);
   const [amountComments, setAmountComments] = useState(0);
-  const [commentsContent, setCommentsContent] = useState([])
+  const [commentsContent, setCommentsContent] = useState([]);
   const [liked, setLiked] = useState(false);
 
   const handleLike = (flag) => {
     if (flag) {
-      setLiked(true)
+      setLiked(true);
     } else {
       setLiked(false);
     }
-  }
+  };
 
   useEffect(() => {
     const getLikedStatus = async () => {
@@ -51,6 +56,12 @@ const Feed = (props) => {
   }, [video?.id, accessToken]);
 
   useEffect(() => {
+    if (isSmallScreen) {
+      window.scrollTo(0, 450);
+    }
+  }, [isSmallScreen]);
+
+  useEffect(() => {
     const countLikes = async () => {
       setAmountLikes(await getLikes(video?.id));
     };
@@ -58,7 +69,7 @@ const Feed = (props) => {
     const countComments = async () => {
       const comments = await getComments(video?.id);
       if (!comments[0]) {
-         setCommentsContent([]);
+        setCommentsContent([]);
         setAmountComments(comments.comment_count);
       } else {
         setCommentsContent(comments);
@@ -67,8 +78,6 @@ const Feed = (props) => {
     };
     countComments();
   }, [liked, message, video?.id]);
-
-
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -116,7 +125,6 @@ const Feed = (props) => {
       setVideo(null);
     }
   }, [videoId, videos, dispatch]);
-
 
   const handleCommentChange = (event) => {
     setCommentError(!validateComment(event.target.value));

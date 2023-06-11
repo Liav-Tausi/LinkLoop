@@ -15,7 +15,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Box, Grid, Stack } from "@mui/material";
 import { useContext } from "react";
 
-
 const VideoCardDataDefault = (props) => {
   const { themeMode } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
@@ -25,9 +24,9 @@ const VideoCardDataDefault = (props) => {
   const hasComments = currentPathname.includes("/comments");
   let newUrl = currentPathname;
   if (!hasComments) {
-    newUrl += "/comments"; 
+    newUrl += "/comments";
   } else {
-    newUrl = newUrl.replace("/comments", ""); 
+    newUrl = newUrl.replace("/comments", "");
   }
 
   return (
@@ -210,22 +209,22 @@ const VideoCardDataDefault = (props) => {
           </Box>
           <Box>
             <Link to={newUrl}>
-            <VideoIcons>
-              <ChatBubbleRoundedIcon
-                sx={{
-                  position: "relative",
-                  color: themeMode.textColor,
-                  transform: "scale(0.95)",
-                  "&:hover": {
-                    transform: "scale(0.93)",
-                    cursor: "pointer",
-                  },
-                  "&:active": {
-                    transform: "scale(0.9)",
-                  },
-                }}
-              />
-            </VideoIcons>
+              <VideoIcons>
+                <ChatBubbleRoundedIcon
+                  sx={{
+                    position: "relative",
+                    color: themeMode.textColor,
+                    transform: "scale(0.95)",
+                    "&:hover": {
+                      transform: "scale(0.93)",
+                      cursor: "pointer",
+                    },
+                    "&:active": {
+                      transform: "scale(0.9)",
+                    },
+                  }}
+                />
+              </VideoIcons>
             </Link>
             <Box
               sx={{

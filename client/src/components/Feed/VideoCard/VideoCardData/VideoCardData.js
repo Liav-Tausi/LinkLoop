@@ -17,7 +17,8 @@ import NotImplemented from "../../../../utils/Comps/NotImplemented";
 import VideoCardDataDefault from "./VideoCardDataDefault";
 
 const VideoCardData = (props) => {
-  const { accessToken, signInOpen, notImplemented, message } = useContext(AppContext);
+  const { accessToken, signInOpen, notImplemented, message } =
+    useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const isSmallScreen = useContext(IsSmallScreenContext);
 
@@ -30,7 +31,6 @@ const VideoCardData = (props) => {
     }
   }, [accessToken]);
 
-
   const handleLikeEvent = async () => {
     if (accessToken) {
       if (!props.liked) {
@@ -40,7 +40,7 @@ const VideoCardData = (props) => {
       } else {
         return false;
       }
-       props.handleLike(!props.liked);
+      props.handleLike(!props.liked);
     } else {
       dispatch({
         type: APP_ACTIONS.SIGN_IN_OPEN,

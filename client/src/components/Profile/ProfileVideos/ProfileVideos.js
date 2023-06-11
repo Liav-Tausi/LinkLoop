@@ -1,7 +1,13 @@
 import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import VideoCardMain from "../../Feed/VideoCard/VideoCardMain";
-import { deleteVideo, getVideosOfUser } from "../../../utils/funcs/mainFuncs";
+import {
+  deleteVideo,
+  getComments,
+  getLikes,
+  getVideosOfUser,
+  isLiked,
+} from "../../../utils/funcs/mainFuncs";
 import {
   APP_ACTIONS,
   AppContext,
@@ -10,10 +16,21 @@ import {
 import VideoShare from "../../Feed/VideoCard/VideoShare/VideoShare";
 
 const ProfileVideos = (props) => {
-  const { message, shareVideo } = useContext(AppContext);
+  const { message, shareVideo, accessToken } = useContext(AppContext);
   const dispatch = useContext(AppDispatchContext);
   const [videosUser, setVideosUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [amountLikes, setAmountLikes] = useState(0);
+  const [amountComments, setAmountComments] = useState(0);
+  const [liked, setLiked] = useState(false);
+
+  const handleLike = (flag, videoId) => {
+    if (flag) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  };
 
   useEffect(() => {
     const fetchVideosData = async () => {
@@ -34,6 +51,40 @@ const ProfileVideos = (props) => {
       });
     }
   };
+
+  useEffect(() => {
+    const getLikedStatus = async () => {
+      if (accessToken) {
+        const likedStatus = await Promise.all(
+          videosUser.map((video) => isLiked(video.id, accessToken))
+        );
+        setLiked(likedStatus.some((status) => status));
+      }
+    };
+    getLikedStatus();
+  }, [videosUser, accessToken]);
+
+  useEffect(() => {
+    const updateLikesAndComments = async () => {
+      const likes = await Promise.all(
+        videosUser.map((video) => getLikes(video.id))
+      );
+      setAmountLikes(
+        likes.reduce((total, likesCount) => total + likesCount, 0)
+      );
+
+      const comments = await Promise.all(
+        videosUser.map((video) => getComments(video.id))
+      );
+      const totalCommentsCount = comments.reduce(
+        (total, commentsList) =>
+          total + (commentsList.length || commentsList.comment_count),
+        0
+      );
+      setAmountComments(totalCommentsCount);
+    };
+    updateLikesAndComments();
+  }, [videosUser, liked, message]);
 
   return (
     <>
@@ -66,6 +117,11 @@ const ProfileVideos = (props) => {
               }}
             >
               <VideoCardMain
+                key={element.id}
+                handleLike={handleLike}
+                amountLikes={amountLikes}
+                amountComments={amountComments}
+                liked={liked}
                 isLoading={isLoading}
                 video_id_name={element.video_id_name}
                 username={props.username}

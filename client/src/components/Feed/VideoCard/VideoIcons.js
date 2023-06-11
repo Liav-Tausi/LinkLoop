@@ -15,13 +15,15 @@ const VideoIcons = (props) => {
         display: "flex",
         justifyContent: "center",
         px: 1,
-        py: props.arrow? 1: 1.14,
+        py: props.arrow ? 1 : 1.14,
         opacity: isSmallScreen ? 0.96 : 1,
         backgroundColor: themeMode.navInputColor,
         borderRadius: "50%",
         "&:hover": {
           backgroundColor: themeMode.navInputColorHover,
         },
+        padding: "10px",
+        position: "relative",
       }}
     >
       {props.children}
