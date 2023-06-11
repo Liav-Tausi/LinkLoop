@@ -68,10 +68,14 @@ class LikeVideoSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    profile = serializers.SerializerMethodField()
 
     class Meta:
         model = VideoComment
         fields = '__all__'
+
+    def get_profile(self, obj):
+        return ProfileSerializer(obj.user.profile).data
 
     def validate(self, attrs):
         video_ids = Video.objects.all()
@@ -95,7 +99,6 @@ class VideoImpressionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print(validated_data)
         video_impression = VideoImpression.objects.create(
             viewer=validated_data.get('viewer'),
             video=validated_data.get('video')

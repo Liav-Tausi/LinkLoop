@@ -1,11 +1,8 @@
-import io
 import os.path
 import uuid
 import django_filters
 import jwt
-import zstandard as zstd
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -219,9 +216,22 @@ class CommentsModelViewSet(ModelViewSet):
         comments = VideoComment.objects.filter(video=video_pk)
         if comments.exists():
             serializer = self.get_serializer(comments, many=True)
-            return Response({'comment_count': comment_count}, serializer.data)
+            return Response(serializer.data)
         else:
             return Response({'comment_count': comment_count})
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        video_id = kwargs['video_pk']
+        comment_id = request.data.get("id")
+        user_id = request.user.pk
+        comment = VideoComment.objects.filter(video=video_id, user=user_id, id=comment_id)
+        if not comment.exists():
+            return Response({'detail': 'You have not commented this video yet'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.perform_destroy(comment)
+        return Response({'detail': 'You have deleted this comment'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class VideoImpressionModelViewSet(ModelViewSet):
@@ -237,9 +247,8 @@ class VideoImpressionModelViewSet(ModelViewSet):
         video = Video.objects.filter(video_id_name=video_id_name).first()
         if video is None:
             return Response({'detail': 'Video not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        impression_count = VideoImpression.objects.filter(video=video).count()
-        return Response({'impression_count': impression_count}, status=status.HTTP_200_OK)
+        views = VideoImpression.objects.filter(video=video).count()
+        return Response({'impression_count': views}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
@@ -254,7 +263,8 @@ class VideoImpressionModelViewSet(ModelViewSet):
             data_copy["viewer"] = None
         user_id = data_copy.get("viewer")
         if user_id is not None and VideoImpression.objects.filter(video=video, viewer=user_id).exists():
-            return Response({'detail': 'User already has an impression for this video'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'User already has an impression for this video'},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

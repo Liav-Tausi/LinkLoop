@@ -66,7 +66,7 @@ class VideoComment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    comment_text = models.TextField(db_column="comment_text", blank=False, null=False, max_length=1000,
+    comment_text = models.TextField(db_column="comment_text", blank=False, null=False, max_length=500,
                                     validators=[MinLengthValidator(1)])
     created_time = models.DateTimeField(db_column="created_time", auto_now_add=True)
     updated_time = models.DateTimeField(db_column="updated_time", auto_now=True)
